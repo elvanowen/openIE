@@ -1,6 +1,7 @@
-package id.ac.itb.openie.preprocess;
+package id.ac.itb.nlp;
 
 import IndonesianNLP.IndonesianSentenceDetector;
+import id.ac.itb.openie.utils.Utilities;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -29,31 +30,7 @@ public class SentenceTokenizer {
     }
 
     public ArrayList<String> tokenizeFile(File file) {
-        BufferedReader br = null;
-        FileReader fr = null;
-        ArrayList<String> content = new ArrayList<String>();
-
-        try {
-            fr = new FileReader(file);
-            br = new BufferedReader(fr);
-
-            String sCurrentLine;
-
-            while ((sCurrentLine = br.readLine()) != null) {
-                content.add(sCurrentLine);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (br != null) br.close();
-                if (fr != null) fr.close();
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
-
-        return tokenizeSentences(content);
+        return tokenizeSentences(Utilities.getFileContent(file));
     }
 
     public ArrayList<String> tokenizeFiles(ArrayList<File> files) {
