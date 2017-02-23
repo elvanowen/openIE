@@ -4,11 +4,12 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by elvanowen on 2/22/17.
  */
-public class DetikDocumentPreprocessor implements IPreProcessorPipelineElement {
+public class DetikDocumentPreprocessor implements IPreprocessorPipelineElement {
 
     /* Function  : Remove document metadata */
     /* Input     : (Foto: Dewi Irmasari/detikcom)Dalam... */
@@ -38,14 +39,14 @@ public class DetikDocumentPreprocessor implements IPreProcessorPipelineElement {
         return fileContent.replaceFirst("(^.*?[—-]+)","").trim();
     }
 
-    public ArrayList<Pair<File, String>> execute(File file, String payload) throws Exception {
+    public HashMap<File, String> execute(File file, String payload) throws Exception {
         String preprocessedPayload = removeMetadata(payload);
         preprocessedPayload = removeLinkPhoto(preprocessedPayload);
         preprocessedPayload = removeLinkToAnotherArticle(preprocessedPayload);
         preprocessedPayload = removeEndingText(preprocessedPayload);
 
-        ArrayList<Pair<File, String>> pipelineItems = new ArrayList<Pair<File, String>>();
-        pipelineItems.add(Pair.of(file, preprocessedPayload));
+        HashMap<File, String> pipelineItems = new HashMap<File, String>();
+        pipelineItems.put(file, preprocessedPayload);
 
         return pipelineItems;
     }

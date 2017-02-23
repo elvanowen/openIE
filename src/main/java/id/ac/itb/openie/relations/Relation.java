@@ -22,6 +22,10 @@ public class Relation {
         this.secondEntity = relation.getRight();
     }
 
+    public String toString() {
+        return String.format("<%s || %s || %s>", firstEntity, relation, secondEntity);
+    }
+
     public Triple<String, String, String> getRelationTriple() {
         return Triple.of(firstEntity, relation, secondEntity);
     }

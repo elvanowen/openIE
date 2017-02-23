@@ -25,7 +25,7 @@ public class DetikCrawler extends BaseCrawler {
         return link.contains("detik.com/read") || link.contains("detik.com/berita");
     }
 
-    protected ArrayList<Pair<String, String>> extractContent(String url, String html) {
+    protected Pair<String, String> extractContent(String url, String html) {
         ArrayList<Pair<String, String>> output = new ArrayList<Pair<String, String>>();
         Document doc = Jsoup.parse(html);
 
@@ -33,9 +33,9 @@ public class DetikCrawler extends BaseCrawler {
         for (Element content : contents) {
             String contentText = content.text();
 
-            output.add(Pair.of(url, contentText));
+            return Pair.of(url, contentText);
         }
 
-        return output;
+        return null;
     }
 }

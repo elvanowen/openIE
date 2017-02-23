@@ -1,22 +1,18 @@
 package id.ac.itb.openie.preprocess;
 
 import id.ac.itb.openie.pipeline.IOpenIePipelineElement;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Created by elvanowen on 2/23/17.
  */
 public class PreprocessorPipeline implements IOpenIePipelineElement {
 
-    private ArrayList<IPreProcessorPipelineElement> preprocessorPipelineElements = new ArrayList<IPreProcessorPipelineElement>();
+    private ArrayList<IPreprocessorPipelineElement> preprocessorPipelineElements = new ArrayList<IPreprocessorPipelineElement>();
 
-    public PreprocessorPipeline addPipelineElement(IPreProcessorPipelineElement preprocessorPipelineElement) {
+    public PreprocessorPipeline addPipelineElement(IPreprocessorPipelineElement preprocessorPipelineElement) {
         preprocessorPipelineElements.add(preprocessorPipelineElement);
         return this;
     }
@@ -24,24 +20,33 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
     public void execute() throws Exception {
         System.out.println("Running preprocessor pipeline...");
 
-        Queue<Pair<File, String>> pipeQueue = new LinkedList<Pair<File, String>>();
-        Queue<Pair<File, String>> nextPipeQueue = new LinkedList<Pair<File, String>>();
-        pipeQueue.add(Pair.of((File) null, (String) null));
+        HashMap<File, String> pipeQueue = null;
+        HashMap<File, String> nextPipeQueue = null;
 
-        Iterator<Pair<File, String>> iterator = pipeQueue.iterator();
+        for (IPreprocessorPipelineElement preprocessorPipelineElement: preprocessorPipelineElements) {
+            if (pipeQueue == null) {
+                pipeQueue = new HashMap<File, String>();
+                nextPipeQueue = new HashMap<File, String>();
 
-        for (IPreProcessorPipelineElement preprocessorPipelineElement: preprocessorPipelineElements) {
-            while(iterator.hasNext()){
-                Pair<File, String> pipelineItem = iterator.next();
+                HashMap<File, String> preprocessed = preprocessorPipelineElement.execute(null, null);
+                pipeQueue.putAll(preprocessed);
+            } else {
+                Iterator<Map.Entry<File, String>> it = pipeQueue.entrySet().iterator();
 
-                ArrayList<Pair<File, String>> preprocessed = preprocessorPipelineElement.execute(pipelineItem.getLeft(), pipelineItem.getRight());
+                while (it.hasNext()) {
+                    Map.Entry<File, String> pair = it.next();
+                    System.out.println(pair.getKey() + " = " + pair.getValue());
 
-                nextPipeQueue.addAll(preprocessed);
+                    HashMap<File, String> preprocessed = preprocessorPipelineElement.execute(pair.getKey(), pair.getValue());
+
+                    nextPipeQueue.putAll(preprocessed);
+
+                    it.remove(); // avoids a ConcurrentModificationException
+                }
+
+                pipeQueue = nextPipeQueue;
+                nextPipeQueue = new HashMap<File, String>();
             }
-
-            pipeQueue = nextPipeQueue;
-            iterator = pipeQueue.iterator();
-            nextPipeQueue = new LinkedList<Pair<File, String>>();
         }
     }
 }

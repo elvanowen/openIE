@@ -7,13 +7,15 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by elvanowen on 2/9/17.
  */
 
-public class ReverbExtractor extends BaseExtractor {
+public class ReverbExtractor extends BaseExtractor implements IExtractorPipelineElement {
 
     private enum EXTRACT_VERB_STATE {
         V, W, P
@@ -256,5 +258,13 @@ public class ReverbExtractor extends BaseExtractor {
         }
 
         return relations;
+    }
+
+    public HashMap<File, Pair<String, Relations>> execute(File file, String payload, Relations relations) throws Exception {
+
+        HashMap<File, Pair<String, Relations>> pipelineItems = new HashMap<File, Pair<String, Relations>>();
+        pipelineItems.put(file, Pair.of(payload, extractRelationFromSentence(payload)));
+
+        return pipelineItems;
     }
 }

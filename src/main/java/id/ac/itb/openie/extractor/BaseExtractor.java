@@ -1,7 +1,6 @@
 package id.ac.itb.openie.extractor;
 
 import id.ac.itb.openie.pipeline.IOpenIePipelineElement;
-import id.ac.itb.openie.relations.Relation;
 import id.ac.itb.openie.config.Config;
 import id.ac.itb.nlp.SentenceTokenizer;
 import id.ac.itb.openie.relations.Relations;
@@ -17,7 +16,7 @@ import java.util.ArrayList;
 abstract class BaseExtractor implements IOpenIePipelineElement {
 
     private Boolean shouldStoreExtractions = true;
-    private String extractionsStorageDirectoryPath = new Config().getProperty("EXTRACTIONS_DEFAULT_STORAGE_DIRECTORY");
+    private String extractionsStorageDirectoryPath = new Config().getProperty("EXTRACTIONS_STORAGE_DIRECTORY");
     private File fileToBeExtracted = null;
 
     public void setShouldStoreExtractions(Boolean shouldStoreExtractions) {

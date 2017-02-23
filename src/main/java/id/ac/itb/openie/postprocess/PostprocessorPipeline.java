@@ -1,23 +1,21 @@
 package id.ac.itb.openie.postprocess;
 
 import id.ac.itb.openie.pipeline.IOpenIePipelineElement;
+import id.ac.itb.openie.preprocess.IPreprocessorPipelineElement;
 import id.ac.itb.openie.relations.Relations;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * Created by elvanowen on 2/23/17.
  */
 public class PostprocessorPipeline implements IOpenIePipelineElement {
 
-    private ArrayList<IPostProcessorPipelineElement> postprocessorPipelineElements = new ArrayList<IPostProcessorPipelineElement>();
+    private ArrayList<IPostprocessorPipelineElement> postprocessorPipelineElements = new ArrayList<IPostprocessorPipelineElement>();
 
-    public PostprocessorPipeline addPipelineElement(IPostProcessorPipelineElement postprocessorPipelineElement) {
+    public PostprocessorPipeline addPipelineElement(IPostprocessorPipelineElement postprocessorPipelineElement) {
         postprocessorPipelineElements.add(postprocessorPipelineElement);
         return this;
     }
@@ -25,24 +23,33 @@ public class PostprocessorPipeline implements IOpenIePipelineElement {
     public void execute() throws Exception {
         System.out.println("Running postprocessor pipeline...");
 
-        Queue<Pair<File, Relations>> pipeQueue = new LinkedList<Pair<File, Relations>>();
-        Queue<Pair<File, Relations>> nextPipeQueue = new LinkedList<Pair<File, Relations>>();
-        pipeQueue.add(Pair.of((File) null, (Relations) null));
+        HashMap<File, Relations> pipeQueue = null;
+        HashMap<File, Relations> nextPipeQueue = null;
 
-        Iterator<Pair<File, Relations>> iterator = pipeQueue.iterator();
+        for (IPostprocessorPipelineElement postprocessorPipelineElement: postprocessorPipelineElements) {
+            if (pipeQueue == null) {
+                pipeQueue = new HashMap<File, Relations>();
+                nextPipeQueue = new HashMap<File, Relations>();
 
-        for (IPostProcessorPipelineElement postprocessorPipelineElement: postprocessorPipelineElements) {
-            while(iterator.hasNext()){
-                Pair<File, Relations> pipelineItem = iterator.next();
+                HashMap<File, Relations> postprocessed = postprocessorPipelineElement.execute(null, null);
+                pipeQueue.putAll(postprocessed);
+            } else {
+                Iterator<Map.Entry<File, Relations>> it = pipeQueue.entrySet().iterator();
 
-                ArrayList<Pair<File, Relations>> postprocessed = postprocessorPipelineElement.execute(pipelineItem.getLeft(), pipelineItem.getRight());
+                while (it.hasNext()) {
+                    Map.Entry<File, Relations> pair = it.next();
+                    System.out.println(pair.getKey() + " = " + pair.getValue());
 
-                nextPipeQueue.addAll(postprocessed);
+                    HashMap<File, Relations> preprocessed = postprocessorPipelineElement.execute(pair.getKey(), pair.getValue());
+
+                    nextPipeQueue.putAll(preprocessed);
+
+                    it.remove(); // avoids a ConcurrentModificationException
+                }
+
+                pipeQueue = nextPipeQueue;
+                nextPipeQueue = new HashMap<File, Relations>();
             }
-
-            pipeQueue = nextPipeQueue;
-            iterator = pipeQueue.iterator();
-            nextPipeQueue = new LinkedList<Pair<File, Relations>>();
         }
     }
 }

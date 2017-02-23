@@ -5,26 +5,27 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by elvanowen on 2/23/17.
  */
-public class FileWriterPreprocessor implements IPreProcessorPipelineElement {
+public class PreprocessorFileWriter implements IPreprocessorPipelineElement {
     private String writeDirectoryPath = null;
 
-    public FileWriterPreprocessor setWriteDirectoryPath(String writeDirectoryPath) {
+    public PreprocessorFileWriter setWriteDirectoryPath(String writeDirectoryPath) {
         this.writeDirectoryPath = writeDirectoryPath;
         return this;
     }
 
-    public ArrayList<Pair<File, String>> execute(File file, String payload) throws Exception {
+    public HashMap<File, String> execute(File file, String payload) throws Exception {
         if (writeDirectoryPath == null) {
             throw new Exception("Write directory path must be specified");
         } else {
             Utilities.writeToFile(writeDirectoryPath, file.getName(), payload);
 
-            ArrayList<Pair<File, String>> pipelineItems = new ArrayList<Pair<File, String>>();
-            pipelineItems.add(Pair.of(file, payload));
+            HashMap<File, String> pipelineItems = new HashMap<File, String>();
+            pipelineItems.put(file, payload);
 
             return pipelineItems;
         }

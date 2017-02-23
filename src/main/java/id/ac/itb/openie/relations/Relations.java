@@ -1,5 +1,7 @@
 package id.ac.itb.openie.relations;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.ArrayList;
 
 /**
@@ -30,6 +32,9 @@ public class Relations {
         return this;
     }
 
+    public String toString() {
+        return StringUtils.join(relations, "\n");
+    }
 
     public ArrayList<Relation> getRelations() {
         return relations;

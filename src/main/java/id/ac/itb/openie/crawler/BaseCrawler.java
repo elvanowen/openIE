@@ -91,13 +91,14 @@ public abstract class BaseCrawler extends WebCrawler {
             HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
             String html = htmlParseData.getHtml();
 
-            ArrayList<Pair<String, String>> outputs = extractContent(url, html);
+            Pair<String, String> output = extractContent(url, html);
+            writeToFile(output.getLeft(), output.getRight());
+        }
+    }
 
-            if (BaseCrawler.crawlStorageDirectoryPath != null) {
-                for(Pair<String, String> pair: outputs) {
-                    Utilities.writeToFile(BaseCrawler.crawlStorageDirectoryPath, pair.getLeft(), pair.getRight());
-                }
-            }
+    protected void writeToFile(String url, String content) {
+        if (BaseCrawler.crawlStorageDirectoryPath != null) {
+            Utilities.writeToFile(BaseCrawler.crawlStorageDirectoryPath, url, content);
         }
     }
 
@@ -142,5 +143,5 @@ public abstract class BaseCrawler extends WebCrawler {
 
     protected abstract Boolean shouldFollowLink(String link);
 
-    protected abstract ArrayList<Pair<String, String>> extractContent(String url, String html);
+    protected abstract Pair<String, String> extractContent(String url, String html);
 }

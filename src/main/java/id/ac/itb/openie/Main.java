@@ -2,10 +2,14 @@ package id.ac.itb.openie;
 
 import id.ac.itb.openie.config.Config;
 import id.ac.itb.openie.crawler.CrawlerPipeline;
-import id.ac.itb.openie.crawler.DetikCrawler;
 import id.ac.itb.openie.crawler.KompasCrawler;
+import id.ac.itb.openie.extractor.*;
 import id.ac.itb.openie.pipeline.OpenIePipeline;
+import id.ac.itb.openie.postprocess.PostprocessorFileReader;
+import id.ac.itb.openie.postprocess.PostprocessorFileWriter;
+import id.ac.itb.openie.postprocess.PostprocessorPipeline;
 import id.ac.itb.openie.preprocess.*;
+import id.ac.itb.openie.preprocess.PreprocessorFileWriter;
 
 /**
  * Created by elvanowen on 2/9/17.
@@ -24,7 +28,7 @@ public class Main {
                 .addPipelineElement(
                         new PreprocessorPipeline()
                                 .addPipelineElement(
-                                        new FileReaderPreprocessor()
+                                        new PreprocessorFileReader()
                                                 .setReadDirectoryPath(
                                                         new Config()
                                                                 .getProperty("CRAWLER_STORAGE_DIRECTORY")))
@@ -33,10 +37,37 @@ public class Main {
 //                                .addPipelineElement(
 //                                        new DetikDocumentPreprocessor())
                                 .addPipelineElement(
-                                        new FileWriterPreprocessor()
+                                        new PreprocessorFileWriter()
                                                 .setWriteDirectoryPath(
                                                         new Config()
                                                                 .getProperty("PREPROCESSOR_STORAGE_DIRECTORY"))))
+                .addPipelineElement(
+                        new ExtractorPipeline()
+                                .addPipelineElement(
+                                        new ExtractorFileReader()
+                                                .setReadDirectoryPath(
+                                                        new Config()
+                                                                .getProperty("PREPROCESSOR_STORAGE_DIRECTORY")))
+                                .addPipelineElement(
+                                        new ReverbExtractor()
+                                )
+                                .addPipelineElement(
+                                        new ExtractorFileWriter()
+                                                .setWriteDirectoryPath(
+                                                        new Config()
+                                                                .getProperty("EXTRACTIONS_STORAGE_DIRECTORY"))))
+                .addPipelineElement(
+                        new PostprocessorPipeline()
+                                .addPipelineElement(
+                                        new PostprocessorFileReader()
+                                            .setReadDirectoryPath(
+                                                    new Config()
+                                                            .getProperty("EXTRACTIONS_STORAGE_DIRECTORY")))
+                                .addPipelineElement(
+                                        new PostprocessorFileWriter()
+                                                .setWriteDirectoryPath(
+                                                        new Config()
+                                                                .getProperty("POSTPROCESSOR_STORAGE_DIRECTORY"))))
                 .execute();
 
 
