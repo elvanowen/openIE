@@ -1,15 +1,26 @@
 package id.ac.itb.openie;
 
 import id.ac.itb.openie.config.Config;
+import id.ac.itb.openie.crawler.Crawler;
 import id.ac.itb.openie.crawler.CrawlerPipeline;
-import id.ac.itb.openie.crawler.KompasCrawler;
-import id.ac.itb.openie.extractor.*;
+import id.ac.itb.openie.crawler.ICrawlerHandler;
+import id.ac.itb.openie.extractor.ExtractorFileReader;
+import id.ac.itb.openie.extractor.ExtractorFileWriter;
+import id.ac.itb.openie.extractor.ExtractorPipeline;
+import id.ac.itb.openie.extractor.ReverbExtractor;
 import id.ac.itb.openie.pipeline.OpenIePipeline;
 import id.ac.itb.openie.postprocess.PostprocessorFileReader;
 import id.ac.itb.openie.postprocess.PostprocessorFileWriter;
 import id.ac.itb.openie.postprocess.PostprocessorPipeline;
-import id.ac.itb.openie.preprocess.*;
+import id.ac.itb.openie.preprocess.KompasDocumentPreprocessor;
+import id.ac.itb.openie.preprocess.PreprocessorFileReader;
 import id.ac.itb.openie.preprocess.PreprocessorFileWriter;
+import id.ac.itb.openie.preprocess.PreprocessorPipeline;
+import ro.fortsoft.pf4j.DefaultPluginManager;
+import ro.fortsoft.pf4j.PluginManager;
+
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by elvanowen on 2/9/17.
@@ -18,11 +29,26 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
+        // Load plugins
+        PluginManager pluginManager = new DefaultPluginManager();
+        pluginManager.loadPlugins();
+        pluginManager.startPlugins();
+
+//        System.out.println(System.getProperty("pf4j.pluginsDir", "plugins"));
+
+        HashMap<String, ICrawlerHandler> crawlerPlugin = new HashMap<String, ICrawlerHandler>();
+
+        List<ICrawlerHandler> crawlerHandlers = pluginManager.getExtensions(ICrawlerHandler.class);
+        for (ICrawlerHandler crawlerHandler : crawlerHandlers) {
+            crawlerPlugin.put(crawlerHandler.getPluginName(), crawlerHandler);
+        }
+
         new OpenIePipeline()
                 .addPipelineElement(
                         new CrawlerPipeline()
                                 .addCrawler(
-                                        new KompasCrawler()
+                                        new Crawler()
+                                                .setCrawlerhandler(crawlerPlugin.get("Okezone Crawler"))
                                                 .setMaxPagesToFetch(5)
                                                 .setCrawlStorageDirectoryPath(new Config().getProperty("CRAWLER_STORAGE_DIRECTORY"))))
                 .addPipelineElement(
@@ -80,11 +106,11 @@ public class Main {
 //            extractor.extractFromFile(file);
 //        }
 
-//        KompasCrawler kompasCrawler = new KompasCrawler();
+//        KompasCrawlerHandler kompasCrawler = new KompasCrawlerHandler();
 //        kompasCrawler.setShouldStoreCrawlData(true);
 //        kompasCrawler.crawl();
 
-//        DetikCrawler detikCrawler = new DetikCrawler();
+//        DetikCrawlerHandler detikCrawler = new DetikCrawlerHandler();
 //        detikCrawler.setShouldStoreCrawlData(true);
 //        detikCrawler.crawl();
 

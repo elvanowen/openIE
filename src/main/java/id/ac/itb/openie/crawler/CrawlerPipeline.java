@@ -9,9 +9,9 @@ import java.util.ArrayList;
  */
 public class CrawlerPipeline implements IOpenIePipelineElement {
 
-    private ArrayList<BaseCrawler> crawlers = new ArrayList<BaseCrawler>();
+    private ArrayList<Crawler> crawlers = new ArrayList<Crawler>();
 
-    public CrawlerPipeline addCrawler(BaseCrawler crawler) {
+    public CrawlerPipeline addCrawler(Crawler crawler) {
         this.crawlers.add(crawler);
         return this;
     }
@@ -19,7 +19,7 @@ public class CrawlerPipeline implements IOpenIePipelineElement {
     public void execute() throws Exception {
         System.out.println("Running crawler pipeline...");
 
-        for (BaseCrawler crawler: crawlers) {
+        for (Crawler crawler: crawlers) {
             crawler.execute();
         }
     }
