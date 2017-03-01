@@ -24,7 +24,7 @@ public class DetikCrawlerHandlerPlugin extends Plugin {
     }
 
     @Extension
-    public static class OkezoneCrawlerHandler implements ICrawlerHandler {
+    public static class DetikCrawlerHandler implements ICrawlerHandler {
 
         public String getPluginName() {
             return "Detik Crawler";

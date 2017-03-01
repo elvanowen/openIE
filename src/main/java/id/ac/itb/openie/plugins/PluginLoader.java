@@ -2,26 +2,43 @@ package id.ac.itb.openie.plugins;
 
 import ro.fortsoft.pf4j.DefaultPluginManager;
 import ro.fortsoft.pf4j.PluginManager;
+import ro.fortsoft.pf4j.PluginState;
 
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by elvanowen on 3/1/17.
  */
-public class PluginLoader<T> {
+public class PluginLoader {
 
-    private Class<T> type = null;
     private PluginManager pluginManager = null;
+    private HashMap<Class, List> availableExtensions = new HashMap<>();
 
-    public PluginLoader(Class<T> type) {
-        this.type = type;
-
+    public PluginLoader() {
         this.pluginManager = new DefaultPluginManager();
-        this.pluginManager.loadPlugins();
-        this.pluginManager.startPlugins();
+        this.reloadPlugins();
     }
 
-    public List<T> getExtensions() {
-        return pluginManager.getExtensions(type);
+    public void reloadPlugins() {
+        pluginManager.loadPlugins();
+        pluginManager.startPlugins();
+        this.reRegisterAvailableExtensions();
+    }
+
+    public PluginLoader reRegisterAvailableExtensions() {
+        for (Map.Entry<Class, List> entry : availableExtensions.entrySet()) {
+            availableExtensions.put(entry.getKey(), pluginManager.getExtensions(entry.getKey()));
+        }
+
+        return this;
+    }
+
+    public PluginLoader registerAvailableExtensions(Class type) {
+        availableExtensions.put(type, pluginManager.getExtensions(type));
+        return this;
+    }
+
+    public List getExtensions(Class type) {
+        return availableExtensions.get(type);
     }
 }

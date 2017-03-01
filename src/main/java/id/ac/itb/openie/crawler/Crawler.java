@@ -33,6 +33,7 @@ public class Crawler extends WebCrawler {
     private static int maxPagesToFetch = 200;
     private static String userAgentString = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
     private static ICrawlerHandler crawlerHandler = null;
+    private static int totalDocumentCrawled = 0;
 
     public Crawler setUserAgentString(String userAgentString) {
         Crawler.userAgentString = userAgentString;
@@ -67,6 +68,10 @@ public class Crawler extends WebCrawler {
     public Crawler setCrawlerhandler(ICrawlerHandler crawlerhandler) {
         Crawler.crawlerHandler = crawlerhandler;
         return this;
+    }
+
+    public int getTotalDocumentCrawled() {
+        return totalDocumentCrawled;
     }
 
     @Override
@@ -114,6 +119,8 @@ public class Crawler extends WebCrawler {
             HashMap<String, String> fileContentMappings = crawlerHandler.extractContentFromHTML(url, html);
 
             Iterator<Map.Entry<String, String>> it = fileContentMappings.entrySet().iterator();
+
+            if (it.hasNext()) totalDocumentCrawled++;
 
             while (it.hasNext()) {
                 Map.Entry<String, String> pair = it.next();

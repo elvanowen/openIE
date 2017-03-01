@@ -5,14 +5,22 @@
  */
 package id.ac.itb.gui;
 
+import id.ac.itb.gui.alert.Alert;
+import id.ac.itb.gui.progressbar.Progress;
+import id.ac.itb.gui.progressbar.ProgressBar;
 import id.ac.itb.openie.config.Config;
 import id.ac.itb.openie.crawler.Crawler;
 import id.ac.itb.openie.crawler.CrawlerPipeline;
 import id.ac.itb.openie.crawler.ICrawlerHandler;
 import id.ac.itb.openie.pipeline.OpenIePipeline;
 import id.ac.itb.openie.plugins.PluginLoader;
+import id.ac.itb.util.UnzipUtility;
 
 import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,12 +31,19 @@ import java.util.List;
 public class OpenIeJFrame extends javax.swing.JFrame {
 
     DefaultListModel crawlerPipelineListModel = new DefaultListModel();
+    PluginLoader pluginLoader = new PluginLoader();
 
     /**
      * Creates new form CustomizeCrawlerJFrame
      */
     public OpenIeJFrame() {
+        initPlugins();
         initComponents();
+    }
+
+    private void initPlugins() {
+        pluginLoader
+                .registerAvailableExtensions(ICrawlerHandler.class);
     }
 
     /**
@@ -49,7 +64,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         crawlerPipelineLabel = new javax.swing.JLabel();
         addCrawlerButton = new javax.swing.JButton();
         crawlerListLabel = new javax.swing.JLabel();
-        addCrawlerButton1 = new javax.swing.JButton();
+        removeCrawlerButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator4 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -92,10 +107,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         createCrawlerButton.setText("Create New Crawler");
 
-        PluginLoader<Object> pluginLoader = new PluginLoader<>(Object.class);
-        List<Object> crawlerHandlers = pluginLoader.getExtensions();
-
-        crawlerComboBox.setModel(new javax.swing.DefaultComboBoxModel<Object>(crawlerHandlers.toArray()));
+        crawlerComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getExtensions(ICrawlerHandler.class).toArray()));
 
         runCrawlerButton.setText("Run Crawler Pipeline");
         runCrawlerButton.addActionListener(new java.awt.event.ActionListener() {
@@ -115,23 +127,13 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         crawlerListLabel.setText("Crawler List");
 
-        addCrawlerButton1.setText("Remove Crawler From Pipeline");
-        addCrawlerButton1.addActionListener(new java.awt.event.ActionListener() {
+        removeCrawlerButton.setText("Remove Crawler From Pipeline");
+        removeCrawlerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addCrawlerButton1ActionPerformed(evt);
+                removeCrawlerButtonActionPerformed(evt);
             }
         });
 
-//        javax.swing.AbstractListModel<Object> crawlerListModel = new javax.swing.AbstractListModel<Object>() {
-//            ArrayList<Crawler> objects = crawlerPipeline.getCrawlers();
-//            public int getSize() { return objects.size(); }
-//            public Object getElementAt(int i) { return objects.get(i); }
-//            public void print() {}
-//        };
-
-
-
-//        crawlerPipelineDragDropList.setModel(crawlerListModel);
         jScrollPane1.setViewportView(crawlerPipelineDragDropList);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -154,7 +156,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                             .addComponent(addCrawlerButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(runCrawlerButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(loadCrawlerButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(addCrawlerButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(removeCrawlerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(createCrawlerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jSeparator4))))
@@ -174,7 +176,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(addCrawlerButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(addCrawlerButton1)
+                        .addComponent(removeCrawlerButton)
                         .addGap(12, 12, 12)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -488,8 +490,14 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton10ActionPerformed
 
-    private void addCrawlerButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCrawlerButton1ActionPerformed
+    private void removeCrawlerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCrawlerButton1ActionPerformed
         // TODO add your handling code here:
+
+        ICrawlerHandler selectedCrawlerHandler = (ICrawlerHandler) crawlerPipelineDragDropList.getSelectedValue();
+
+        System.out.println(selectedCrawlerHandler);
+        crawlerPipelineListModel.removeElement(selectedCrawlerHandler);
+
     }//GEN-LAST:event_addCrawlerButton1ActionPerformed
 
     private void addCrawlerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCrawlerButtonActionPerformed
@@ -512,10 +520,40 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         OpenIePipeline openIePipeline = new OpenIePipeline();
         openIePipeline.addPipelineElement(crawlerPipeline);
+
+//        ProgressBar progressBar = new ProgressBar("Running Crawler Pipeline");
+
+        new Progress().setVisible(true);
+
+
     }//GEN-LAST:event_runCrawlerButtonActionPerformed
 
     private void loadCrawlerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadCrawlerButtonActionPerformed
         // TODO add your handling code here:
+
+        JFileChooser fileChooser = new JFileChooser();
+        int returnValue = fileChooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+
+            try {
+                String target = System.getProperty("pf4j.pluginsDir", "plugins") + File.separator + selectedFile.getName();
+                File targetZip = new File(target);
+                String UnzipTarget = target.replaceFirst("[.][^.]+$", "");
+                Files.copy(selectedFile.toPath(), targetZip.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                UnzipUtility unzipUtility = new UnzipUtility();
+                unzipUtility.unzip(target, UnzipTarget);
+                targetZip.delete();
+
+//                JOptionPane.showMessageDialog(new JFrame(), "Required restarting application to load new plugins.");
+
+                new Alert("Required restarting application to load new plugins.").setVisible(true);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }//GEN-LAST:event_loadCrawlerButtonActionPerformed
 
     /**
@@ -564,7 +602,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addCrawlerButton;
-    private javax.swing.JButton addCrawlerButton1;
+    private javax.swing.JButton removeCrawlerButton;
     private javax.swing.JComboBox<Object> crawlerComboBox;
     private javax.swing.JLabel crawlerListLabel;
     private javax.swing.JLabel crawlerPipelineLabel;

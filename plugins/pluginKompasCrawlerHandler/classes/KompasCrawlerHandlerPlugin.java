@@ -24,7 +24,7 @@ public class KompasCrawlerHandlerPlugin extends Plugin {
     }
 
     @Extension
-    public static class OkezoneCrawlerHandler implements ICrawlerHandler {
+    public static class KompasCrawlerHandler implements ICrawlerHandler {
 
         public String getPluginName() {
             return "Kompas Crawler";
