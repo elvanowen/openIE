@@ -9,6 +9,7 @@ import id.ac.itb.openie.extractor.ExtractorFileWriter;
 import id.ac.itb.openie.extractor.ExtractorPipeline;
 import id.ac.itb.openie.extractor.ReverbExtractor;
 import id.ac.itb.openie.pipeline.OpenIePipeline;
+import id.ac.itb.openie.plugins.PluginLoader;
 import id.ac.itb.openie.postprocess.PostprocessorFileReader;
 import id.ac.itb.openie.postprocess.PostprocessorFileWriter;
 import id.ac.itb.openie.postprocess.PostprocessorPipeline;
@@ -30,15 +31,18 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         // Load plugins
-        PluginManager pluginManager = new DefaultPluginManager();
-        pluginManager.loadPlugins();
-        pluginManager.startPlugins();
+//        PluginManager pluginManager = new DefaultPluginManager();
+//        pluginManager.loadPlugins();
+//        pluginManager.startPlugins();
+
+        PluginLoader<ICrawlerHandler> pluginLoader = new PluginLoader<>(ICrawlerHandler.class);
+        List<ICrawlerHandler> crawlerHandlers = pluginLoader.getExtensions();
 
 //        System.out.println(System.getProperty("pf4j.pluginsDir", "plugins"));
 
         HashMap<String, ICrawlerHandler> crawlerPlugin = new HashMap<String, ICrawlerHandler>();
-
-        List<ICrawlerHandler> crawlerHandlers = pluginManager.getExtensions(ICrawlerHandler.class);
+//
+//        List<ICrawlerHandler> crawlerHandlers = pluginManager.getExtensions(ICrawlerHandler.class);
         for (ICrawlerHandler crawlerHandler : crawlerHandlers) {
             crawlerPlugin.put(crawlerHandler.getPluginName(), crawlerHandler);
         }

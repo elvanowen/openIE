@@ -16,6 +16,10 @@ public class CrawlerPipeline implements IOpenIePipelineElement {
         return this;
     }
 
+    public ArrayList<Crawler> getCrawlers() {
+        return this.crawlers;
+    }
+
     public void execute() throws Exception {
         System.out.println("Running crawler pipeline...");
 

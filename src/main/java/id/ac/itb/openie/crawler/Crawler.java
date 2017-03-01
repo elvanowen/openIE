@@ -10,9 +10,14 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import edu.uci.ics.crawler4j.url.WebURL;
 import id.ac.itb.openie.config.Config;
+import id.ac.itb.openie.relations.Relations;
 import id.ac.itb.openie.utils.Utilities;
 import org.apache.commons.lang3.tuple.Pair;
 
+import java.io.File;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 /**
@@ -65,6 +70,18 @@ public class Crawler extends WebCrawler {
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        crawlerHandler.crawlerWillRun();
+    }
+
+    @Override
+    public void onBeforeExit() {
+        super.onBeforeExit();
+        crawlerHandler.crawlerDidRun();
+    }
+
+    @Override
     public boolean shouldVisit(Page referringPage, WebURL url) {
         String targetHref = url.getURL().toLowerCase();
         String referringHref = referringPage.getWebURL().getURL().toLowerCase();
@@ -72,7 +89,7 @@ public class Crawler extends WebCrawler {
 //        System.out.println(referringHref + " -> " + targetHref);
 
         // If url is seed then allow
-        for (String seedURL: crawlerHandler.getSeedEndpoints()) {
+        for (String seedURL: crawlerHandler.getCrawlerStartingUrls()) {
             if (targetHref.equalsIgnoreCase(seedURL)) {
                 return true;
             }
@@ -82,7 +99,7 @@ public class Crawler extends WebCrawler {
             return false;
         }
 
-        return crawlerHandler.shouldFollowLink(targetHref);
+        return crawlerHandler.shouldCrawlerFollowLink(targetHref);
     }
 
     @Override
@@ -94,8 +111,17 @@ public class Crawler extends WebCrawler {
             HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
             String html = htmlParseData.getHtml();
 
-            Pair<String, String> output = crawlerHandler.extractContent(url, html);
-            writeToFile(output.getLeft(), output.getRight());
+            HashMap<String, String> fileContentMappings = crawlerHandler.extractContentFromHTML(url, html);
+
+            Iterator<Map.Entry<String, String>> it = fileContentMappings.entrySet().iterator();
+
+            while (it.hasNext()) {
+                Map.Entry<String, String> pair = it.next();
+
+                writeToFile(pair.getKey(), pair.getValue());
+
+                it.remove(); // avoids a ConcurrentModificationException
+            }
         }
     }
 
@@ -133,7 +159,7 @@ public class Crawler extends WebCrawler {
              * URLs that are fetched and then the crawler starts following links
              * which are found in these pages
              */
-            for (String seed: crawlerHandler.getSeedEndpoints()) {
+            for (String seed: crawlerHandler.getCrawlerStartingUrls()) {
                 controller.addSeed(seed);
             }
 

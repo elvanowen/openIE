@@ -8,6 +8,7 @@ import org.jsoup.select.Elements;
 import ro.fortsoft.pf4j.ExtensionPoint;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -15,7 +16,12 @@ import java.util.HashSet;
  */
 public interface ICrawlerHandler extends ExtensionPoint {
     public String getPluginName();
-    public HashSet<String> getSeedEndpoints();
-    public Boolean shouldFollowLink(String link);
-    public Pair<String, String> extractContent(String url, String html);
+    public HashSet<String> getCrawlerStartingUrls();
+    public Boolean shouldCrawlerFollowLink(String link);
+    public HashMap<String, String> extractContentFromHTML(String url, String html);
+    public String toString();
+
+    // Hooks
+    public void crawlerWillRun();
+    public void crawlerDidRun();
 }

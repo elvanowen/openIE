@@ -11,6 +11,7 @@ import ro.fortsoft.pf4j.Plugin;
 import ro.fortsoft.pf4j.PluginWrapper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -29,7 +30,7 @@ public class KompasCrawlerHandlerPlugin extends Plugin {
             return "Kompas Crawler";
         }
 
-        public HashSet<String> getSeedEndpoints() {
+        public HashSet<String> getCrawlerStartingUrls() {
             HashSet<String> urls = new HashSet<String>();
 
             urls.add("http://www.kompas.com");
@@ -37,22 +38,35 @@ public class KompasCrawlerHandlerPlugin extends Plugin {
             return urls;
         }
 
-        public Boolean shouldFollowLink(String link) {
+        public Boolean shouldCrawlerFollowLink(String link) {
             return link.contains("kompas.com/read");
         }
 
-        public Pair<String, String> extractContent(String url, String html) {
-            ArrayList<Pair<String, String>> output = new ArrayList<Pair<String, String>>();
+        public HashMap<String, String> extractContentFromHTML(String url, String html) {
+//            ArrayList<Pair<String, String>> output = new ArrayList<Pair<String, String>>();
+            HashMap<String, String> output = new HashMap<>();
             Document doc = Jsoup.parse(html);
 
             Elements contents = doc.getElementsByClass("kcm-read-text");
             for (Element content : contents) {
                 String contentText = content.text();
 
-                return Pair.of(url, contentText);
+                output.put(url, contentText);
             }
 
-            return null;
+            return output;
+        }
+
+        public String toString() {
+            return this.getPluginName();
+        }
+
+        public void crawlerWillRun() {
+            System.out.println(this.getPluginName() + " will run..");
+        }
+
+        public void crawlerDidRun() {
+            System.out.println(this.getPluginName() + " did run..");
         }
     }
 }

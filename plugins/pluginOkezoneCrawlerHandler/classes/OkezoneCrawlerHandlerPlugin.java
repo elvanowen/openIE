@@ -12,6 +12,7 @@ import ro.fortsoft.pf4j.Plugin;
 import ro.fortsoft.pf4j.PluginWrapper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -30,7 +31,7 @@ public class OkezoneCrawlerHandlerPlugin extends Plugin {
             return "Okezone Crawler";
         }
 
-        public HashSet<String> getSeedEndpoints() {
+        public HashSet<String> getCrawlerStartingUrls() {
             HashSet<String> urls = new HashSet<String>();
 
             urls.add("http://www.okezone.com");
@@ -38,12 +39,13 @@ public class OkezoneCrawlerHandlerPlugin extends Plugin {
             return urls;
         }
 
-        public Boolean shouldFollowLink(String link) {
+        public Boolean shouldCrawlerFollowLink(String link) {
             return link.contains("okezone.com/read");
         }
 
-        public Pair<String, String> extractContent(String url, String html) {
+        public HashMap<String, String> extractContentFromHTML(String url, String html) {
             Document doc = Jsoup.parse(html);
+            HashMap<String, String> output = new HashMap<>();
 
             ArrayList<String> paragraphs = new ArrayList<String>();
 
@@ -53,10 +55,23 @@ public class OkezoneCrawlerHandlerPlugin extends Plugin {
             }
 
             if (paragraphs.size() > 0) {
-                return Pair.of(url, StringUtils.join(paragraphs, " "));
+                output.put(url, StringUtils.join(paragraphs, " "));
+                return output;
             } else {
                 return null;
             }
+        }
+
+        public String toString() {
+            return this.getPluginName();
+        }
+
+        public void crawlerWillRun() {
+            System.out.println(this.getPluginName() + " will run..");
+        }
+
+        public void crawlerDidRun() {
+            System.out.println(this.getPluginName() + " did run..");
         }
     }
 }
