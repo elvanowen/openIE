@@ -6,8 +6,7 @@
 package id.ac.itb.gui;
 
 import id.ac.itb.gui.alert.Alert;
-import id.ac.itb.gui.progressbar.Progress;
-import id.ac.itb.gui.progressbar.ProgressBar;
+import id.ac.itb.gui.progressbar.CrawlerProgress;
 import id.ac.itb.openie.config.Config;
 import id.ac.itb.openie.crawler.Crawler;
 import id.ac.itb.openie.crawler.CrawlerPipeline;
@@ -523,7 +522,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
 //        ProgressBar progressBar = new ProgressBar("Running Crawler Pipeline");
 
-        new Progress().setVisible(true);
+        new CrawlerProgress().setVisible(true);
 
 
     }//GEN-LAST:event_runCrawlerButtonActionPerformed

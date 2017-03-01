@@ -11,12 +11,12 @@ import javax.swing.*;
  *
  * @author elvanowen
  */
-public class Progress extends javax.swing.JFrame {
+public class CrawlerProgress extends javax.swing.JFrame {
 
     /**
-     * Creates new form Progress
+     * Creates new form CrawlerProgress
      */
-    public Progress() {
+    public CrawlerProgress() {
         initComponents();
     }
 
@@ -76,7 +76,7 @@ public class Progress extends javax.swing.JFrame {
 
         pack();
         setLocationRelativeTo(null);
-        setTitle("Progress Bar");
+        setTitle("CrawlerProgress Bar");
     }// </editor-fold>//GEN-END:initComponents
 
     /**
@@ -90,7 +90,7 @@ public class Progress extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Progress().setVisible(true);
+                new CrawlerProgress().setVisible(true);
             }
         });
     }
