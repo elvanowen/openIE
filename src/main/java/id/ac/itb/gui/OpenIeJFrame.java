@@ -6,6 +6,7 @@
 package id.ac.itb.gui;
 
 import id.ac.itb.gui.alert.Alert;
+import id.ac.itb.gui.config.CrawlerConfig;
 import id.ac.itb.gui.progressbar.CrawlerProgress;
 import id.ac.itb.openie.config.Config;
 import id.ac.itb.openie.crawler.Crawler;
@@ -20,8 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
@@ -57,7 +56,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel1 = new javax.swing.JPanel();
         loadCrawlerButton = new javax.swing.JButton();
-        createCrawlerButton = new javax.swing.JButton();
+        configureCrawlerButton = new javax.swing.JButton();
         crawlerComboBox = new javax.swing.JComboBox<Object>();
         runCrawlerButton = new javax.swing.JButton();
         crawlerPipelineLabel = new javax.swing.JLabel();
@@ -104,7 +103,12 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             }
         });
 
-        createCrawlerButton.setText("Create New Crawler");
+        configureCrawlerButton.setText("Configure Crawler");
+        configureCrawlerButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                configureCrawlerButtonActionPerformed(evt);
+            }
+        });
 
         crawlerComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getExtensions(ICrawlerHandler.class).toArray()));
 
@@ -156,7 +160,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                             .addComponent(runCrawlerButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(loadCrawlerButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(removeCrawlerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(createCrawlerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(configureCrawlerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jSeparator4))))
                 .addContainerGap())
@@ -181,7 +185,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(loadCrawlerButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(createCrawlerButton)
+                        .addComponent(configureCrawlerButton)
                         .addGap(10, 10, 10)
                         .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -489,6 +493,13 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton10ActionPerformed
 
+    private void configureCrawlerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCrawlerButton1ActionPerformed
+        // TODO add your handling code here:
+
+        new CrawlerConfig().setVisible(true);
+
+    }//GEN-LAST:event_addCrawlerButton1ActionPerformed
+
     private void removeCrawlerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCrawlerButton1ActionPerformed
         // TODO add your handling code here:
 
@@ -605,7 +616,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox<Object> crawlerComboBox;
     private javax.swing.JLabel crawlerListLabel;
     private javax.swing.JLabel crawlerPipelineLabel;
-    private javax.swing.JButton createCrawlerButton;
+    private javax.swing.JButton configureCrawlerButton;
     private id.ac.itb.gui.dragdroplist.DragDropList crawlerPipelineDragDropList;
     private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton14;
