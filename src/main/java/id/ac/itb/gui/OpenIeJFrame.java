@@ -12,7 +12,8 @@ import id.ac.itb.openie.crawler.ICrawlerHandler;
 import id.ac.itb.openie.pipeline.OpenIePipeline;
 import id.ac.itb.openie.plugins.PluginLoader;
 
-import javax.swing.UIManager;
+import javax.swing.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +21,8 @@ import java.util.List;
  * @author elvanowen
  */
 public class OpenIeJFrame extends javax.swing.JFrame {
+
+    DefaultListModel crawlerPipelineListModel = new DefaultListModel();
 
     /**
      * Creates new form CustomizeCrawlerJFrame
@@ -50,7 +53,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator4 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
-        crawlerPipelineDragDropList = new id.ac.itb.gui.dragdroplist.DragDropList();
+        crawlerPipelineDragDropList = new id.ac.itb.gui.dragdroplist.DragDropList(crawlerPipelineListModel);
         jPanel2 = new javax.swing.JPanel();
         jButton18 = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
@@ -119,11 +122,16 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             }
         });
 
-        crawlerPipelineDragDropList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
+//        javax.swing.AbstractListModel<Object> crawlerListModel = new javax.swing.AbstractListModel<Object>() {
+//            ArrayList<Crawler> objects = crawlerPipeline.getCrawlers();
+//            public int getSize() { return objects.size(); }
+//            public Object getElementAt(int i) { return objects.get(i); }
+//            public void print() {}
+//        };
+
+
+
+//        crawlerPipelineDragDropList.setModel(crawlerListModel);
         jScrollPane1.setViewportView(crawlerPipelineDragDropList);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -488,13 +496,15 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         ICrawlerHandler crawlerHandler = (ICrawlerHandler) crawlerComboBox.getSelectedItem();
-        System.out.println(crawlerHandler);
 
         crawlerPipeline.addCrawler(
             new Crawler()
             .setCrawlerhandler(crawlerHandler)
             .setMaxPagesToFetch(5)
             .setCrawlStorageDirectoryPath(new Config().getProperty("CRAWLER_STORAGE_DIRECTORY")));
+
+        crawlerPipelineListModel.addElement(crawlerHandler);
+        crawlerPipelineDragDropList.printItems();
     }//GEN-LAST:event_addCrawlerButtonActionPerformed
 
     private void runCrawlerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runCrawlerButtonActionPerformed

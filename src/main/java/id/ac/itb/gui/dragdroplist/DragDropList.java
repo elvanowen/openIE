@@ -9,7 +9,6 @@ package id.ac.itb.gui.dragdroplist;
  *
  * @author elvanowen
  */
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -19,42 +18,40 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 
 public class DragDropList extends JList {
-    DefaultListModel<Object> model;
+    DefaultListModel listModel;
     private Integer fromIdx, toIdx;
-    private List<Object> items;
 
-    public DragDropList() {
-        super(new DefaultListModel<Object>());
-        model = (DefaultListModel<Object>) getModel();
+    public DragDropList(DefaultListModel listModel) {
+        super(listModel);
+
         setDragEnabled(true);
         setDropMode(DropMode.INSERT);
-
         setTransferHandler(new DropHandler(this));
-
         new DragListener(this);
+
+        this.listModel = listModel;
     }
 
-    public void setItems(List<Object> objects) {
-        this.items = objects;
-
-        for(Object object: objects) {
-            model.addElement(object);
+    public void printItems() {
+        System.out.println("items");
+        if (this.listModel.size() > 0) {
+            System.out.println(this.listModel);
+        } else {
+            System.out.println(this.listModel);
         }
     }
 
     void moveItem(Integer fromIdx, Integer toIdx) {
-
-        Object elementToBeRemoved = model.getElementAt(fromIdx);
-        items.add(toIdx, model.getElementAt(fromIdx));
-        model.add(toIdx, model.getElementAt(fromIdx));
+        Object elementToBeRemoved = listModel.getElementAt(fromIdx);
+        listModel.add(toIdx, listModel.getElementAt(fromIdx));
 
         if (fromIdx > toIdx) {
-            items.remove(model.lastIndexOf(elementToBeRemoved));
-            model.remove(model.lastIndexOf(elementToBeRemoved));
+            listModel.remove(listModel.lastIndexOf(elementToBeRemoved));
         } else {
-            items.remove(model.indexOf(elementToBeRemoved));
-            model.remove(model.indexOf(elementToBeRemoved));
+            listModel.remove(listModel.indexOf(elementToBeRemoved));
         }
+
+        System.out.println(this.listModel);
     }
 
     void setFromIdx(Integer fromIdx) {
@@ -75,7 +72,7 @@ public class DragDropList extends JList {
 
     public static void main(String[] a){
         JFrame f = new JFrame();
-        f.add(new JScrollPane(new DragDropList()));
+        f.add(new JScrollPane(new DragDropList(new DefaultListModel())));
         f.setSize(300,300);
         f.setVisible(true);
     }

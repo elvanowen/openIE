@@ -17,6 +17,7 @@ public class CrawlerPipeline implements IOpenIePipelineElement {
     }
 
     public ArrayList<Crawler> getCrawlers() {
+        System.out.println("Accessing getCrawlers");
         return this.crawlers;
     }
 
