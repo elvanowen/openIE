@@ -2,6 +2,7 @@ package id.ac.itb.openie;
 
 import id.ac.itb.openie.config.Config;
 import id.ac.itb.openie.crawler.Crawler;
+import id.ac.itb.openie.crawler.CrawlerConfig;
 import id.ac.itb.openie.crawler.CrawlerPipeline;
 import id.ac.itb.openie.crawler.ICrawlerHandler;
 import id.ac.itb.openie.extractor.ExtractorFileReader;
@@ -53,8 +54,7 @@ public class Main {
                                 .addCrawler(
                                         new Crawler()
                                                 .setCrawlerhandler(crawlerPlugin.get("Okezone Crawler"))
-                                                .setMaxPagesToFetch(5)
-                                                .setCrawlStorageDirectoryPath(new Config().getProperty("CRAWLER_STORAGE_DIRECTORY"))))
+                                                .setCrawlerConfig(new CrawlerConfig().setMaxPagesToFetch(50))))
                 .addPipelineElement(
                         new PreprocessorPipeline()
                                 .addPipelineElement(

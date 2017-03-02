@@ -25,49 +25,26 @@ import java.util.regex.Pattern;
  */
 public class Crawler extends WebCrawler {
 
-    private static String crawlStorageDirectoryPath = null;
-    private static Pattern filterRegexPattern = Pattern.compile(".*(\\.(css|js|gif|jpeg|jpg|png|mp3|mp3|zip|gz))$");
-    private static String internalCrawlerStorageDirectory = new Config().getProperty("INTERNAL_CRAWLER_STORAGE_DIRECTORY");
-    private static int numberOfCrawlers = 1;
-    private static int maxDepthOfCrawling = 2;
-    private static int maxPagesToFetch = 200;
-    private static String userAgentString = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
-    private static ICrawlerHandler crawlerHandler = null;
-    private static int totalDocumentCrawled = 0;
-
-    public Crawler setUserAgentString(String userAgentString) {
-        Crawler.userAgentString = userAgentString;
-        return this;
-    }
-
-    public Crawler setMaxDepthOfCrawling(int maxDepthOfCrawling) {
-        Crawler.maxDepthOfCrawling = maxDepthOfCrawling;
-        return this;
-    }
-
-    public Crawler setNumberOfCrawlers(int numberOfCrawlers) {
-        Crawler.numberOfCrawlers = numberOfCrawlers;
-        return this;
-    }
-
-    public Crawler setMaxPagesToFetch(int maxPagesToFetch) {
-        Crawler.maxPagesToFetch = maxPagesToFetch;
-        return this;
-    }
-
-    public Crawler setFilterRegexPattern(String filterRegexPattern) {
-        Crawler.filterRegexPattern = Pattern.compile(filterRegexPattern);
-        return this;
-    }
-
-    public Crawler setCrawlStorageDirectoryPath(String crawlStorageDirectoryPath) {
-        Crawler.crawlStorageDirectoryPath = crawlStorageDirectoryPath;
-        return this;
-    }
+    private ICrawlerHandler crawlerHandler = null;
+    private int totalDocumentCrawled = 0;
+    private CrawlerConfig crawlerConfig = new CrawlerConfig();
 
     public Crawler setCrawlerhandler(ICrawlerHandler crawlerhandler) {
-        Crawler.crawlerHandler = crawlerhandler;
+        this.crawlerHandler = crawlerhandler;
         return this;
+    }
+
+    public ICrawlerHandler getCrawlerhandler() {
+        return this.crawlerHandler;
+    }
+
+    public Crawler setCrawlerConfig(CrawlerConfig crawlerConfig) {
+        this.crawlerConfig = crawlerConfig;
+        return this;
+    }
+
+    public CrawlerConfig getCrawlerConfig() {
+        return this.crawlerConfig;
     }
 
     public int getTotalDocumentCrawled() {
@@ -100,7 +77,7 @@ public class Crawler extends WebCrawler {
             }
         }
 
-        if (filterRegexPattern.matcher(targetHref).matches()) {
+        if (crawlerConfig.getFilterRegexPattern().matcher(targetHref).matches()) {
             return false;
         }
 
@@ -133,22 +110,19 @@ public class Crawler extends WebCrawler {
     }
 
     protected void writeToFile(String url, String content) {
-        if (Crawler.crawlStorageDirectoryPath != null) {
-            Utilities.writeToFile(Crawler.crawlStorageDirectoryPath, url, content);
-        }
+        Utilities.writeToFile(crawlerConfig.getCrawlStorageDirectoryPath(), url, content);
     }
 
     public void execute() throws Exception {
-
         if (crawlerHandler == null) {
             throw new Exception("No Crawler Handler specified");
         }
 
         CrawlConfig config = new CrawlConfig();
-        config.setCrawlStorageFolder(Crawler.internalCrawlerStorageDirectory);
-        config.setMaxDepthOfCrawling(Crawler.maxDepthOfCrawling);
-        config.setMaxPagesToFetch(Crawler.maxPagesToFetch);
-        config.setUserAgentString(Crawler.userAgentString);
+        config.setCrawlStorageFolder(crawlerConfig.getInternalCrawlerStorageDirectory());
+        config.setMaxDepthOfCrawling(crawlerConfig.getMaxDepthOfCrawling());
+        config.setMaxPagesToFetch(crawlerConfig.getMaxPagesToFetch());
+        config.setUserAgentString(crawlerConfig.getUserAgentString());
 
         /*
          * Instantiate the controller for this crawl.
@@ -174,7 +148,7 @@ public class Crawler extends WebCrawler {
              * Start the crawl. This is a blocking operation, meaning that your code
              * will reach the line after this only when crawling is finished.
              */
-            controller.start(this.getClass(), Crawler.numberOfCrawlers);
+            controller.start(this.getClass(), crawlerConfig.getNumberOfCrawlers());
         } catch (Exception e) {
             e.printStackTrace();
         }

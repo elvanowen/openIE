@@ -13,10 +13,13 @@ import javax.swing.*;
  */
 public class CrawlerConfig extends javax.swing.JFrame {
 
+    id.ac.itb.openie.crawler.CrawlerConfig crawlerConfig = null;
+
     /**
      * Creates new form CrawlerConfig
      */
-    public CrawlerConfig() {
+    public CrawlerConfig(id.ac.itb.openie.crawler.CrawlerConfig crawlerConfig) {
+        this.crawlerConfig = crawlerConfig;
         initComponents();
     }
 
@@ -133,7 +136,7 @@ public class CrawlerConfig extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CrawlerConfig().setVisible(true);
+                new CrawlerConfig(new id.ac.itb.openie.crawler.CrawlerConfig()).setVisible(true);
             }
         });
     }

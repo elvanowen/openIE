@@ -17,10 +17,13 @@ import id.ac.itb.openie.plugins.PluginLoader;
 import id.ac.itb.util.UnzipUtility;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 
 /**
  *
@@ -107,6 +110,12 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         configureCrawlerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 configureCrawlerButtonActionPerformed(evt);
+            }
+        });
+        configureCrawlerButton.setEnabled(false);
+        crawlerPipelineDragDropList.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent ev) {
+                configureCrawlerButton.setEnabled(true);
             }
         });
 
@@ -496,7 +505,26 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private void configureCrawlerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCrawlerButton1ActionPerformed
         // TODO add your handling code here:
 
-        new CrawlerConfig().setVisible(true);
+        ICrawlerHandler selectedCrawlerHandler = (ICrawlerHandler) crawlerPipelineDragDropList.getSelectedValue();
+
+        System.out.println("disini");
+        System.out.println(selectedCrawlerHandler);
+
+        ArrayList<Crawler> crawlers = crawlerPipeline.getCrawlers();
+        Crawler selectedCrawler = null;
+
+        for (Crawler crawler: crawlers) {
+            if (crawler.getCrawlerhandler().getPluginName().equals(selectedCrawlerHandler.getPluginName())) {
+                selectedCrawler = crawler;
+            }
+        }
+
+        if (selectedCrawler != null) {
+            id.ac.itb.openie.crawler.CrawlerConfig crawlerConfig = selectedCrawler.getCrawlerConfig();
+
+            // Show configuration dialog
+            new CrawlerConfig(crawlerConfig).setVisible(true);
+        }
 
     }//GEN-LAST:event_addCrawlerButton1ActionPerformed
 
@@ -515,11 +543,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         ICrawlerHandler crawlerHandler = (ICrawlerHandler) crawlerComboBox.getSelectedItem();
 
-        crawlerPipeline.addCrawler(
-            new Crawler()
-            .setCrawlerhandler(crawlerHandler)
-            .setMaxPagesToFetch(5)
-            .setCrawlStorageDirectoryPath(new Config().getProperty("CRAWLER_STORAGE_DIRECTORY")));
+        crawlerPipeline.addCrawler(new Crawler().setCrawlerhandler(crawlerHandler));
 
         crawlerPipelineListModel.addElement(crawlerHandler);
         crawlerPipelineDragDropList.printItems();
@@ -570,30 +594,6 @@ public class OpenIeJFrame extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(OpenIeJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(OpenIeJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(OpenIeJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(OpenIeJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch(Exception e){ }
