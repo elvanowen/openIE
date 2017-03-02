@@ -42,28 +42,36 @@ public class CrawlerConfig extends javax.swing.JFrame {
         userAgentStringLabel = new javax.swing.JLabel();
         regexFilterPatternLabel = new javax.swing.JLabel();
         regexFilterPatternTextField = new javax.swing.JTextField();
+        okButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         maxPagesToFetchLabel.setText("Max Pages to Fetch");
 
-        maxPagesToFetchTextField.setText("jTextField1");
+        maxPagesToFetchTextField.setText(Integer.toString(crawlerConfig.getMaxPagesToFetch()));
 
         numberOfCrawlersLabel.setText("Number of Crawlers");
 
-        numberOfCrawlersTextField.setText("jTextField1");
+        numberOfCrawlersTextField.setText(Integer.toString(crawlerConfig.getNumberOfCrawlers()));
 
         maxDepthofCrawlingLabel.setText("Max Depth of Crawling");
 
-        maxDepthofCrawlingTextField.setText("jTextField1");
-
-        userAgentStringTextField.setText("jTextField1");
+        maxDepthofCrawlingTextField.setText(Integer.toString(crawlerConfig.getMaxDepthOfCrawling()));
 
         userAgentStringLabel.setText("User Agent String");
 
+        userAgentStringTextField.setText(crawlerConfig.getUserAgentString());
+
         regexFilterPatternLabel.setText("Regex Filter Pattern");
 
-        regexFilterPatternTextField.setText("jTextField1");
+        regexFilterPatternTextField.setText(crawlerConfig.getFilterRegexPattern().toString());
+
+        okButton.setText("Save");
+        okButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                okButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -91,7 +99,10 @@ public class CrawlerConfig extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(userAgentStringLabel)
                         .addGap(46, 46, 46)
-                        .addComponent(userAgentStringTextField)))
+                        .addComponent(userAgentStringTextField))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(okButton)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -117,13 +128,24 @@ public class CrawlerConfig extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(regexFilterPatternLabel)
                     .addComponent(regexFilterPatternTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(okButton)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
-        setLocationRelativeTo(null);
-        setTitle("Crawler Configuration");
     }// </editor-fold>//GEN-END:initComponents
+
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
+        // TODO add your handling code here:
+
+        crawlerConfig.setMaxDepthOfCrawling(Integer.parseInt(maxDepthofCrawlingTextField.getText()));
+        crawlerConfig.setMaxPagesToFetch(Integer.parseInt(maxPagesToFetchTextField.getText()));
+        crawlerConfig.setNumberOfCrawlers(Integer.parseInt(numberOfCrawlersTextField.getText()));
+        crawlerConfig.setFilterRegexPattern(regexFilterPatternTextField.getText());
+        crawlerConfig.setUserAgentString(userAgentStringTextField.getText());
+
+    }//GEN-LAST:event_okButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -148,6 +170,7 @@ public class CrawlerConfig extends javax.swing.JFrame {
     private javax.swing.JTextField maxPagesToFetchTextField;
     private javax.swing.JLabel numberOfCrawlersLabel;
     private javax.swing.JTextField numberOfCrawlersTextField;
+    private javax.swing.JButton okButton;
     private javax.swing.JLabel regexFilterPatternLabel;
     private javax.swing.JTextField regexFilterPatternTextField;
     private javax.swing.JLabel userAgentStringLabel;
