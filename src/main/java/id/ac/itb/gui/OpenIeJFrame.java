@@ -520,6 +520,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         }
 
         if (selectedCrawler != null) {
+            System.out.println(selectedCrawler.getCrawlerConfig().getMaxPagesToFetch());
             id.ac.itb.openie.crawler.CrawlerConfig crawlerConfig = selectedCrawler.getCrawlerConfig();
 
             // Show configuration dialog

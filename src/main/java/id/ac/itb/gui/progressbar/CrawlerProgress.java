@@ -76,7 +76,7 @@ public class CrawlerProgress extends javax.swing.JFrame {
 
         pack();
         setLocationRelativeTo(null);
-        setTitle("CrawlerProgress Bar");
+        setTitle("Crawler Progress");
     }// </editor-fold>//GEN-END:initComponents
 
     /**

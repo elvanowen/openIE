@@ -49,22 +49,27 @@ public class CrawlerConfig extends javax.swing.JFrame {
         maxPagesToFetchLabel.setText("Max Pages to Fetch");
 
         maxPagesToFetchTextField.setText(Integer.toString(crawlerConfig.getMaxPagesToFetch()));
+        maxPagesToFetchTextField.setMaximumSize(new java.awt.Dimension(232, 2147483647));
 
         numberOfCrawlersLabel.setText("Number of Crawlers");
 
         numberOfCrawlersTextField.setText(Integer.toString(crawlerConfig.getNumberOfCrawlers()));
+        numberOfCrawlersTextField.setMaximumSize(new java.awt.Dimension(232, 2147483647));
 
         maxDepthofCrawlingLabel.setText("Max Depth of Crawling");
 
         maxDepthofCrawlingTextField.setText(Integer.toString(crawlerConfig.getMaxDepthOfCrawling()));
+        maxDepthofCrawlingTextField.setMaximumSize(new java.awt.Dimension(232, 2147483647));
 
         userAgentStringLabel.setText("User Agent String");
 
         userAgentStringTextField.setText(crawlerConfig.getUserAgentString());
+        userAgentStringTextField.setMaximumSize(new java.awt.Dimension(232, 2147483647));
 
         regexFilterPatternLabel.setText("Regex Filter Pattern");
 
         regexFilterPatternTextField.setText(crawlerConfig.getFilterRegexPattern().toString());
+        regexFilterPatternTextField.setMaximumSize(new java.awt.Dimension(232, 2147483647));
 
         okButton.setText("Save");
         okButton.addActionListener(new java.awt.event.ActionListener() {
@@ -134,6 +139,8 @@ public class CrawlerConfig extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
+        setTitle("Crawler Config");
     }// </editor-fold>//GEN-END:initComponents
 
     private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
@@ -144,6 +151,8 @@ public class CrawlerConfig extends javax.swing.JFrame {
         crawlerConfig.setNumberOfCrawlers(Integer.parseInt(numberOfCrawlersTextField.getText()));
         crawlerConfig.setFilterRegexPattern(regexFilterPatternTextField.getText());
         crawlerConfig.setUserAgentString(userAgentStringTextField.getText());
+
+        this.dispose();
 
     }//GEN-LAST:event_okButtonActionPerformed
 
