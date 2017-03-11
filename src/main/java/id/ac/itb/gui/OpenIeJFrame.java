@@ -508,26 +508,11 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private void configureCrawlerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCrawlerButton1ActionPerformed
         // TODO add your handling code here:
 
-        ICrawlerHandler selectedCrawlerHandler = (ICrawlerHandler) crawlerPipelineDragDropList.getSelectedValue();
-
-        System.out.println("disini");
-        System.out.println(selectedCrawlerHandler);
-
-        ArrayList<Crawler> crawlers = crawlerPipeline.getCrawlers();
-        Crawler selectedCrawler = null;
-
-        for (Crawler crawler: crawlers) {
-            if (crawler.getCrawlerhandler().getPluginName().equals(selectedCrawlerHandler.getPluginName())) {
-                selectedCrawler = crawler;
-            }
-        }
+        Crawler selectedCrawler = (Crawler) crawlerPipelineDragDropList.getSelectedValue();
 
         if (selectedCrawler != null) {
-            System.out.println(selectedCrawler.getCrawlerConfig().getMaxPagesToFetch());
-            id.ac.itb.openie.crawler.CrawlerConfig crawlerConfig = selectedCrawler.getCrawlerConfig();
-
             // Show configuration dialog
-            new CrawlerConfig(crawlerConfig).setVisible(true);
+            new CrawlerConfig(selectedCrawler.getCrawlerConfig()).setVisible(true);
         }
 
     }//GEN-LAST:event_addCrawlerButton1ActionPerformed
@@ -535,26 +520,28 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private void removeCrawlerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCrawlerButton1ActionPerformed
         // TODO add your handling code here:
 
-        ICrawlerHandler selectedCrawlerHandler = (ICrawlerHandler) crawlerPipelineDragDropList.getSelectedValue();
-
-        System.out.println(selectedCrawlerHandler);
-        crawlerPipelineListModel.removeElement(selectedCrawlerHandler);
+        Crawler selectedCrawler = (Crawler) crawlerPipelineDragDropList.getSelectedValue();
+        crawlerPipelineListModel.removeElement(selectedCrawler);
 
     }//GEN-LAST:event_addCrawlerButton1ActionPerformed
 
     private void addCrawlerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCrawlerButtonActionPerformed
         // TODO add your handling code here:
 
-        ICrawlerHandler crawlerHandler = (ICrawlerHandler) crawlerComboBox.getSelectedItem();
+        ICrawlerHandler crawlerHandler = (ICrawlerHandler) pluginLoader.getExtensions(ICrawlerHandler.class).get(crawlerComboBox.getSelectedIndex());
+        Crawler crawler = new Crawler().setCrawlerhandler(crawlerHandler);
 
-        crawlerPipeline.addCrawler(new Crawler().setCrawlerhandler(crawlerHandler));
-
-        crawlerPipelineListModel.addElement(crawlerHandler);
+        crawlerPipelineListModel.addElement(crawler);
         crawlerPipelineDragDropList.printItems();
     }//GEN-LAST:event_addCrawlerButtonActionPerformed
 
     private void runCrawlerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runCrawlerButtonActionPerformed
         // TODO add your handling code here:
+
+        for (int i=0;i<crawlerPipelineListModel.size();i++) {
+            Crawler crawler = (Crawler) crawlerPipelineListModel.get(i);
+            crawlerPipeline.addCrawler(crawler);
+        }
 
         openIePipeline.clear();
         openIePipeline.addPipelineElement(crawlerPipeline);
@@ -575,6 +562,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
             @Override
             protected void done() {
+                ((CrawlerProgress) crawlerProgress).stopTimer();
                 crawlerProgress.dispose();
             }
         };

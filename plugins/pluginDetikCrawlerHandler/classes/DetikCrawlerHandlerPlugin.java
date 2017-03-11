@@ -33,13 +33,24 @@ public class DetikCrawlerHandlerPlugin extends Plugin {
         public HashSet<String> getCrawlerStartingUrls() {
             HashSet<String> urls = new HashSet<String>();
 
-            urls.add("http://www.detik.com");
+            urls.add("https://www.detik.com");
+            urls.add("https://finance.detik.com");
+            urls.add("https://news.detik.com");
+            urls.add("https://wolipop.detik.com");
+            urls.add("https://health.detik.com");
+            urls.add("https://hot.detik.com");
+            urls.add("http://travel.detik.com");
 
             return urls;
         }
 
         public Boolean shouldCrawlerFollowLink(String link) {
-            return link.contains("detik.com/read") || link.contains("detik.com/berita");
+            return  link.contains("detik.com/read/") ||
+                    link.contains("detik.com/berita/") ||
+                    link.contains("detik.com/comment/") ||
+                    link.contains("detik.com/sepakbola/") ||
+                    link.contains("detik.com/celeb/") ||
+                    link.contains("detik.com/berita-ekonomi-bisnis/");
         }
 
         public HashMap<String, String> extractContentFromHTML(String url, String html) {

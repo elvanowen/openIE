@@ -12,7 +12,7 @@ public class CrawlerConfig {
     private Pattern filterRegexPattern = Pattern.compile(".*(\\.(css|js|gif|jpeg|jpg|png|mp3|mp3|zip|gz))$");
     private String internalCrawlerStorageDirectory = new Config().getProperty("INTERNAL_CRAWLER_STORAGE_DIRECTORY");
     private int numberOfCrawlers = 1;
-    private int maxDepthOfCrawling = 2;
+    private int maxDepthOfCrawling = 5;
     private int maxPagesToFetch = 200;
     private String userAgentString = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/56.0.2924.87 Safari/537.36";
 

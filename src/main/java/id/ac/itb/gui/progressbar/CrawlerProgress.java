@@ -12,6 +12,8 @@ import org.apache.commons.lang3.StringUtils;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  *
@@ -42,9 +44,12 @@ public class CrawlerProgress extends javax.swing.JFrame {
         String trail = StringUtils.repeat(".", tick) + StringUtils.repeat(" ", 4 - tick);
 
         if (crawlerPipeline.getCurrentlyRunningCrawler() != null) {
-            totalDocumentsFetched = crawlerPipeline.getCurrentlyRunningCrawler().getTotalDocumentCrawled();
-            totalDocumentsToBeFetched = crawlerPipeline.getCurrentlyRunningCrawler().getCrawlerConfig().getMaxPagesToFetch();
             crawlerName = crawlerPipeline.getCurrentlyRunningCrawler().getCrawlerhandler().getPluginName();
+        }
+
+        for (Crawler crawler: crawlerPipeline.getCrawlers()) {
+            totalDocumentsFetched += crawler.getTotalDocumentCrawled();
+            totalDocumentsToBeFetched += crawler.getCrawlerConfig().getMaxPagesToFetch();
         }
 
         if (totalDocumentsToBeFetched > 0 && totalDocumentsFetched == totalDocumentsToBeFetched) {
@@ -52,6 +57,8 @@ public class CrawlerProgress extends javax.swing.JFrame {
         } else {
             totalDocumentLabel.setText(" " + totalDocumentsFetched + " / " + totalDocumentsToBeFetched + " documents.");
         }
+
+        updateProgressBar(totalDocumentsFetched, totalDocumentsToBeFetched);
 
         int totalProcessedCrawler = crawlerPipeline.getTotalProcessedCrawler();
         int totalCrawler = crawlerPipeline.getCrawlers().size();
@@ -63,17 +70,14 @@ public class CrawlerProgress extends javax.swing.JFrame {
         }
     }
 
-    private void updateProgressBar() {
-        int totalDocumentsFetched = 0, totalDocumentsToBeFetched = 0;
-
-        for (Crawler crawler: crawlerPipeline.getCrawlers()) {
-            totalDocumentsFetched = crawler.getTotalDocumentCrawled();
-            totalDocumentsToBeFetched = crawler.getCrawlerConfig().getMaxPagesToFetch();
-        }
-
+    private void updateProgressBar(int numerator, int denominator) {
         crawlerProgressBar.setMinimum(0);
-        crawlerProgressBar.setMaximum(totalDocumentsToBeFetched);
-        crawlerProgressBar.setValue(totalDocumentsFetched);
+        crawlerProgressBar.setMaximum(denominator);
+        crawlerProgressBar.setValue(numerator);
+    }
+
+    public void stopTimer() {
+        processTimer.stop();
     }
 
     /**
@@ -98,7 +102,6 @@ public class CrawlerProgress extends javax.swing.JFrame {
 
         processTimer = new Timer(1000, e -> {
             showProgressLabel();
-            updateProgressBar();
         });
         processTimer.start();
 

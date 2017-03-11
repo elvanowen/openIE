@@ -25,8 +25,11 @@ import java.util.regex.Pattern;
  */
 public class Crawler extends WebCrawler {
 
-    private static ICrawlerHandler crawlerHandler = null;
-    private static int totalDocumentCrawled = 0;
+    private static Crawler currentlyRunningCrawler = null;
+    private static ICrawlerHandler currentlyRunningCrawlerHandler = null;
+
+    private ICrawlerHandler crawlerHandler = null;
+    private int totalDocumentCrawled = 0;
     private CrawlerConfig crawlerConfig = new CrawlerConfig();
 
     public Crawler setCrawlerhandler(ICrawlerHandler crawlerhandler) {
@@ -47,20 +50,24 @@ public class Crawler extends WebCrawler {
         return this.crawlerConfig;
     }
 
-    public int getTotalDocumentCrawled() {
+    public synchronized void setTotalDocumentCrawled(int totalDocumentCrawled) {
+        this.totalDocumentCrawled = totalDocumentCrawled;
+    }
+
+    public synchronized int getTotalDocumentCrawled() {
         return totalDocumentCrawled;
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        crawlerHandler.crawlerWillRun();
+        currentlyRunningCrawlerHandler.crawlerWillRun();
     }
 
     @Override
     public void onBeforeExit() {
         super.onBeforeExit();
-        crawlerHandler.crawlerDidRun();
+        currentlyRunningCrawlerHandler.crawlerDidRun();
     }
 
     @Override
@@ -71,17 +78,17 @@ public class Crawler extends WebCrawler {
 //        System.out.println(referringHref + " -> " + targetHref);
 
         // If url is seed then allow
-        for (String seedURL: crawlerHandler.getCrawlerStartingUrls()) {
+        for (String seedURL: currentlyRunningCrawlerHandler.getCrawlerStartingUrls()) {
             if (targetHref.equalsIgnoreCase(seedURL)) {
                 return true;
             }
         }
 
-        if (crawlerConfig.getFilterRegexPattern().matcher(targetHref).matches()) {
+        if (currentlyRunningCrawler.getCrawlerConfig().getFilterRegexPattern().matcher(targetHref).matches()) {
             return false;
         }
 
-        return crawlerHandler.shouldCrawlerFollowLink(targetHref);
+        return currentlyRunningCrawlerHandler.shouldCrawlerFollowLink(targetHref);
     }
 
     @Override
@@ -93,10 +100,10 @@ public class Crawler extends WebCrawler {
             HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
             String html = htmlParseData.getHtml();
 
-            HashMap<String, String> fileContentMappings = crawlerHandler.extractContentFromHTML(url, html);
+            HashMap<String, String> fileContentMappings = currentlyRunningCrawlerHandler.extractContentFromHTML(url, html);
             Iterator<Map.Entry<String, String>> it = fileContentMappings.entrySet().iterator();
 
-            totalDocumentCrawled++;
+            currentlyRunningCrawler.setTotalDocumentCrawled(currentlyRunningCrawler.getTotalDocumentCrawled() + 1);
 
             while (it.hasNext()) {
                 Map.Entry<String, String> pair = it.next();
@@ -109,13 +116,16 @@ public class Crawler extends WebCrawler {
     }
 
     protected void writeToFile(String url, String content) {
-        Utilities.writeToFile(crawlerConfig.getCrawlStorageDirectoryPath(), url, content);
+        Utilities.writeToFile(currentlyRunningCrawler.getCrawlerConfig().getCrawlStorageDirectoryPath(), url, content);
     }
 
     public void execute() throws Exception {
         if (crawlerHandler == null) {
             throw new Exception("No Crawler Handler specified");
         }
+
+        currentlyRunningCrawlerHandler = crawlerHandler;
+        currentlyRunningCrawler = this;
 
         CrawlConfig config = new CrawlConfig();
         config.setCrawlStorageFolder(crawlerConfig.getInternalCrawlerStorageDirectory());
@@ -139,7 +149,7 @@ public class Crawler extends WebCrawler {
              * URLs that are fetched and then the crawler starts following links
              * which are found in these pages
              */
-            for (String seed: crawlerHandler.getCrawlerStartingUrls()) {
+            for (String seed: currentlyRunningCrawlerHandler.getCrawlerStartingUrls()) {
                 controller.addSeed(seed);
             }
 
@@ -147,9 +157,14 @@ public class Crawler extends WebCrawler {
              * Start the crawl. This is a blocking operation, meaning that your code
              * will reach the line after this only when crawling is finished.
              */
-            controller.start(this.getClass(), crawlerConfig.getNumberOfCrawlers());
+            controller.start(this.getClass(), 1);
+            controller.waitUntilFinish();
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public String toString() {
+        return this.getCrawlerhandler().getPluginName();
     }
 }
