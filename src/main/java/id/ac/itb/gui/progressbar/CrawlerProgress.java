@@ -49,17 +49,15 @@ public class CrawlerProgress extends javax.swing.JFrame {
 
         if (totalDocumentsToBeFetched > 0 && totalDocumentsFetched == totalDocumentsToBeFetched) {
             totalDocumentLabel.setText("Fetches Completed. Processing" + trail);
-        } else if (totalDocumentsToBeFetched == 0) {
-            totalDocumentLabel.setText("");
         } else {
-            totalDocumentLabel.setText(totalDocumentsFetched + " / " + totalDocumentsToBeFetched + " documents");
+            totalDocumentLabel.setText(" " + totalDocumentsFetched + " / " + totalDocumentsToBeFetched + " documents.");
         }
 
         int totalProcessedCrawler = crawlerPipeline.getTotalProcessedCrawler();
         int totalCrawler = crawlerPipeline.getCrawlers().size();
 
         if (crawlerName.equalsIgnoreCase("")) {
-            totalCrawlerLabel.setText("Setting up crawlers" + trail);
+            totalCrawlerLabel.setText("Setting up crawlers" + trail + StringUtils.repeat(" ", 40));
         } else {
             totalCrawlerLabel.setText("Running " + crawlerName + " ( " + totalProcessedCrawler + " / " + totalCrawler + " crawlers )");
         }
@@ -69,10 +67,8 @@ public class CrawlerProgress extends javax.swing.JFrame {
         int totalDocumentsFetched = 0, totalDocumentsToBeFetched = 0;
 
         for (Crawler crawler: crawlerPipeline.getCrawlers()) {
-            if (crawlerPipeline.getCurrentlyRunningCrawler() != null) {
-                totalDocumentsFetched = crawlerPipeline.getCurrentlyRunningCrawler().getTotalDocumentCrawled();
-                totalDocumentsToBeFetched = crawlerPipeline.getCurrentlyRunningCrawler().getCrawlerConfig().getMaxPagesToFetch();
-            }
+            totalDocumentsFetched = crawler.getTotalDocumentCrawled();
+            totalDocumentsToBeFetched = crawler.getCrawlerConfig().getMaxPagesToFetch();
         }
 
         crawlerProgressBar.setMinimum(0);
@@ -118,7 +114,7 @@ public class CrawlerProgress extends javax.swing.JFrame {
                         .addComponent(currentRunningCrawlerLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(totalCrawlerLabel)
-                        .addGap(0, 152, Short.MAX_VALUE))
+                        .addGap(0, 237, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(totalDocumentLabel)))
@@ -135,7 +131,7 @@ public class CrawlerProgress extends javax.swing.JFrame {
                 .addComponent(crawlerProgressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(totalDocumentLabel)
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap(14, Short.MAX_VALUE))
         );
 
         pack();
