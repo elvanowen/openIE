@@ -5,7 +5,13 @@
  */
 package id.ac.itb.gui.progressbar;
 
+import id.ac.itb.openie.crawler.Crawler;
+import id.ac.itb.openie.crawler.CrawlerPipeline;
+import org.apache.commons.lang3.StringUtils;
+
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  *
@@ -13,11 +19,65 @@ import javax.swing.*;
  */
 public class CrawlerProgress extends javax.swing.JFrame {
 
+    CrawlerPipeline crawlerPipeline;
+    private Timer processTimer = null;
+    private int tick;
+
     /**
      * Creates new form CrawlerProgress
      */
     public CrawlerProgress() {
         initComponents();
+    }
+
+    public CrawlerProgress(CrawlerPipeline crawlerPipeline) {
+        this.crawlerPipeline = crawlerPipeline;
+        initComponents();
+    }
+
+    private void showProgressLabel() {
+        int totalDocumentsFetched = 0, totalDocumentsToBeFetched = 0;
+        String crawlerName = "";
+        tick = (tick % 4) + 1;
+        String trail = StringUtils.repeat(".", tick) + StringUtils.repeat(" ", 4 - tick);
+
+        if (crawlerPipeline.getCurrentlyRunningCrawler() != null) {
+            totalDocumentsFetched = crawlerPipeline.getCurrentlyRunningCrawler().getTotalDocumentCrawled();
+            totalDocumentsToBeFetched = crawlerPipeline.getCurrentlyRunningCrawler().getCrawlerConfig().getMaxPagesToFetch();
+            crawlerName = crawlerPipeline.getCurrentlyRunningCrawler().getCrawlerhandler().getPluginName();
+        }
+
+        if (totalDocumentsToBeFetched > 0 && totalDocumentsFetched == totalDocumentsToBeFetched) {
+            totalDocumentLabel.setText("Fetches Completed. Processing" + trail);
+        } else if (totalDocumentsToBeFetched == 0) {
+            totalDocumentLabel.setText("");
+        } else {
+            totalDocumentLabel.setText(totalDocumentsFetched + " / " + totalDocumentsToBeFetched + " documents");
+        }
+
+        int totalProcessedCrawler = crawlerPipeline.getTotalProcessedCrawler();
+        int totalCrawler = crawlerPipeline.getCrawlers().size();
+
+        if (crawlerName.equalsIgnoreCase("")) {
+            totalCrawlerLabel.setText("Setting up crawlers" + trail);
+        } else {
+            totalCrawlerLabel.setText("Running " + crawlerName + " ( " + totalProcessedCrawler + " / " + totalCrawler + " crawlers )");
+        }
+    }
+
+    private void updateProgressBar() {
+        int totalDocumentsFetched = 0, totalDocumentsToBeFetched = 0;
+
+        for (Crawler crawler: crawlerPipeline.getCrawlers()) {
+            if (crawlerPipeline.getCurrentlyRunningCrawler() != null) {
+                totalDocumentsFetched = crawlerPipeline.getCurrentlyRunningCrawler().getTotalDocumentCrawled();
+                totalDocumentsToBeFetched = crawlerPipeline.getCurrentlyRunningCrawler().getCrawlerConfig().getMaxPagesToFetch();
+            }
+        }
+
+        crawlerProgressBar.setMinimum(0);
+        crawlerProgressBar.setMaximum(totalDocumentsToBeFetched);
+        crawlerProgressBar.setValue(totalDocumentsFetched);
     }
 
     /**
@@ -34,13 +94,17 @@ public class CrawlerProgress extends javax.swing.JFrame {
         totalDocumentLabel = new javax.swing.JLabel();
         totalCrawlerLabel = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 
-        currentRunningCrawlerLabel.setText("Running Crawler .....");
+        totalCrawlerLabel.setText("Setting up crawlers");
 
-        totalDocumentLabel.setText("10 / 250 documents");
+        showProgressLabel();
 
-        totalCrawlerLabel.setText("( 2 / 3 crawlers )");
+        processTimer = new Timer(1000, e -> {
+            showProgressLabel();
+            updateProgressBar();
+        });
+        processTimer.start();
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

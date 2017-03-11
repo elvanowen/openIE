@@ -14,6 +14,10 @@ public class OpenIePipeline {
         return this;
     }
 
+    public void clear() {
+        this.openIePipelineElements = new ArrayList<>();
+    }
+
     public void execute() throws Exception {
         System.out.println("Running OpenIE pipeline...");
 

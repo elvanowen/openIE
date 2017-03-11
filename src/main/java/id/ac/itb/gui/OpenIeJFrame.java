@@ -19,6 +19,7 @@ import id.ac.itb.util.UnzipUtility;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -460,6 +461,8 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
+        setTitle("Open IE Bahasa Indonesia");
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
@@ -553,13 +556,31 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private void runCrawlerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runCrawlerButtonActionPerformed
         // TODO add your handling code here:
 
-        OpenIePipeline openIePipeline = new OpenIePipeline();
+        openIePipeline.clear();
         openIePipeline.addPipelineElement(crawlerPipeline);
 
-//        ProgressBar progressBar = new ProgressBar("Running Crawler Pipeline");
+        JFrame crawlerProgress = new CrawlerProgress(crawlerPipeline);
 
-        new CrawlerProgress().setVisible(true);
+        SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+            @Override
+            protected String doInBackground() throws InterruptedException {
+                try {
+                    openIePipeline.execute();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
+                return "";
+            }
+
+            @Override
+            protected void done() {
+                crawlerProgress.dispose();
+            }
+        };
+
+        worker.execute();
+        crawlerProgress.setVisible(true);
 
     }//GEN-LAST:event_runCrawlerButtonActionPerformed
 
@@ -655,4 +676,5 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private CrawlerPipeline crawlerPipeline = new CrawlerPipeline();
+    private OpenIePipeline openIePipeline = new OpenIePipeline();
 }

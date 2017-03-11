@@ -10,6 +10,8 @@ import java.util.ArrayList;
 public class CrawlerPipeline implements IOpenIePipelineElement {
 
     private ArrayList<Crawler> crawlers = new ArrayList<Crawler>();
+    private int totalProcessedCrawler = 0;
+    private Crawler currentlyRunningCrawler = null;
 
     public CrawlerPipeline addCrawler(Crawler crawler) {
         this.crawlers.add(crawler);
@@ -17,7 +19,6 @@ public class CrawlerPipeline implements IOpenIePipelineElement {
     }
 
     public ArrayList<Crawler> getCrawlers() {
-        System.out.println("Accessing getCrawlers");
         return this.crawlers;
     }
 
@@ -25,7 +26,17 @@ public class CrawlerPipeline implements IOpenIePipelineElement {
         System.out.println("Running crawler pipeline...");
 
         for (Crawler crawler: crawlers) {
+            this.totalProcessedCrawler++;
+            currentlyRunningCrawler = crawler;
             crawler.execute();
         }
+    }
+
+    public int getTotalProcessedCrawler() {
+        return this.totalProcessedCrawler;
+    }
+
+    public Crawler getCurrentlyRunningCrawler() {
+        return this.currentlyRunningCrawler;
     }
 }

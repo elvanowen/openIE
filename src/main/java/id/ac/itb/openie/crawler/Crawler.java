@@ -25,17 +25,17 @@ import java.util.regex.Pattern;
  */
 public class Crawler extends WebCrawler {
 
-    private ICrawlerHandler crawlerHandler = null;
-    private int totalDocumentCrawled = 0;
+    private static ICrawlerHandler crawlerHandler = null;
+    private static int totalDocumentCrawled = 0;
     private CrawlerConfig crawlerConfig = new CrawlerConfig();
 
     public Crawler setCrawlerhandler(ICrawlerHandler crawlerhandler) {
-        this.crawlerHandler = crawlerhandler;
+        crawlerHandler = crawlerhandler;
         return this;
     }
 
     public ICrawlerHandler getCrawlerhandler() {
-        return this.crawlerHandler;
+        return crawlerHandler;
     }
 
     public Crawler setCrawlerConfig(CrawlerConfig crawlerConfig) {
@@ -94,10 +94,9 @@ public class Crawler extends WebCrawler {
             String html = htmlParseData.getHtml();
 
             HashMap<String, String> fileContentMappings = crawlerHandler.extractContentFromHTML(url, html);
-
             Iterator<Map.Entry<String, String>> it = fileContentMappings.entrySet().iterator();
 
-            if (it.hasNext()) totalDocumentCrawled++;
+            totalDocumentCrawled++;
 
             while (it.hasNext()) {
                 Map.Entry<String, String> pair = it.next();
