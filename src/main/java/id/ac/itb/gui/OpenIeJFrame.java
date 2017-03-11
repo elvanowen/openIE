@@ -72,42 +72,51 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         crawlerPipelineDragDropList = new id.ac.itb.gui.dragdroplist.DragDropList(crawlerPipelineListModel);
         jPanel2 = new javax.swing.JPanel();
-        jButton18 = new javax.swing.JButton();
-        jLabel6 = new javax.swing.JLabel();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        jLabel7 = new javax.swing.JLabel();
-        jButton14 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
-        jSeparator2 = new javax.swing.JSeparator();
-        jButton6 = new javax.swing.JButton();
+        preprocessorListLabel = new javax.swing.JLabel();
+        preprocessorComboBox = new javax.swing.JComboBox<>();
+        preprocessorPipelineLabel = new javax.swing.JLabel();
+        addPreprocessorButton = new javax.swing.JButton();
+        removePreprocessorButton = new javax.swing.JButton();
+        jSeparator5 = new javax.swing.JSeparator();
+        loadPreprocessorButton = new javax.swing.JButton();
+        configurePreprocessorButton = new javax.swing.JButton();
+        jSeparator6 = new javax.swing.JSeparator();
+        runPreprocessorButton = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jComboBox7 = new javax.swing.JComboBox<>();
-        jLabel5 = new javax.swing.JLabel();
-        jButton23 = new javax.swing.JButton();
-        jButton24 = new javax.swing.JButton();
-        jButton25 = new javax.swing.JButton();
-        jButton26 = new javax.swing.JButton();
+        extractorListLabel = new javax.swing.JLabel();
+        extractorComboBox = new javax.swing.JComboBox<>();
+        extractorPipelineLabel = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        addExtractorButton = new javax.swing.JButton();
+        removeExtractorButton = new javax.swing.JButton();
+        jSeparator8 = new javax.swing.JSeparator();
+        loadExtractorButton = new javax.swing.JButton();
+        configureExtractorButton = new javax.swing.JButton();
+        jSeparator9 = new javax.swing.JSeparator();
+        runExtractorButton = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
-        jLabel8 = new javax.swing.JLabel();
-        jComboBox4 = new javax.swing.JComboBox<>();
-        jLabel9 = new javax.swing.JLabel();
-        jButton27 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jSeparator3 = new javax.swing.JSeparator();
-        jButton10 = new javax.swing.JButton();
+        postprocessorListLabel = new javax.swing.JLabel();
+        postprocessorComboBox = new javax.swing.JComboBox<>();
+        postprocessorPipelineLabel = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        addPostprocessorButton = new javax.swing.JButton();
+        removePostprocessorButton = new javax.swing.JButton();
+        jSeparator2 = new javax.swing.JSeparator();
+        loadPostprocessorButton = new javax.swing.JButton();
+        configurePostprocessorButton = new javax.swing.JButton();
+        jSeparator7 = new javax.swing.JSeparator();
+        runPostprocessorButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        loadCrawlerButton.setText("Load Custom Crawler");
+        loadCrawlerButton.setText("Load");
         loadCrawlerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loadCrawlerButtonActionPerformed(evt);
             }
         });
 
-        configureCrawlerButton.setText("Configure Crawler");
+        configureCrawlerButton.setText("Configure");
         configureCrawlerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 configureCrawlerButtonActionPerformed(evt);
@@ -131,7 +140,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         crawlerPipelineLabel.setText("Crawler Pipeline");
 
-        addCrawlerButton.setText("Add Crawler To Pipeline");
+        addCrawlerButton.setText("Add To Pipeline");
         addCrawlerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addCrawlerButtonActionPerformed(evt);
@@ -140,7 +149,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         crawlerListLabel.setText("Crawler List");
 
-        removeCrawlerButton.setText("Remove Crawler From Pipeline");
+        removeCrawlerButton.setText("Remove From Pipeline");
         removeCrawlerButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeCrawlerButtonActionPerformed(evt);
@@ -208,39 +217,44 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Crawler", jPanel1);
 
-        jButton18.setText("Run Preprocessor");
-        jButton18.addActionListener(new java.awt.event.ActionListener() {
+        preprocessorListLabel.setText("Preprocessor List");
+
+        preprocessorComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        preprocessorPipelineLabel.setText("Preprocessor Pipeline");
+
+        addPreprocessorButton.setText("Add To Pipeline");
+        addPreprocessorButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton18ActionPerformed(evt);
+                addPreprocessorButtonActionPerformed(evt);
             }
         });
 
-        jLabel6.setText("Preprocessor List");
-
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel7.setText("Preprocessor Pipeline");
-
-        jButton14.setText("Add Preprocessor To Pipeline");
-        jButton14.addActionListener(new java.awt.event.ActionListener() {
+        removePreprocessorButton.setText("Remove From Pipeline");
+        removePreprocessorButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton14ActionPerformed(evt);
+                removePreprocessorButtonActionPerformed(evt);
             }
         });
 
-        jButton4.setText("Load Custom Preprocessor");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        loadPreprocessorButton.setText("Load");
+        loadPreprocessorButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                loadPreprocessorButtonActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Create New Preprocessor");
-
-        jButton6.setText("Run Preprocessor Pipeline");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        configurePreprocessorButton.setText("Configure");
+        configurePreprocessorButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                configurePreprocessorButtonActionPerformed(evt);
+            }
+        });
+
+        runPreprocessorButton.setText("Run Preprocessor Pipeline");
+        runPreprocessorButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                runPreprocessorButtonActionPerformed(evt);
             }
         });
 
@@ -249,82 +263,95 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(402, 402, 402)
-                .addComponent(jButton18, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(83, Short.MAX_VALUE))
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jLabel6)
-                                .addComponent(jLabel7))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 243, Short.MAX_VALUE)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addGap(6, 6, 6)
-                                    .addComponent(jSeparator2)
-                                    .addGap(8, 8, 8))
-                                .addComponent(jButton14, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 265, Short.MAX_VALUE)
-                                .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                    .addContainerGap()))
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(preprocessorComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(preprocessorListLabel)
+                            .addComponent(preprocessorPipelineLabel))
+                        .addGap(277, 277, 277)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(addPreprocessorButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(runPreprocessorButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(loadPreprocessorButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(removePreprocessorButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(configurePreprocessorButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jSeparator5, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jSeparator6))))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(346, Short.MAX_VALUE)
-                .addComponent(jButton18))
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jLabel6)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jLabel7)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jButton14)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jButton4)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jButton5)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                    .addComponent(jButton6)
-                    .addContainerGap(142, Short.MAX_VALUE)))
+                .addContainerGap()
+                .addComponent(preprocessorListLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(preprocessorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(preprocessorPipelineLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(addPreprocessorButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(removePreprocessorButton)
+                .addGap(12, 12, 12)
+                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(loadPreprocessorButton)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(configurePreprocessorButton)
+                .addGap(10, 10, 10)
+                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(runPreprocessorButton)
+                .addGap(75, 75, 75))
         );
 
         jTabbedPane1.addTab("Preprocessor", jPanel2);
 
-        jComboBox7.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        extractorListLabel.setText("Extractor List");
 
-        jLabel5.setText("Crawler Pipeline");
-
-        jButton23.setText("Add Crawler");
-        jButton23.addActionListener(new java.awt.event.ActionListener() {
+        extractorComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        extractorComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton23ActionPerformed(evt);
+                extractorComboBoxActionPerformed(evt);
             }
         });
 
-        jButton24.setText("Load Crawler");
-        jButton24.addActionListener(new java.awt.event.ActionListener() {
+        extractorPipelineLabel.setText("Extractor Pipeline");
+
+        addExtractorButton.setText("Add To Pipeline");
+        addExtractorButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton24ActionPerformed(evt);
+                addExtractorButtonActionPerformed(evt);
             }
         });
 
-        jButton25.setText("Create Crawler");
-
-        jButton26.setText("Run Crawler");
-        jButton26.addActionListener(new java.awt.event.ActionListener() {
+        removeExtractorButton.setText("Remove From Pipeline");
+        removeExtractorButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton26ActionPerformed(evt);
+                removeExtractorButtonActionPerformed(evt);
+            }
+        });
+
+        loadExtractorButton.setText("Load");
+        loadExtractorButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadExtractorButtonActionPerformed(evt);
+            }
+        });
+
+        configureExtractorButton.setText("Configure");
+        configureExtractorButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                configureExtractorButtonActionPerformed(evt);
+            }
+        });
+
+        runExtractorButton.setText("Run Extractor Pipeline");
+        runExtractorButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                runExtractorButtonActionPerformed(evt);
             }
         });
 
@@ -335,67 +362,101 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox7, 0, 474, Short.MAX_VALUE)
+                    .addComponent(extractorComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(0, 387, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jButton25, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton24, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton26, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jButton23, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 149, Short.MAX_VALUE))
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(extractorListLabel)
+                            .addComponent(extractorPipelineLabel)
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(addExtractorButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(runExtractorButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(loadExtractorButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(removeExtractorButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(configureExtractorButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jSeparator8, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jSeparator9))))
                 .addContainerGap())
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton23))
+                .addComponent(extractorListLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(extractorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(extractorPipelineLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jButton24)
+                        .addComponent(addExtractorButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton25)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 241, Short.MAX_VALUE)
-                        .addComponent(jButton26))
+                        .addComponent(removeExtractorButton)
+                        .addGap(12, 12, 12)
+                        .addComponent(jSeparator8, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(loadExtractorButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(configureExtractorButton)
+                        .addGap(10, 10, 10)
+                        .addComponent(jSeparator9, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(runExtractorButton)
+                        .addGap(75, 75, 75))
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel5)
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                        .addComponent(jScrollPane4)
+                        .addContainerGap())))
         );
 
         jTabbedPane1.addTab("Extractor", jPanel3);
 
-        jLabel8.setText("Postprocessor List");
+        postprocessorListLabel.setText("Postprocessor List");
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jLabel9.setText("Postprocessor Pipeline");
-
-        jButton27.setText("Add Postprocessor To Pipeline");
-        jButton27.addActionListener(new java.awt.event.ActionListener() {
+        postprocessorComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        postprocessorComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton27ActionPerformed(evt);
+                postprocessorComboBoxActionPerformed(evt);
             }
         });
 
-        jButton7.setText("Load Custom Postprocessor");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        postprocessorPipelineLabel.setText("Postprocessor Pipeline");
+
+        addPostprocessorButton.setText("Add To Pipeline");
+        addPostprocessorButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                addPostprocessorButtonActionPerformed(evt);
             }
         });
 
-        jButton8.setText("Create New Postprocessor");
-
-        jButton10.setText("Run Postprocessor Pipeline");
-        jButton10.addActionListener(new java.awt.event.ActionListener() {
+        removePostprocessorButton.setText("Remove From Pipeline");
+        removePostprocessorButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton10ActionPerformed(evt);
+                removePostprocessorButtonActionPerformed(evt);
+            }
+        });
+
+        loadPostprocessorButton.setText("Load");
+        loadPostprocessorButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loadPostprocessorButtonActionPerformed(evt);
+            }
+        });
+
+        configurePostprocessorButton.setText("Configure");
+        configurePostprocessorButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                configurePostprocessorButtonActionPerformed(evt);
+            }
+        });
+
+        runPostprocessorButton.setText("Run Postprocessor Pipeline");
+        runPostprocessorButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                runPostprocessorButtonActionPerformed(evt);
             }
         });
 
@@ -406,43 +467,54 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jComboBox4, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(postprocessorComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel9))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 227, Short.MAX_VALUE)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(postprocessorListLabel)
+                            .addComponent(postprocessorPipelineLabel)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addComponent(jSeparator3)
-                                .addGap(8, 8, 8))
-                            .addComponent(jButton27, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 273, Short.MAX_VALUE)
-                            .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(addPostprocessorButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(runPostprocessorButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(loadPostprocessorButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(removePostprocessorButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(configurePostprocessorButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jSeparator7))))
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel8)
+                .addComponent(postprocessorListLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(postprocessorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel9)
+                .addComponent(postprocessorPipelineLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton27)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton7)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton10)
-                .addContainerGap(142, Short.MAX_VALUE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(addPostprocessorButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(removePostprocessorButton)
+                        .addGap(12, 12, 12)
+                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(loadPostprocessorButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(configurePostprocessorButton)
+                        .addGap(10, 10, 10)
+                        .addComponent(jSeparator7, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(runPostprocessorButton)
+                        .addGap(75, 75, 75))
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addComponent(jScrollPane3)
+                        .addContainerGap())))
         );
 
         jTabbedPane1.addTab("Postprocessor", jPanel4);
@@ -464,46 +536,6 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setTitle("Open IE Bahasa Indonesia");
     }// </editor-fold>//GEN-END:initComponents
-
-    private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton18ActionPerformed
-
-    private void jButton23ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton23ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton23ActionPerformed
-
-    private void jButton24ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton24ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton24ActionPerformed
-
-    private void jButton26ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton26ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton26ActionPerformed
-
-    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton14ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
-
-    private void jButton27ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton27ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton27ActionPerformed
-
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
-
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton10ActionPerformed
 
     private void configureCrawlerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCrawlerButton1ActionPerformed
         // TODO add your handling code here:
@@ -600,6 +632,74 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_loadCrawlerButtonActionPerformed
 
+    private void addPreprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPreprocessorButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addPreprocessorButtonActionPerformed
+
+    private void removePreprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removePreprocessorButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_removePreprocessorButtonActionPerformed
+
+    private void loadPreprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadPreprocessorButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_loadPreprocessorButtonActionPerformed
+
+    private void runPreprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runPreprocessorButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_runPreprocessorButtonActionPerformed
+
+    private void configurePreprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configurePreprocessorButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_configurePreprocessorButtonActionPerformed
+
+    private void addPostprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPostprocessorButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addPostprocessorButtonActionPerformed
+
+    private void removePostprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removePostprocessorButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_removePostprocessorButtonActionPerformed
+
+    private void loadPostprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadPostprocessorButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_loadPostprocessorButtonActionPerformed
+
+    private void runPostprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runPostprocessorButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_runPostprocessorButtonActionPerformed
+
+    private void addExtractorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addExtractorButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addExtractorButtonActionPerformed
+
+    private void removeExtractorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeExtractorButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_removeExtractorButtonActionPerformed
+
+    private void loadExtractorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadExtractorButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_loadExtractorButtonActionPerformed
+
+    private void runExtractorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runExtractorButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_runExtractorButtonActionPerformed
+
+    private void configurePostprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configurePostprocessorButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_configurePostprocessorButtonActionPerformed
+
+    private void postprocessorComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postprocessorComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_postprocessorComboBoxActionPerformed
+
+    private void configureExtractorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configureExtractorButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_configureExtractorButtonActionPerformed
+
+    private void extractorComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extractorComboBoxActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_extractorComboBoxActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -624,43 +724,54 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private javax.swing.JButton addCrawlerButton;
     private javax.swing.JButton removeCrawlerButton;
     private javax.swing.JComboBox<Object> crawlerComboBox;
+    private javax.swing.JButton addCrawlerButton1;
+    private javax.swing.JButton addExtractorButton;
+    private javax.swing.JButton addPostprocessorButton;
+    private javax.swing.JButton addPreprocessorButton;
+    private javax.swing.JButton configureExtractorButton;
+    private javax.swing.JButton configurePostprocessorButton;
+    private javax.swing.JButton configurePreprocessorButton;
     private javax.swing.JLabel crawlerListLabel;
     private javax.swing.JLabel crawlerPipelineLabel;
     private javax.swing.JButton configureCrawlerButton;
     private id.ac.itb.gui.dragdroplist.DragDropList crawlerPipelineDragDropList;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton14;
-    private javax.swing.JButton jButton18;
-    private javax.swing.JButton jButton23;
-    private javax.swing.JButton jButton24;
-    private javax.swing.JButton jButton25;
-    private javax.swing.JButton jButton26;
-    private javax.swing.JButton jButton27;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
-    private javax.swing.JComboBox<String> jComboBox7;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
+    private javax.swing.JButton createCrawlerButton;
+    private javax.swing.JComboBox<String> extractorComboBox;
+    private javax.swing.JLabel extractorListLabel;
+    private javax.swing.JLabel extractorPipelineLabel;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
-    private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JSeparator jSeparator6;
+    private javax.swing.JSeparator jSeparator7;
+    private javax.swing.JSeparator jSeparator8;
+    private javax.swing.JSeparator jSeparator9;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JButton loadCrawlerButton;
+    private javax.swing.JButton loadExtractorButton;
+    private javax.swing.JButton loadPostprocessorButton;
+    private javax.swing.JButton loadPreprocessorButton;
+    private javax.swing.JComboBox<String> postprocessorComboBox;
+    private javax.swing.JLabel postprocessorListLabel;
+    private javax.swing.JLabel postprocessorPipelineLabel;
+    private javax.swing.JComboBox<String> preprocessorComboBox;
+    private javax.swing.JLabel preprocessorListLabel;
+    private javax.swing.JLabel preprocessorPipelineLabel;
+    private javax.swing.JButton removeExtractorButton;
+    private javax.swing.JButton removePostprocessorButton;
+    private javax.swing.JButton removePreprocessorButton;
     private javax.swing.JButton runCrawlerButton;
+    private javax.swing.JButton runExtractorButton;
+    private javax.swing.JButton runPostprocessorButton;
+    private javax.swing.JButton runPreprocessorButton;
     // End of variables declaration//GEN-END:variables
 
     private CrawlerPipeline crawlerPipeline = new CrawlerPipeline();
