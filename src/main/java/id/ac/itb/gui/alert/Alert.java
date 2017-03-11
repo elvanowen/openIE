@@ -35,7 +35,7 @@ public class Alert extends javax.swing.JFrame {
         alertLabel = new javax.swing.JLabel();
         dismissButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         alertLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         alertLabel.setText(this.alert);

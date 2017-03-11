@@ -43,8 +43,9 @@ public class CrawlerConfig extends javax.swing.JFrame {
         regexFilterPatternLabel = new javax.swing.JLabel();
         regexFilterPatternTextField = new javax.swing.JTextField();
         okButton = new javax.swing.JButton();
+        cancelButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
         maxPagesToFetchLabel.setText("Max Pages to Fetch");
 
@@ -78,6 +79,13 @@ public class CrawlerConfig extends javax.swing.JFrame {
             }
         });
 
+        cancelButton.setText("Cancel");
+        cancelButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancelButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -107,6 +115,8 @@ public class CrawlerConfig extends javax.swing.JFrame {
                         .addComponent(userAgentStringTextField))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(cancelButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(okButton)))
                 .addContainerGap())
         );
@@ -134,7 +144,9 @@ public class CrawlerConfig extends javax.swing.JFrame {
                     .addComponent(regexFilterPatternLabel)
                     .addComponent(regexFilterPatternTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(okButton)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(okButton)
+                    .addComponent(cancelButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -143,8 +155,8 @@ public class CrawlerConfig extends javax.swing.JFrame {
         setTitle("Crawler Config");
     }// </editor-fold>//GEN-END:initComponents
 
-    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
         // TODO add your handling code here:
+    private void okButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_okButtonActionPerformed
 
         crawlerConfig.setMaxDepthOfCrawling(Integer.parseInt(maxDepthofCrawlingTextField.getText()));
         crawlerConfig.setMaxPagesToFetch(Integer.parseInt(maxPagesToFetchTextField.getText()));
@@ -155,6 +167,11 @@ public class CrawlerConfig extends javax.swing.JFrame {
         this.dispose();
 
     }//GEN-LAST:event_okButtonActionPerformed
+
+    private void cancelButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancelButtonActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_cancelButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -173,6 +190,7 @@ public class CrawlerConfig extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton cancelButton;
     private javax.swing.JLabel maxDepthofCrawlingLabel;
     private javax.swing.JTextField maxDepthofCrawlingTextField;
     private javax.swing.JLabel maxPagesToFetchLabel;
