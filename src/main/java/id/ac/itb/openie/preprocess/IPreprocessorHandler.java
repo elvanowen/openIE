@@ -2,6 +2,7 @@ package id.ac.itb.openie.preprocess;
 
 import ro.fortsoft.pf4j.ExtensionPoint;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -10,12 +11,10 @@ import java.util.HashSet;
  */
 public interface IPreprocessorHandler extends ExtensionPoint {
     public String getPluginName();
-    public HashSet<String> getCrawlerStartingUrls();
-    public Boolean shouldCrawlerFollowLink(String link);
-    public HashMap<String, String> extractContentFromHTML(String url, String html);
+    public HashMap<File, String> execute(File file, String payload) throws Exception;
     public String toString();
 
     // Hooks
-    public void crawlerWillRun();
-    public void crawlerDidRun();
+    public void preprocessorWillRun();
+    public void preprocessorDidRun();
 }
