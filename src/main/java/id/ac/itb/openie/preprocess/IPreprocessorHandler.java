@@ -1,0 +1,21 @@
+package id.ac.itb.openie.preprocess;
+
+import ro.fortsoft.pf4j.ExtensionPoint;
+
+import java.util.HashMap;
+import java.util.HashSet;
+
+/**
+ * Created by elvanowen on 2/24/17.
+ */
+public interface IPreprocessorHandler extends ExtensionPoint {
+    public String getPluginName();
+    public HashSet<String> getCrawlerStartingUrls();
+    public Boolean shouldCrawlerFollowLink(String link);
+    public HashMap<String, String> extractContentFromHTML(String url, String html);
+    public String toString();
+
+    // Hooks
+    public void crawlerWillRun();
+    public void crawlerDidRun();
+}

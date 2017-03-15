@@ -14,6 +14,7 @@ import id.ac.itb.openie.crawler.CrawlerPipeline;
 import id.ac.itb.openie.crawler.ICrawlerHandler;
 import id.ac.itb.openie.pipeline.OpenIePipeline;
 import id.ac.itb.openie.plugins.PluginLoader;
+import id.ac.itb.openie.preprocess.IPreprocessorHandler;
 import id.ac.itb.util.UnzipUtility;
 
 import javax.swing.*;
@@ -45,7 +46,8 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
     private void initPlugins() {
         pluginLoader
-                .registerAvailableExtensions(ICrawlerHandler.class);
+                .registerAvailableExtensions(ICrawlerHandler.class)
+                .registerAvailableExtensions(IPreprocessorHandler.class);
     }
 
     /**
@@ -99,6 +101,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         postprocessorComboBox = new javax.swing.JComboBox<>();
         postprocessorPipelineLabel = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
         addPostprocessorButton = new javax.swing.JButton();
         removePostprocessorButton = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
@@ -219,7 +222,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         preprocessorListLabel.setText("Preprocessor List");
 
-        preprocessorComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        preprocessorComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getExtensions(IPreprocessorHandler.class).toArray()));
 
         preprocessorPipelineLabel.setText("Preprocessor Pipeline");
 
@@ -736,7 +739,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private javax.swing.JButton configureCrawlerButton;
     private id.ac.itb.gui.dragdroplist.DragDropList crawlerPipelineDragDropList;
     private javax.swing.JButton createCrawlerButton;
-    private javax.swing.JComboBox<String> extractorComboBox;
+    private javax.swing.JComboBox<Object> extractorComboBox;
     private javax.swing.JLabel extractorListLabel;
     private javax.swing.JLabel extractorPipelineLabel;
     private javax.swing.JPanel jPanel1;
@@ -744,6 +747,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
@@ -759,10 +763,10 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private javax.swing.JButton loadExtractorButton;
     private javax.swing.JButton loadPostprocessorButton;
     private javax.swing.JButton loadPreprocessorButton;
-    private javax.swing.JComboBox<String> postprocessorComboBox;
+    private javax.swing.JComboBox<Object> postprocessorComboBox;
     private javax.swing.JLabel postprocessorListLabel;
     private javax.swing.JLabel postprocessorPipelineLabel;
-    private javax.swing.JComboBox<String> preprocessorComboBox;
+    private javax.swing.JComboBox<Object> preprocessorComboBox;
     private javax.swing.JLabel preprocessorListLabel;
     private javax.swing.JLabel preprocessorPipelineLabel;
     private javax.swing.JButton removeExtractorButton;
