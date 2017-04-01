@@ -207,7 +207,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         openIESectionPreprocessLabel.setText("Preprocesses");
 
-        openIESectionPreprocessComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        openIESectionPreprocessComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getExtensions(IPreprocessorHandler.class).toArray()));
 
         openIESectionAddPreprocessesButton.setText("+");
         openIESectionAddPreprocessesButton.addActionListener(new java.awt.event.ActionListener() {
@@ -220,7 +220,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         openIESectionExtractionLabel.setText("Extraction");
 
-        openIESectionExtractionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        openIESectionExtractionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getExtensions(IExtractorHandler.class).toArray()));
 
         openIESectionAddExtractionButton.setText("+");
         openIESectionAddExtractionButton.addActionListener(new java.awt.event.ActionListener() {
@@ -289,8 +289,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         });
 
         openIESectionCrawlerLabel.setText("Crawlers");
-
-        openIESectionCrawlerComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[]{"Item 1", "Item 2", "Item 3", "Item 4"}));
+        openIESectionCrawlerComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getExtensions(ICrawlerHandler.class).toArray()));
 
         openIESectionAddCrawlersButton.setText("+");
         openIESectionAddCrawlersButton.addActionListener(new java.awt.event.ActionListener() {
@@ -511,6 +510,27 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         preprocessorComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getExtensions(IPreprocessorHandler.class).toArray()));
 
+        // By default add File Reader and File Writer to execution pipeline
+        for (int i=0;i<preprocessorComboBox.getItemCount(); i++) {
+            IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) pluginLoader.getExtensions(IPreprocessorHandler.class).get(i);
+            String pluginName = preprocessorHandler.getPluginName();
+
+            if (pluginName.equalsIgnoreCase("Preprocessor File Reader")) {
+                Preprocessor preprocessor = new Preprocessor().setPreprocessorHandler(preprocessorHandler);
+                preprocessPipelineListModel.addElement(preprocessor);
+            }
+        }
+
+        for (int i=0;i<preprocessorComboBox.getItemCount(); i++) {
+            IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) pluginLoader.getExtensions(IPreprocessorHandler.class).get(i);
+            String pluginName = preprocessorHandler.getPluginName();
+
+            if (pluginName.equalsIgnoreCase("Preprocessor File Writer")) {
+                Preprocessor preprocessor = new Preprocessor().setPreprocessorHandler(preprocessorHandler);
+                preprocessPipelineListModel.addElement(preprocessor);
+            }
+        }
+
         preprocessorPipelineLabel.setText("Preprocessor Pipeline");
 
         addPreprocessorButton.setText("Add To Pipeline");
@@ -521,6 +541,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         });
 
         removePreprocessorButton.setText("Remove From Pipeline");
+        removePreprocessorButton.setEnabled(false);
         removePreprocessorButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removePreprocessorButtonActionPerformed(evt);
@@ -539,7 +560,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         crawlerPipelineDragDropList.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent ev) {
                 Crawler selectedCrawler = (Crawler) crawlerPipelineDragDropList.getSelectedValue();
-                if (selectedCrawler.getCrawlerhandler().getAvailableConfigurations() != null) {
+                if (selectedCrawler != null && selectedCrawler.getCrawlerhandler().getAvailableConfigurations() != null) {
                     configureCrawlerButton.setEnabled(true);
                 }
             }
@@ -547,10 +568,20 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         preprocessorPipelineDragDropList.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent ev) {
                 Preprocessor selectedPreprocessor = (Preprocessor) preprocessorPipelineDragDropList.getSelectedValue();
-                if (selectedPreprocessor.getPreprocessorHandler().getAvailableConfigurations() != null) {
-                    configurePreprocessorButton.setEnabled(true);
-                } else {
-                    configurePreprocessorButton.setEnabled(false);
+
+                if (selectedPreprocessor != null) {
+                    if (selectedPreprocessor.getPreprocessorHandler().getAvailableConfigurations() != null) {
+                        configurePreprocessorButton.setEnabled(true);
+                    } else {
+                        configurePreprocessorButton.setEnabled(false);
+                    }
+
+                    String pluginName = selectedPreprocessor.getPreprocessorHandler().getPluginName();
+                    if (pluginName.equalsIgnoreCase("Preprocessor File Reader") || pluginName.equalsIgnoreCase("Preprocessor File Writer")) {
+                        removePreprocessorButton.setEnabled(false);
+                    } else {
+                        removePreprocessorButton.setEnabled(true);
+                    }
                 }
             }
         });
@@ -944,7 +975,8 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) pluginLoader.getExtensions(IPreprocessorHandler.class).get(preprocessorComboBox.getSelectedIndex());
         Preprocessor preprocessor = new Preprocessor().setPreprocessorHandler(preprocessorHandler);
 
-        preprocessPipelineListModel.addElement(preprocessor);
+        preprocessPipelineListModel.add(preprocessPipelineListModel.size() - 1, preprocessor);
+//        preprocessPipelineListModel.addElement(preprocessor);
         preprocessorPipelineDragDropList.printItems();
 
     }//GEN-LAST:event_addPreprocessorButtonActionPerformed
@@ -952,8 +984,8 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private void removePreprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removePreprocessorButtonActionPerformed
         // TODO add your handling code here:
 
-        IPreprocessorHandler selectedPreprocessorHandler = (IPreprocessorHandler) preprocessorPipelineDragDropList.getSelectedValue();
-        preprocessPipelineListModel.removeElement(selectedPreprocessorHandler);
+        Preprocessor selectedPreprocessor = (Preprocessor) preprocessorPipelineDragDropList.getSelectedValue();
+        preprocessPipelineListModel.removeElement(selectedPreprocessor);
 
     }//GEN-LAST:event_removePreprocessorButtonActionPerformed
 
@@ -1220,15 +1252,15 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private javax.swing.JButton openIESectionAddPostprocessesButton;
     private javax.swing.JButton openIESectionAddPreprocessesButton;
     private javax.swing.JButton openIESectionConfigurePipelineElementButton1;
-    private javax.swing.JComboBox<String> openIESectionCrawlerComboBox;
+    private javax.swing.JComboBox<Object> openIESectionCrawlerComboBox;
     private javax.swing.JLabel openIESectionCrawlerLabel;
     private javax.swing.JButton openIESectionExecutePipelineElementButton;
     private javax.swing.JLabel openIESectionExecutionPipelineLabel;
-    private javax.swing.JComboBox<String> openIESectionExtractionComboBox;
+    private javax.swing.JComboBox<Object> openIESectionExtractionComboBox;
     private javax.swing.JLabel openIESectionExtractionLabel;
     private javax.swing.JComboBox<String> openIESectionPostprocessComboBox;
     private javax.swing.JLabel openIESectionPostprocessLabel;
-    private javax.swing.JComboBox<String> openIESectionPreprocessComboBox;
+    private javax.swing.JComboBox<Object> openIESectionPreprocessComboBox;
     private javax.swing.JLabel openIESectionPreprocessLabel;
     private javax.swing.JButton openIESectionRemovePipelineElementButton;
     private javax.swing.JLabel postprocessorListLabel;

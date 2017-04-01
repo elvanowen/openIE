@@ -22,7 +22,7 @@ public class DetikPreprocessHandlerPlugin extends Plugin {
 
         @Override
         public String getPluginName() {
-            return "Detik Preprocessor";
+            return "Detik Document Preprocessor";
         }
 
         @Override

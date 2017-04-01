@@ -22,7 +22,7 @@ public class KompasPreprocessorHandlerPlugin extends Plugin {
 
         @Override
         public String getPluginName() {
-            return "Kompas Preprocessor";
+            return "Kompas Document Preprocessor";
         }
 
         @Override

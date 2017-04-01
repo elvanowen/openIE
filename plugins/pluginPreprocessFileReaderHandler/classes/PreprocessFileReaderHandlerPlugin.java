@@ -26,7 +26,7 @@ public class PreprocessFileReaderHandlerPlugin extends Plugin {
         HashMap<String, String> availableConfigurations = new HashMap<>();
 
         public String getPluginName() {
-            return "File Reader";
+            return "Preprocessor File Reader";
         }
 
         @Override

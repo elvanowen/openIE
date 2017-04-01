@@ -77,6 +77,10 @@ public class OkezoneCrawlerHandlerPlugin extends Plugin {
             }
         }
 
+        public String toString() {
+            return this.getPluginName();
+        }
+
         public void crawlerWillRun() {
             System.out.println(this.getPluginName() + " will run..");
         }
