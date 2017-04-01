@@ -18,7 +18,7 @@ public class KompasNormalization extends Plugin {
     }
 
     @Extension
-    public static class KompasPreprocessorHandler implements IPreprocessorHandler {
+    public static class KompasNormalizationHandler implements IPreprocessorHandler {
 
         @Override
         public String getPluginName() {

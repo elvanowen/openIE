@@ -23,7 +23,7 @@ public class SentenceFormalization extends Plugin {
     }
 
     @Extension
-    public static class SentenceFormalizationPreprocessorHandler implements IPreprocessorHandler {
+    public static class SentenceFormalizationHandler implements IPreprocessorHandler {
 
         @Override
         public String getPluginName() {

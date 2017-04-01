@@ -18,7 +18,7 @@ public class DetikNormalization extends Plugin {
     }
 
     @Extension
-    public static class DetikPreprocessorHandler implements IPreprocessorHandler {
+    public static class DetikNormalizationHandler implements IPreprocessorHandler {
 
         @Override
         public String getPluginName() {
