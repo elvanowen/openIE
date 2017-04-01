@@ -41,13 +41,14 @@ public class PreprocessFileReaderHandlerPlugin extends Plugin {
             if (getAvailableConfigurations().get("Input Directory") == null) {
                 throw new Exception("Read directory path must be specified");
             } else {
-                ArrayList<File> files = Utilities.getDirectoryFiles(new File(availableConfigurations.get("Input Directory")));
                 HashMap<File, String> pipelineItems = new HashMap<File, String>();
 
-                for (File _file: files) {
-                    System.out.println("Check File");
-                    System.out.println(_file);
-                    pipelineItems.put(_file, Utilities.getFileContent(_file).get(0));
+                for (String inputDir: availableConfigurations.get("Input Directory").split(":")) {
+                    ArrayList<File> files = Utilities.getDirectoryFiles(new File(inputDir));
+
+                    for (File _file: files) {
+                        pipelineItems.put(_file, Utilities.getFileContent(_file).get(0));
+                    }
                 }
 
                 return pipelineItems;
