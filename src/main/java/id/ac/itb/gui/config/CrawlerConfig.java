@@ -152,7 +152,7 @@ public class CrawlerConfig extends javax.swing.JFrame {
 
         pack();
         setLocationRelativeTo(null);
-        setTitle("Crawler Config");
+        setTitle("Crawler ConfigDialog");
     }// </editor-fold>//GEN-END:initComponents
 
         // TODO add your handling code here:

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 abstract class BaseExtractor implements IOpenIePipelineElement {
 
     private Boolean shouldStoreExtractions = true;
-    private String extractionsStorageDirectoryPath = new Config().getProperty("EXTRACTIONS_STORAGE_DIRECTORY");
+    private String extractionsStorageDirectoryPath = new Config().getProperty("EXTRACTIONS_OUTPUT_RELATIVE_PATH");
     private File fileToBeExtracted = null;
 
     public void setShouldStoreExtractions(Boolean shouldStoreExtractions) {

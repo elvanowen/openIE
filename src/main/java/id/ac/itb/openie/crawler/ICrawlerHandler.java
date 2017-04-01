@@ -16,10 +16,10 @@ import java.util.HashSet;
  */
 public interface ICrawlerHandler extends ExtensionPoint {
     public String getPluginName();
+    public HashMap<String, String> getAvailableConfigurations();
     public HashSet<String> getCrawlerStartingUrls();
     public Boolean shouldCrawlerFollowLink(String link);
     public HashMap<String, String> extractContentFromHTML(String url, String html);
-    public String toString();
 
     // Hooks
     public void crawlerWillRun();

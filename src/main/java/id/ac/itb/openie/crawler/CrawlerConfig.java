@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
  * Created by elvanowen on 3/2/17.
  */
 public class CrawlerConfig {
-    private String crawlStorageDirectoryPath = new Config().getProperty("CRAWLER_STORAGE_DIRECTORY");
+    private String crawlStorageDirectoryPath = new Config().getProperty("CRAWLER_OUTPUT_RELATIVE_PATH");
     private Pattern filterRegexPattern = Pattern.compile(".*(\\.(css|js|gif|jpeg|jpg|png|mp3|mp3|zip|gz))$");
     private String internalCrawlerStorageDirectory = new Config().getProperty("INTERNAL_CRAWLER_STORAGE_DIRECTORY");
     private int numberOfCrawlers = 1;

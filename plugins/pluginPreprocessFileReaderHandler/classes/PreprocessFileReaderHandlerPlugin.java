@@ -1,0 +1,71 @@
+package classes;
+
+import id.ac.itb.openie.config.Config;
+import id.ac.itb.openie.preprocess.IPreprocessorHandler;
+import id.ac.itb.openie.utils.Utilities;
+import ro.fortsoft.pf4j.Extension;
+import ro.fortsoft.pf4j.Plugin;
+import ro.fortsoft.pf4j.PluginWrapper;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+/**
+ * Created by elvanowen on 2/24/17.
+ */
+public class PreprocessFileReaderHandlerPlugin extends Plugin {
+
+    public PreprocessFileReaderHandlerPlugin(PluginWrapper wrapper) {
+        super(wrapper);
+    }
+
+    @Extension
+    public static class PreprocessorFileReaderHandler implements IPreprocessorHandler {
+
+        HashMap<String, String> availableConfigurations = new HashMap<>();
+
+        public String getPluginName() {
+            return "File Reader";
+        }
+
+        @Override
+        public HashMap<String, String> getAvailableConfigurations() {
+            availableConfigurations.putIfAbsent("Input Directory", System.getProperty("user.dir") + File.separator + new Config().getProperty("CRAWLER_OUTPUT_RELATIVE_PATH"));
+
+            return availableConfigurations;
+        }
+
+        @Override
+        public HashMap<File, String> preprocess(File file, String payload) throws Exception {
+            if (getAvailableConfigurations().get("Input Directory") == null) {
+                throw new Exception("Read directory path must be specified");
+            } else {
+                ArrayList<File> files = Utilities.getDirectoryFiles(new File(availableConfigurations.get("Input Directory")));
+                HashMap<File, String> pipelineItems = new HashMap<File, String>();
+
+                for (File _file: files) {
+                    System.out.println("Check File");
+                    System.out.println(_file);
+                    pipelineItems.put(_file, Utilities.getFileContent(_file).get(0));
+                }
+
+                return pipelineItems;
+            }
+        }
+
+        public String toString() {
+            return this.getPluginName();
+        }
+
+        @Override
+        public void preprocessorWillRun() {
+
+        }
+
+        @Override
+        public void preprocessorDidRun() {
+
+        }
+    }
+}

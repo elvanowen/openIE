@@ -26,11 +26,8 @@ import java.util.regex.Pattern;
 public class Crawler extends WebCrawler {
 
     private static Crawler currentlyRunningCrawler = null;
-    private static ICrawlerHandler currentlyRunningCrawlerHandler = null;
-
     private ICrawlerHandler crawlerHandler = null;
     private int totalDocumentCrawled = 0;
-    private CrawlerConfig crawlerConfig = new CrawlerConfig();
 
     public Crawler setCrawlerhandler(ICrawlerHandler crawlerhandler) {
         crawlerHandler = crawlerhandler;
@@ -39,15 +36,6 @@ public class Crawler extends WebCrawler {
 
     public ICrawlerHandler getCrawlerhandler() {
         return crawlerHandler;
-    }
-
-    public Crawler setCrawlerConfig(CrawlerConfig crawlerConfig) {
-        this.crawlerConfig = crawlerConfig;
-        return this;
-    }
-
-    public CrawlerConfig getCrawlerConfig() {
-        return this.crawlerConfig;
     }
 
     public synchronized void setTotalDocumentCrawled(int totalDocumentCrawled) {
@@ -61,13 +49,13 @@ public class Crawler extends WebCrawler {
     @Override
     public void onStart() {
         super.onStart();
-        currentlyRunningCrawlerHandler.crawlerWillRun();
+        currentlyRunningCrawler.getCrawlerhandler().crawlerWillRun();
     }
 
     @Override
     public void onBeforeExit() {
         super.onBeforeExit();
-        currentlyRunningCrawlerHandler.crawlerDidRun();
+        currentlyRunningCrawler.getCrawlerhandler().crawlerDidRun();
     }
 
     @Override
@@ -78,17 +66,17 @@ public class Crawler extends WebCrawler {
 //        System.out.println(referringHref + " -> " + targetHref);
 
         // If url is seed then allow
-        for (String seedURL: currentlyRunningCrawlerHandler.getCrawlerStartingUrls()) {
+        for (String seedURL: currentlyRunningCrawler.getCrawlerhandler().getCrawlerStartingUrls()) {
             if (targetHref.equalsIgnoreCase(seedURL)) {
                 return true;
             }
         }
 
-        if (currentlyRunningCrawler.getCrawlerConfig().getFilterRegexPattern().matcher(targetHref).matches()) {
+        if (Pattern.compile(currentlyRunningCrawler.getCrawlerhandler().getAvailableConfigurations().get("Regex Filter Pattern")).matcher(targetHref).matches()) {
             return false;
         }
 
-        return currentlyRunningCrawlerHandler.shouldCrawlerFollowLink(targetHref);
+        return currentlyRunningCrawler.getCrawlerhandler().shouldCrawlerFollowLink(targetHref);
     }
 
     @Override
@@ -100,7 +88,7 @@ public class Crawler extends WebCrawler {
             HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
             String html = htmlParseData.getHtml();
 
-            HashMap<String, String> fileContentMappings = currentlyRunningCrawlerHandler.extractContentFromHTML(url, html);
+            HashMap<String, String> fileContentMappings = currentlyRunningCrawler.getCrawlerhandler().extractContentFromHTML(url, html);
             Iterator<Map.Entry<String, String>> it = fileContentMappings.entrySet().iterator();
 
             currentlyRunningCrawler.setTotalDocumentCrawled(currentlyRunningCrawler.getTotalDocumentCrawled() + 1);
@@ -116,22 +104,43 @@ public class Crawler extends WebCrawler {
     }
 
     protected void writeToFile(String url, String content) {
-        Utilities.writeToFile(currentlyRunningCrawler.getCrawlerConfig().getCrawlStorageDirectoryPath(), url, content);
+        Utilities.writeToFile(currentlyRunningCrawler.getCrawlerhandler().getAvailableConfigurations().get("Output Directory"), url, content);
     }
 
     public void execute() throws Exception {
-        if (crawlerHandler == null) {
-            throw new Exception("No Crawler Handler specified");
-        }
+        if (crawlerHandler == null) throw new Exception("No Crawler Handler specified");
 
-        currentlyRunningCrawlerHandler = crawlerHandler;
         currentlyRunningCrawler = this;
 
         CrawlConfig config = new CrawlConfig();
-        config.setCrawlStorageFolder(crawlerConfig.getInternalCrawlerStorageDirectory());
-        config.setMaxDepthOfCrawling(crawlerConfig.getMaxDepthOfCrawling());
-        config.setMaxPagesToFetch(crawlerConfig.getMaxPagesToFetch());
-        config.setUserAgentString(crawlerConfig.getUserAgentString());
+
+        // Set Output Directory Config
+        String userOutputDirectory = currentlyRunningCrawler.getCrawlerhandler().getAvailableConfigurations().get("Output Directory");
+        String defaultOutputDirectory = System.getProperty("user.dir") + File.separator + new Config().getProperty("CRAWLER_OUTPUT_RELATIVE_PATH");
+        String outputDirectory = userOutputDirectory != null ? userOutputDirectory : defaultOutputDirectory;
+
+        config.setCrawlStorageFolder(outputDirectory);
+
+        // Set Max Depth of Crawling Config
+        String userMaxDepthOfCrawling = currentlyRunningCrawler.getCrawlerhandler().getAvailableConfigurations().get("Max Depth of Crawling");
+        String defaultMaxDepthOfCrawling = "20";
+        String maxDepthOfCrawling = userMaxDepthOfCrawling != null ? userMaxDepthOfCrawling : defaultMaxDepthOfCrawling;
+
+        config.setMaxDepthOfCrawling(Integer.valueOf(maxDepthOfCrawling));
+
+        // Set Max Pages to Fetch Config
+        String userMaxPagesToFetch = currentlyRunningCrawler.getCrawlerhandler().getAvailableConfigurations().get("Max Pages to Fetch");
+        String defaultMaxPagesToFetch = "50";
+        String maxPagesToFetch = userMaxPagesToFetch != null ? userMaxPagesToFetch : defaultMaxPagesToFetch;
+
+        config.setMaxPagesToFetch(Integer.valueOf(maxPagesToFetch));
+
+        // Set User Agent String Config
+        String userUserAgentString = currentlyRunningCrawler.getCrawlerhandler().getAvailableConfigurations().get("User Agent String");
+        String defaultUserAgentString = "Open IE/1.0.0";
+        String userAgentString = userUserAgentString != null ? userUserAgentString : defaultUserAgentString;
+
+        config.setUserAgentString(userAgentString);
 
         /*
          * Instantiate the controller for this crawl.
@@ -149,7 +158,7 @@ public class Crawler extends WebCrawler {
              * URLs that are fetched and then the crawler starts following links
              * which are found in these pages
              */
-            for (String seed: currentlyRunningCrawlerHandler.getCrawlerStartingUrls()) {
+            for (String seed: currentlyRunningCrawler.getCrawlerhandler().getCrawlerStartingUrls()) {
                 controller.addSeed(seed);
             }
 

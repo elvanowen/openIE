@@ -11,9 +11,9 @@ import java.util.HashMap;
 /**
  * Created by elvanowen on 3/12/17.
  */
-public class DetikPreprocessorHandlerPlugin extends Plugin {
+public class DetikPreprocessHandlerPlugin extends Plugin {
 
-    public DetikPreprocessorHandlerPlugin(PluginWrapper wrapper) {
+    public DetikPreprocessHandlerPlugin(PluginWrapper wrapper) {
         super(wrapper);
     }
 
@@ -23,6 +23,11 @@ public class DetikPreprocessorHandlerPlugin extends Plugin {
         @Override
         public String getPluginName() {
             return "Detik Preprocessor";
+        }
+
+        @Override
+        public HashMap<String, String> getAvailableConfigurations() {
+            return null;
         }
 
         /* Function  : Remove document metadata */
@@ -54,7 +59,7 @@ public class DetikPreprocessorHandlerPlugin extends Plugin {
         }
 
         @Override
-        public HashMap<File, String> execute(File file, String payload) throws Exception {
+        public HashMap<File, String> preprocess(File file, String payload) throws Exception {
             String preprocessedPayload = removeMetadata(payload);
             preprocessedPayload = removeLinkPhoto(preprocessedPayload);
             preprocessedPayload = removeLinkToAnotherArticle(preprocessedPayload);

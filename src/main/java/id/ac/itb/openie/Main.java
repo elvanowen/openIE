@@ -2,7 +2,6 @@ package id.ac.itb.openie;
 
 import id.ac.itb.openie.config.Config;
 import id.ac.itb.openie.crawler.Crawler;
-import id.ac.itb.openie.crawler.CrawlerConfig;
 import id.ac.itb.openie.crawler.CrawlerPipeline;
 import id.ac.itb.openie.crawler.ICrawlerHandler;
 import id.ac.itb.openie.extractor.ExtractorFileReader;
@@ -10,7 +9,6 @@ import id.ac.itb.openie.extractor.ExtractorFileWriter;
 import id.ac.itb.openie.extractor.ExtractorPipeline;
 import id.ac.itb.openie.extractor.ReverbExtractor;
 import id.ac.itb.openie.pipeline.OpenIePipeline;
-import id.ac.itb.openie.plugins.PluginLoader;
 import id.ac.itb.openie.postprocess.PostprocessorFileReader;
 import id.ac.itb.openie.postprocess.PostprocessorFileWriter;
 import id.ac.itb.openie.postprocess.PostprocessorPipeline;
@@ -53,15 +51,14 @@ public class Main {
                         new CrawlerPipeline()
                                 .addCrawler(
                                         new Crawler()
-                                                .setCrawlerhandler(crawlerPlugin.get("Okezone Crawler"))
-                                                .setCrawlerConfig(new CrawlerConfig().setMaxPagesToFetch(50))))
+                                                .setCrawlerhandler(crawlerPlugin.get("Okezone Crawler"))))
                 .addPipelineElement(
                         new PreprocessorPipeline()
                                 .addPipelineElement(
                                         new PreprocessorFileReader()
                                                 .setReadDirectoryPath(
                                                         new Config()
-                                                                .getProperty("CRAWLER_STORAGE_DIRECTORY")))
+                                                                .getProperty("CRAWLER_OUTPUT_RELATIVE_PATH")))
                                 .addPipelineElement(
                                         new KompasDocumentPreprocessor())
 //                                .addPipelineElement(
@@ -70,14 +67,14 @@ public class Main {
                                         new PreprocessorFileWriter()
                                                 .setWriteDirectoryPath(
                                                         new Config()
-                                                                .getProperty("PREPROCESSOR_STORAGE_DIRECTORY"))))
+                                                                .getProperty("PREPROCESSES_OUTPUT_RELATIVE_PATH"))))
                 .addPipelineElement(
                         new ExtractorPipeline()
                                 .addPipelineElement(
                                         new ExtractorFileReader()
                                                 .setReadDirectoryPath(
                                                         new Config()
-                                                                .getProperty("PREPROCESSOR_STORAGE_DIRECTORY")))
+                                                                .getProperty("PREPROCESSES_OUTPUT_RELATIVE_PATH")))
                                 .addPipelineElement(
                                         new ReverbExtractor()
                                 )
@@ -85,19 +82,19 @@ public class Main {
                                         new ExtractorFileWriter()
                                                 .setWriteDirectoryPath(
                                                         new Config()
-                                                                .getProperty("EXTRACTIONS_STORAGE_DIRECTORY"))))
+                                                                .getProperty("EXTRACTIONS_OUTPUT_RELATIVE_PATH"))))
                 .addPipelineElement(
                         new PostprocessorPipeline()
                                 .addPipelineElement(
                                         new PostprocessorFileReader()
                                             .setReadDirectoryPath(
                                                     new Config()
-                                                            .getProperty("EXTRACTIONS_STORAGE_DIRECTORY")))
+                                                            .getProperty("EXTRACTIONS_OUTPUT_RELATIVE_PATH")))
                                 .addPipelineElement(
                                         new PostprocessorFileWriter()
                                                 .setWriteDirectoryPath(
                                                         new Config()
-                                                                .getProperty("POSTPROCESSOR_STORAGE_DIRECTORY"))))
+                                                                .getProperty("POSTPROCESSES_OUTPUT_RELATIVE_PATH"))))
                 .execute();
 
 
@@ -120,11 +117,11 @@ public class Main {
 
 
 
-//        ArrayList<File> files = Utilities.getDirectoryFiles(new File(new Config().getProperty("PREPROCESSOR_STORAGE_DIRECTORY")));
+//        ArrayList<File> files = Utilities.getDirectoryFiles(new File(new ConfigDialog().getProperty("PREPROCESSOR_STORAGE_DIRECTORY")));
 
 //        ReverbExtractor reverbExtractor = new ReverbExtractor();
 ////        ArrayList<Triple<String, String, String>> relations = reverbExtractor.extractFromFile(files.get(10));
-//        ArrayList<Triple<String, String, String>> relations = reverbExtractor.extractFromDirectory(new File(new Config().getProperty("PREPROCESSOR_STORAGE_DIRECTORY")));
+//        ArrayList<Triple<String, String, String>> relations = reverbExtractor.extractFromDirectory(new File(new ConfigDialog().getProperty("PREPROCESSOR_STORAGE_DIRECTORY")));
 //
 //        for (Triple<String, String, String> relation: relations) {
 //            if (relation != null) {

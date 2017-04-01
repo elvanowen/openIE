@@ -25,6 +25,11 @@ public class KompasPreprocessorHandlerPlugin extends Plugin {
             return "Kompas Preprocessor";
         }
 
+        @Override
+        public HashMap<String, String> getAvailableConfigurations() {
+            return null;
+        }
+
         /* Function  : Remove document metadata */
         /* Input     : (Baca juga: Ada Usul ... Tahan Diri) Fraksi Partai Demokrat... */
         /* Output    : Fraksi Partai Demokrat... */
@@ -39,7 +44,8 @@ public class KompasPreprocessorHandlerPlugin extends Plugin {
             return fileContent.replaceFirst("(^.*?KOMPAS(\\.com)?...)","").trim();
         }
 
-        public HashMap<File, String> execute(File file, String payload) throws Exception {
+        @Override
+        public HashMap<File, String> preprocess(File file, String payload) throws Exception {
             String preprocessedPayload = removeMetadata(payload);
             preprocessedPayload = removeLinkToAnotherArticle(preprocessedPayload);
 

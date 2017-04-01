@@ -9,10 +9,10 @@ import java.util.HashSet;
 /**
  * Created by elvanowen on 2/24/17.
  */
-public interface IPreprocessorHandler extends IPreprocessorPipelineElement, ExtensionPoint {
+public interface IPreprocessorHandler extends ExtensionPoint {
     public String getPluginName();
-    public HashMap<File, String> execute(File file, String payload) throws Exception;
-    public String toString();
+    public HashMap<String, String> getAvailableConfigurations();
+    public HashMap<File, String> preprocess(File file, String payload) throws Exception;
 
     // Hooks
     public void preprocessorWillRun();

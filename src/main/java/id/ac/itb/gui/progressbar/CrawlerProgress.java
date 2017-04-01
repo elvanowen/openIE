@@ -49,7 +49,7 @@ public class CrawlerProgress extends javax.swing.JFrame {
 
         for (Crawler crawler: crawlerPipeline.getCrawlers()) {
             totalDocumentsFetched += crawler.getTotalDocumentCrawled();
-            totalDocumentsToBeFetched += crawler.getCrawlerConfig().getMaxPagesToFetch();
+            totalDocumentsToBeFetched += Integer.valueOf(crawler.getCrawlerhandler().getAvailableConfigurations().get("Max Pages to Fetch"));
         }
 
         if (totalDocumentsToBeFetched > 0 && totalDocumentsFetched == totalDocumentsToBeFetched) {
