@@ -14,9 +14,9 @@ import java.util.HashMap;
 /**
  * Created by elvanowen on 2/24/17.
  */
-public class PreprocessFileReaderHandlerPlugin extends Plugin {
+public class PreprocessorFileReader extends Plugin {
 
-    public PreprocessFileReaderHandlerPlugin(PluginWrapper wrapper) {
+    public PreprocessorFileReader(PluginWrapper wrapper) {
         super(wrapper);
     }
 
@@ -26,7 +26,7 @@ public class PreprocessFileReaderHandlerPlugin extends Plugin {
         HashMap<String, String> availableConfigurations = new HashMap<>();
 
         public String getPluginName() {
-            return "Preprocessor File Reader";
+            return "File Reader";
         }
 
         @Override

@@ -19,9 +19,9 @@ import java.util.HashSet;
 /**
  * Created by elvanowen on 2/24/17.
  */
-public class KompasCrawlerHandlerPlugin extends Plugin {
+public class KompasCrawler extends Plugin {
 
-    public KompasCrawlerHandlerPlugin(PluginWrapper wrapper) {
+    public KompasCrawler(PluginWrapper wrapper) {
         super(wrapper);
     }
 
@@ -31,12 +31,12 @@ public class KompasCrawlerHandlerPlugin extends Plugin {
         HashMap<String, String> availableConfigurations = new HashMap<>();
 
         public String getPluginName() {
-            return "Kompas Crawler";
+            return "Kompas.com";
         }
 
         @Override
         public HashMap<String, String> getAvailableConfigurations() {
-            availableConfigurations.putIfAbsent("Output Directory", System.getProperty("user.dir") + File.separator + new Config().getProperty("CRAWLER_OUTPUT_RELATIVE_PATH"));
+//            availableConfigurations.putIfAbsent("Output Directory", System.getProperty("user.dir") + File.separator + new Config().getProperty("CRAWLER_OUTPUT_RELATIVE_PATH"));
             availableConfigurations.putIfAbsent("Max Pages to Fetch", "50");
             availableConfigurations.putIfAbsent("Max Depth of Crawling", "30");
             availableConfigurations.putIfAbsent("Regex Filter Pattern", ".*(\\.(css|js|gif|jpeg|jpg|png|mp3|mp3|zip|gz))$");

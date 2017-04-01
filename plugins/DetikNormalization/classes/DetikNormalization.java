@@ -11,9 +11,9 @@ import java.util.HashMap;
 /**
  * Created by elvanowen on 3/12/17.
  */
-public class DetikPreprocessHandlerPlugin extends Plugin {
+public class DetikNormalization extends Plugin {
 
-    public DetikPreprocessHandlerPlugin(PluginWrapper wrapper) {
+    public DetikNormalization(PluginWrapper wrapper) {
         super(wrapper);
     }
 
@@ -22,7 +22,7 @@ public class DetikPreprocessHandlerPlugin extends Plugin {
 
         @Override
         public String getPluginName() {
-            return "Detik Document Preprocessor";
+            return "Detik Normalization";
         }
 
         @Override

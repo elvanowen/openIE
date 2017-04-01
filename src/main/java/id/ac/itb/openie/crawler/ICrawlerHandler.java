@@ -7,6 +7,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import ro.fortsoft.pf4j.ExtensionPoint;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,7 +15,7 @@ import java.util.HashSet;
 /**
  * Created by elvanowen on 2/24/17.
  */
-public interface ICrawlerHandler extends ExtensionPoint {
+public interface ICrawlerHandler extends ExtensionPoint, Serializable {
     public String getPluginName();
     public HashMap<String, String> getAvailableConfigurations();
     public HashSet<String> getCrawlerStartingUrls();

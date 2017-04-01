@@ -66,7 +66,7 @@ public class CrawlerProgress extends javax.swing.JFrame {
         if (crawlerName.equalsIgnoreCase("")) {
             totalCrawlerLabel.setText("Setting up crawlers" + trail + StringUtils.repeat(" ", 40));
         } else {
-            totalCrawlerLabel.setText("Running " + crawlerName + " ( " + totalProcessedCrawler + " / " + totalCrawler + " crawlers )");
+            totalCrawlerLabel.setText("Crawling " + crawlerName + " ( " + totalProcessedCrawler + " / " + totalCrawler + " crawler" + (totalCrawler > 1 ? "s" : "") + " )");
         }
     }
 

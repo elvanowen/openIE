@@ -39,6 +39,12 @@ public class PluginLoader {
     }
 
     public List getExtensions(Class type) {
+        Collections.sort(availableExtensions.get(type), new Comparator<Object>() {
+            public int compare(Object lhs, Object rhs) {
+                return lhs.toString().compareTo(rhs.toString());
+            }
+        });
+
         return availableExtensions.get(type);
     }
 }

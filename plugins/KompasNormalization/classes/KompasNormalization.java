@@ -11,9 +11,9 @@ import java.util.HashMap;
 /**
  * Created by elvanowen on 3/12/17.
  */
-public class KompasPreprocessorHandlerPlugin extends Plugin {
+public class KompasNormalization extends Plugin {
 
-    public KompasPreprocessorHandlerPlugin(PluginWrapper wrapper) {
+    public KompasNormalization(PluginWrapper wrapper) {
         super(wrapper);
     }
 
@@ -22,7 +22,7 @@ public class KompasPreprocessorHandlerPlugin extends Plugin {
 
         @Override
         public String getPluginName() {
-            return "Kompas Document Preprocessor";
+            return "Kompas Normalization";
         }
 
         @Override

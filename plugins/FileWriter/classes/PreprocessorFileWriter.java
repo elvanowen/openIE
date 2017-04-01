@@ -13,9 +13,9 @@ import java.util.HashMap;
 /**
  * Created by elvanowen on 2/24/17.
  */
-public class PreprocessFileWriterHandlerPlugin extends Plugin {
+public class PreprocessorFileWriter extends Plugin {
 
-    public PreprocessFileWriterHandlerPlugin(PluginWrapper wrapper) {
+    public PreprocessorFileWriter(PluginWrapper wrapper) {
         super(wrapper);
     }
 
@@ -25,7 +25,7 @@ public class PreprocessFileWriterHandlerPlugin extends Plugin {
         HashMap<String, String> availableConfigurations = new HashMap<>();
 
         public String getPluginName() {
-            return "Preprocessor File Writer";
+            return "File Writer";
         }
 
         @Override

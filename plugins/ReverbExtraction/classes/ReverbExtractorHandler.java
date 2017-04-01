@@ -20,14 +20,14 @@ import java.util.HashSet;
 /**
  * Created by elvanowen on 2/24/17.
  */
-public class ReverbExtractorHandlerPlugin extends Plugin {
+public class ReverbExtractorHandler extends Plugin {
 
-    public ReverbExtractorHandlerPlugin(PluginWrapper wrapper) {
+    public ReverbExtractorHandler(PluginWrapper wrapper) {
         super(wrapper);
     }
 
     @Extension
-    public static class ReverbExtractorHandler implements IExtractorHandler {
+    public static class ReverbExtractorHandlerPlugin implements IExtractorHandler {
 
         public String getPluginName() {
             return "Reverb Extractor";

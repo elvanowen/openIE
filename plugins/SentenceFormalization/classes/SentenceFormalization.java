@@ -16,9 +16,9 @@ import java.util.HashMap;
 /**
  * Created by elvanowen on 3/12/17.
  */
-public class SentenceFormalizationPreprocessHandlerPlugin extends Plugin {
+public class SentenceFormalization extends Plugin {
 
-    public SentenceFormalizationPreprocessHandlerPlugin(PluginWrapper wrapper) {
+    public SentenceFormalization(PluginWrapper wrapper) {
         super(wrapper);
     }
 

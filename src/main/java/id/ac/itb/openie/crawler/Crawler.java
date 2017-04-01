@@ -15,6 +15,7 @@ import id.ac.itb.openie.utils.Utilities;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -26,8 +27,17 @@ import java.util.regex.Pattern;
 public class Crawler extends WebCrawler {
 
     private static Crawler currentlyRunningCrawler = null;
+    private static ArrayList<String> outputDirectories = new ArrayList<>();
     private ICrawlerHandler crawlerHandler = null;
     private int totalDocumentCrawled = 0;
+
+    public static void addOutputDirectory(String outputDirectory) {
+        outputDirectories.add(outputDirectory);
+    }
+
+    public static void clearOutputDirectory() {
+        outputDirectories = new ArrayList<>();
+    }
 
     public Crawler setCrawlerhandler(ICrawlerHandler crawlerhandler) {
         crawlerHandler = crawlerhandler;
@@ -84,14 +94,14 @@ public class Crawler extends WebCrawler {
         String url = page.getWebURL().getURL();
         System.out.println(url);
 
+        currentlyRunningCrawler.setTotalDocumentCrawled(currentlyRunningCrawler.getTotalDocumentCrawled() + 1);
+
         if (page.getParseData() instanceof HtmlParseData) {
             HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
             String html = htmlParseData.getHtml();
 
             HashMap<String, String> fileContentMappings = currentlyRunningCrawler.getCrawlerhandler().extractContentFromHTML(url, html);
             Iterator<Map.Entry<String, String>> it = fileContentMappings.entrySet().iterator();
-
-            currentlyRunningCrawler.setTotalDocumentCrawled(currentlyRunningCrawler.getTotalDocumentCrawled() + 1);
 
             while (it.hasNext()) {
                 Map.Entry<String, String> pair = it.next();
@@ -104,7 +114,9 @@ public class Crawler extends WebCrawler {
     }
 
     protected void writeToFile(String url, String content) {
-        Utilities.writeToFile(currentlyRunningCrawler.getCrawlerhandler().getAvailableConfigurations().get("Output Directory"), url, content);
+        for (String outputDirectory: outputDirectories) {
+            Utilities.writeToFile(outputDirectory, url, content);
+        }
     }
 
     public void execute() throws Exception {
@@ -114,12 +126,8 @@ public class Crawler extends WebCrawler {
 
         CrawlConfig config = new CrawlConfig();
 
-        // Set Output Directory Config
-        String userOutputDirectory = currentlyRunningCrawler.getCrawlerhandler().getAvailableConfigurations().get("Output Directory");
-        String defaultOutputDirectory = System.getProperty("user.dir") + File.separator + new Config().getProperty("CRAWLER_OUTPUT_RELATIVE_PATH");
-        String outputDirectory = userOutputDirectory != null ? userOutputDirectory : defaultOutputDirectory;
-
-        config.setCrawlStorageFolder(outputDirectory);
+        // Set Internal Output Directory Config
+        config.setCrawlStorageFolder(System.getProperty("user.dir") + File.separator + new Config().getProperty("INTERNAL_CRAWLER_STORAGE_DIRECTORY"));
 
         // Set Max Depth of Crawling Config
         String userMaxDepthOfCrawling = currentlyRunningCrawler.getCrawlerhandler().getAvailableConfigurations().get("Max Depth of Crawling");
@@ -174,6 +182,12 @@ public class Crawler extends WebCrawler {
     }
 
     public String toString() {
-        return this.getCrawlerhandler().getPluginName();
+        String outputDirectory = getCrawlerhandler().getAvailableConfigurations().get("Output Directory");
+
+        if (outputDirectory != null) {
+            return "File Writer: " + outputDirectory;
+        } else {
+            return this.getCrawlerhandler().getPluginName();
+        }
     }
 }
