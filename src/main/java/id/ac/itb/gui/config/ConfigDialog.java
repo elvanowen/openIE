@@ -20,9 +20,6 @@ public class ConfigDialog extends JFrame {
     HashMap<String, String> config;
     HashMap<String, Pair<JLabel, JTextField>> configComponents = new HashMap<>();
 
-    /**
-     * Creates new form CrawlerConfig
-     */
     public ConfigDialog(HashMap<String, String> config) {
         this.config = config;
         initComponents();

@@ -6,15 +6,16 @@ import org.apache.commons.lang3.tuple.Pair;
 import ro.fortsoft.pf4j.ExtensionPoint;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.HashMap;
 
 /**
  * Created by elvanowen on 2/24/17.
  */
-public interface IExtractorHandler extends IExtractorPipelineElement, ExtensionPoint {
+public interface IExtractorHandler extends ExtensionPoint, Serializable {
     public String getPluginName();
-    public HashMap<File, Pair<String, Relations>> execute(File file, String payload, Relations relations) throws Exception;
-    public String toString();
+    public HashMap<String, String> getAvailableConfigurations();
+    public HashMap<File, Pair<String, Relations>> extract(File file, String payload, Relations relations) throws Exception;
 
     // Hooks
     public void extractorWillRun();

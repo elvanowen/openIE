@@ -26,7 +26,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.Collections;
 
 /**
  *
@@ -39,6 +38,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     DefaultListModel preprocessPipelineListModel = new DefaultListModel();
     DefaultListModel extractPipelineListModel = new DefaultListModel();
     DefaultListModel postprocessPipelineListModel = new DefaultListModel();
+    DefaultListModel openIePipelineListModel = new DefaultListModel();
     PluginLoader pluginLoader = new PluginLoader();
 
     /**
@@ -81,23 +81,26 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
     private void browseStartingDirectory() {
         JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         int returnValue = fileChooser.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
 
-            try {
-                String target = System.getProperty("pf4j.pluginsDir", "plugins") + File.separator + selectedFile.getName();
-                File targetZip = new File(target);
-                String UnzipTarget = target.replaceFirst("[.][^.]+$", "");
-                Files.copy(selectedFile.toPath(), targetZip.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            System.out.println(selectedFile);
 
-                UnzipUtility unzipUtility = new UnzipUtility();
-                unzipUtility.unzip(target, UnzipTarget);
-                targetZip.delete();
+            // By default add File Reader to execution pipeline
+            for (int i=0;i<openIESectionPreprocessComboBox.getItemCount(); i++) {
+                IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) pluginLoader.getExtensions(IPreprocessorHandler.class).get(i);
+                String pluginName = preprocessorHandler.getPluginName();
 
-                new Alert("Required restarting application to load new plugins.").setVisible(true);
-            } catch (IOException e) {
-                e.printStackTrace();
+                if (pluginName.equalsIgnoreCase("File Reader")) {
+                    Preprocessor preprocessor = new Preprocessor().setPreprocessorHandler(preprocessorHandler);
+                    preprocessor.getPreprocessorHandler().setAvailableConfigurations("Input Directory", selectedFile.getAbsolutePath());
+
+                    openIePipelineListModel.addElement(preprocessor);
+                    openIePipelineDragDropList.printItems();
+                    break;
+                }
             }
         }
     }
@@ -152,6 +155,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         crawlerPipelineDragDropList = new id.ac.itb.gui.dragdroplist.DragDropList(crawlPipelineListModel);
         preprocessorPipelineDragDropList = new id.ac.itb.gui.dragdroplist.DragDropList(preprocessPipelineListModel);
         extractorPipelineDragDropList = new id.ac.itb.gui.dragdroplist.DragDropList(extractPipelineListModel);
+        openIePipelineDragDropList = new id.ac.itb.gui.dragdroplist.DragDropList(openIePipelineListModel);
         preprocessorListLabel = new javax.swing.JLabel();
         preprocessorComboBox = new javax.swing.JComboBox<>();
         preprocessorPipelineLabel = new javax.swing.JLabel();
@@ -268,6 +272,8 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                 openIESectionAddCrawlersButtonActionPerformed(evt);
             }
         });
+
+        jScrollPane6.setViewportView(openIePipelineDragDropList);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -707,7 +713,63 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         extractorListLabel.setText("Extractor List");
 
+        extractorPipelineDragDropList.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent ev) {
+                Extractor selectedExtractor = (Extractor) extractorPipelineDragDropList.getSelectedValue();
+                if (selectedExtractor != null && selectedExtractor.getExtractorHandler().getAvailableConfigurations() != null) {
+                    configureExtractorButton.setEnabled(true);
+                } else {
+                    configureExtractorButton.setEnabled(false);
+                }
+
+                String pluginName = selectedExtractor.getExtractorHandler().getPluginName();
+                int nFileWriter = 0;
+                int nFileReader = 0;
+
+                for (int i=0;i<extractorPipelineDragDropList.getModel().getSize();i++) {
+                    if (((Extractor)extractorPipelineDragDropList.getModel().getElementAt(i)).getExtractorHandler().getPluginName().equalsIgnoreCase("File Writer")) {
+                        nFileWriter++;
+                    } else if (((Extractor)extractorPipelineDragDropList.getModel().getElementAt(i)).getExtractorHandler().getPluginName().equalsIgnoreCase("File Reader")) {
+                        nFileReader++;
+                    }
+                }
+
+                if (pluginName.equalsIgnoreCase("File Reader")) {
+                    if (nFileReader > 1) removeExtractorButton.setEnabled(true);
+                    else removeExtractorButton.setEnabled(false);
+                } else if (pluginName.equalsIgnoreCase("File Writer")) {
+                    if (nFileWriter > 1) removeExtractorButton.setEnabled(true);
+                    else removeExtractorButton.setEnabled(false);
+                } else {
+                    removeExtractorButton.setEnabled(true);
+                }
+            }
+        });
+
         extractorComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getExtensions(IExtractorHandler.class).toArray()));
+
+        // By default add File Reader to execution pipeline
+        for (int i=0;i<extractorComboBox.getItemCount(); i++) {
+            IExtractorHandler extractorHandler = (IExtractorHandler) pluginLoader.getExtensions(IExtractorHandler.class).get(i);
+            String pluginName = extractorHandler.getPluginName();
+
+            if (pluginName.equalsIgnoreCase("File Reader")) {
+                Extractor extractor = new Extractor().setExtractorHandler(extractorHandler);
+                extractPipelineListModel.addElement(extractor);
+            }
+        }
+
+        // By default add File Writer to execution pipeline
+        for (int i=0;i<extractorComboBox.getItemCount(); i++) {
+            IExtractorHandler extractorHandler = (IExtractorHandler) pluginLoader.getExtensions(IExtractorHandler.class).get(i);
+            String pluginName = extractorHandler.getPluginName();
+
+            if (pluginName.equalsIgnoreCase("File Writer")) {
+                Extractor extractor = new Extractor().setExtractorHandler(extractorHandler);
+                extractPipelineListModel.addElement(extractor);
+            }
+        }
+
         extractorComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 extractorComboBoxActionPerformed(evt);
@@ -941,7 +1003,6 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         if (selectedCrawler != null) {
             // Show configuration dialog
-//            new CrawlerConfig(selectedCrawler.getCrawlerConfig()).setVisible(true);
             new ConfigDialog(selectedCrawler.getCrawlerhandler().getAvailableConfigurations()).setVisible(true);
         }
 
@@ -1122,8 +1183,9 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
 
         IExtractorHandler extractorHandler = (IExtractorHandler) pluginLoader.getExtensions(IExtractorHandler.class).get(extractorComboBox.getSelectedIndex());
+        Extractor extractor = new Extractor().setExtractorHandler(SerializationUtils.clone(extractorHandler));
 
-        extractPipelineListModel.addElement(extractorHandler);
+        extractPipelineListModel.add(extractPipelineListModel.size() - 1, extractor);
         extractorPipelineDragDropList.printItems();
 
     }//GEN-LAST:event_addExtractorButtonActionPerformed
@@ -1146,24 +1208,10 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private void runExtractorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runExtractorButtonActionPerformed
         // TODO add your handling code here:
 
-        extractorPipeline
-                .addPipelineElement(
-                        new ExtractorFileReader()
-                                .setReadDirectoryPath(
-                                        new Config()
-                                                .getProperty("PREPROCESSES_OUTPUT_RELATIVE_PATH")));
-
         for (int i = 0; i< extractPipelineListModel.size(); i++) {
             IExtractorPipelineElement extractorPipelineElement = (IExtractorPipelineElement) extractPipelineListModel.get(i);
             extractorPipeline.addPipelineElement(extractorPipelineElement);
         }
-
-        extractorPipeline
-                .addPipelineElement(
-                        new ExtractorFileWriter()
-                                .setWriteDirectoryPath(
-                                        new Config()
-                                                .getProperty("EXTRACTIONS_OUTPUT_RELATIVE_PATH")));
 
         openIePipeline.clear();
         openIePipeline.addPipelineElement(extractorPipeline);
@@ -1194,18 +1242,44 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
     private void browseStartingDirectoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseStartingDirectoryButtonActionPerformed
         // TODO add your handling code here:
+
+        browseStartingDirectory();
     }//GEN-LAST:event_browseStartingDirectoryButtonActionPerformed
 
     private void openIESectionAddCrawlersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openIESectionAddCrawlersButtonActionPerformed
         // TODO add your handling code here:
+
+        ICrawlerHandler crawlerHandler = (ICrawlerHandler) pluginLoader.getExtensions(ICrawlerHandler.class).get(openIESectionCrawlerComboBox.getSelectedIndex());
+        Crawler crawler = new Crawler().setCrawlerhandler(SerializationUtils.clone(crawlerHandler));
+
+//        openIePipelineListModel.add(crawlPipelineListModel.size() - 1, crawler);
+        openIePipelineListModel.addElement(crawler);
+        openIePipelineDragDropList.printItems();
+
     }//GEN-LAST:event_openIESectionAddCrawlersButtonActionPerformed
 
     private void openIESectionAddPreprocessesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openIESectionAddPreprocessesButtonActionPerformed
         // TODO add your handling code here:
+
+        IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) pluginLoader.getExtensions(IPreprocessorHandler.class).get(openIESectionPreprocessComboBox.getSelectedIndex());
+        Preprocessor preprocessor = new Preprocessor().setPreprocessorHandler(SerializationUtils.clone(preprocessorHandler));
+
+//        openIePipelineListModel.add(preprocessPipelineListModel.size() - 1, preprocessor);
+        openIePipelineListModel.addElement(preprocessor);
+        openIePipelineDragDropList.printItems();
+
     }//GEN-LAST:event_openIESectionAddPreprocessesButtonActionPerformed
 
     private void openIESectionAddExtractionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openIESectionAddExtractionButtonActionPerformed
         // TODO add your handling code here:
+
+        IExtractorHandler extractorHandler = (IExtractorHandler) pluginLoader.getExtensions(IExtractorHandler.class).get(openIESectionExtractionComboBox.getSelectedIndex());
+        Extractor extractor = new Extractor().setExtractorHandler(SerializationUtils.clone(extractorHandler));
+
+        //        openIePipelineListModel.add(preprocessPipelineListModel.size() - 1, preprocessor);
+        openIePipelineListModel.addElement(extractor);
+        openIePipelineDragDropList.printItems();
+
     }//GEN-LAST:event_openIESectionAddExtractionButtonActionPerformed
 
     private void openIESectionAddPostprocessesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openIESectionAddPostprocessesButtonActionPerformed
@@ -1263,6 +1337,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private id.ac.itb.gui.dragdroplist.DragDropList crawlerPipelineDragDropList;
     private id.ac.itb.gui.dragdroplist.DragDropList preprocessorPipelineDragDropList;
+    private id.ac.itb.gui.dragdroplist.DragDropList openIePipelineDragDropList;
     private id.ac.itb.gui.dragdroplist.DragDropList extractorPipelineDragDropList;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

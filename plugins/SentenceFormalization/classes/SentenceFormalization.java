@@ -35,6 +35,11 @@ public class SentenceFormalization extends Plugin {
             return null;
         }
 
+        @Override
+        public HashMap<String, String> setAvailableConfigurations(String key, String value) {
+            return null;
+        }
+
         /*
         Input: kata2nya 4ku donk loecoe bangedh gt
         Output: kata-katanya aku dong lucu banget begitu

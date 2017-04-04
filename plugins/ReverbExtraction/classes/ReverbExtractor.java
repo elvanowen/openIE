@@ -16,7 +16,7 @@ import java.util.HashMap;
  * Created by elvanowen on 2/9/17.
  */
 
-public class ReverbExtractor extends BaseExtractor implements IExtractorPipelineElement {
+public class ReverbExtractor {
 
     private enum EXTRACT_VERB_STATE {
         V, W, P
@@ -261,9 +261,9 @@ public class ReverbExtractor extends BaseExtractor implements IExtractorPipeline
         return relations;
     }
 
-    public HashMap<File, Pair<String, Relations>> execute(File file, String payload, Relations relations) throws Exception {
+    public HashMap<File, Pair<String, Relations>> extract(File file, String payload, Relations relations) throws Exception {
 
-        HashMap<File, Pair<String, Relations>> pipelineItems = new HashMap<File, Pair<String, Relations>>();
+        HashMap<File, Pair<String, Relations>> pipelineItems = new HashMap<>();
         pipelineItems.put(file, Pair.of(payload, extractRelationFromSentence(payload)));
 
         return pipelineItems;

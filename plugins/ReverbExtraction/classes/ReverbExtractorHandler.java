@@ -34,8 +34,13 @@ public class ReverbExtractorHandler extends Plugin {
         }
 
         @Override
-        public HashMap<File, Pair<String, Relations>> execute(File file, String payload, Relations relations) throws Exception {
-            return new ReverbExtractor().execute(file, payload, relations);
+        public HashMap<String, String> getAvailableConfigurations() {
+            return null;
+        }
+
+        @Override
+        public HashMap<File, Pair<String, Relations>> extract(File file, String payload, Relations relations) throws Exception {
+            return new ReverbExtractor().extract(file, payload, relations);
         }
 
         public String toString() {
@@ -49,5 +54,6 @@ public class ReverbExtractorHandler extends Plugin {
         public void extractorDidRun() {
             System.out.println(this.getPluginName() + " did run..");
         }
+
     }
 }

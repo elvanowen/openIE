@@ -13,6 +13,7 @@ import java.util.HashSet;
 public interface IPreprocessorHandler extends ExtensionPoint, Serializable {
     public String getPluginName();
     public HashMap<String, String> getAvailableConfigurations();
+    public HashMap<String, String> setAvailableConfigurations(String key, String value);
     public HashMap<File, String> preprocess(File file, String payload) throws Exception;
 
     // Hooks

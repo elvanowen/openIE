@@ -30,6 +30,11 @@ public class DetikNormalization extends Plugin {
             return null;
         }
 
+        @Override
+        public HashMap<String, String> setAvailableConfigurations(String key, String value) {
+            return null;
+        }
+
         /* Function  : Remove document metadata */
         /* Input     : (Foto: Dewi Irmasari/detikcom)Dalam... */
         /* Output    : Dalam... */

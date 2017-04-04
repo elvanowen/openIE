@@ -1,8 +1,12 @@
 package classes;
 
 import id.ac.itb.openie.config.Config;
+import id.ac.itb.openie.extractor.IExtractorHandler;
 import id.ac.itb.openie.preprocess.IPreprocessorHandler;
+import id.ac.itb.openie.relations.Relations;
 import id.ac.itb.openie.utils.Utilities;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import ro.fortsoft.pf4j.Extension;
 import ro.fortsoft.pf4j.Plugin;
 import ro.fortsoft.pf4j.PluginWrapper;
@@ -13,14 +17,14 @@ import java.util.HashMap;
 /**
  * Created by elvanowen on 2/24/17.
  */
-public class PreprocessorFileWriter extends Plugin {
+public class ExtractorFileWriter extends Plugin {
 
-    public PreprocessorFileWriter(PluginWrapper wrapper) {
+    public ExtractorFileWriter(PluginWrapper wrapper) {
         super(wrapper);
     }
 
     @Extension
-    public static class PreprocessorFileWriterHandler implements IPreprocessorHandler {
+    public static class ExtractorFileWriterHandler implements IExtractorHandler {
 
         HashMap<String, String> availableConfigurations = new HashMap<>();
 
@@ -36,37 +40,33 @@ public class PreprocessorFileWriter extends Plugin {
         }
 
         @Override
-        public HashMap<String, String> setAvailableConfigurations(String key, String value) {
-            availableConfigurations.put(key, value);
-            return null;
-        }
-
-        @Override
-        public HashMap<File, String> preprocess(File file, String payload) throws Exception {
+        public HashMap<File, Pair<String, Relations>> extract(File file, String payload, Relations relations) throws Exception {
             if (getAvailableConfigurations().get("Output Directory") == null) {
                 throw new Exception("Write directory path must be specified");
             } else {
-                Utilities.writeToFile(availableConfigurations.get("Output Directory"), file.getName(), payload);
+                Utilities.writeToFile(availableConfigurations.get("Output Directory"), file.getName(), relations.toString());
 
-                HashMap<File, String> pipelineItems = new HashMap<File, String>();
-                pipelineItems.put(file, payload);
+                HashMap<File, Pair<String, Relations>> pipelineItems = new HashMap<>();
+                pipelineItems.put(file, Pair.of(payload, relations));
 
                 return pipelineItems;
             }
         }
 
+        @Override
+        public void extractorWillRun() {
+
+        }
+
+        @Override
+        public void extractorDidRun() {
+
+        }
+
+
         public String toString() {
             return this.getPluginName();
         }
 
-        @Override
-        public void preprocessorWillRun() {
-
-        }
-
-        @Override
-        public void preprocessorDidRun() {
-
-        }
     }
 }
