@@ -30,9 +30,9 @@ public class Preprocessor implements IPreprocessorPipelineElement {
             String outputDirectory = getPreprocessorHandler().getAvailableConfigurations().get("Output Directory");
 
             if (inputDirectory != null) {
-                return "File Reader: " + inputDirectory;
+                return this.getPreprocessorHandler().getPluginName() + " : " + inputDirectory;
             } else if (outputDirectory != null) {
-                return "File Writer: " + outputDirectory;
+                return this.getPreprocessorHandler().getPluginName() + " : "  + outputDirectory;
             }
         }
 

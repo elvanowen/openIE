@@ -25,7 +25,7 @@ public class PreprocessorFileWriter extends Plugin {
         HashMap<String, String> availableConfigurations = new HashMap<>();
 
         public String getPluginName() {
-            return "File Writer";
+            return "Preprocessor File Writer";
         }
 
         @Override

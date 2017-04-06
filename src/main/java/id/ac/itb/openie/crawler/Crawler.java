@@ -10,9 +10,7 @@ import edu.uci.ics.crawler4j.robotstxt.RobotstxtConfig;
 import edu.uci.ics.crawler4j.robotstxt.RobotstxtServer;
 import edu.uci.ics.crawler4j.url.WebURL;
 import id.ac.itb.openie.config.Config;
-import id.ac.itb.openie.relations.Relations;
 import id.ac.itb.openie.utils.Utilities;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -185,7 +183,7 @@ public class Crawler extends WebCrawler {
         String outputDirectory = getCrawlerhandler().getAvailableConfigurations().get("Output Directory");
 
         if (outputDirectory != null) {
-            return "File Writer: " + outputDirectory;
+            return this.getCrawlerhandler().getPluginName() + " : "  + outputDirectory;
         } else {
             return this.getCrawlerhandler().getPluginName();
         }

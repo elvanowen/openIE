@@ -1,16 +1,9 @@
 package id.ac.itb.openie.extractor;
 
-import id.ac.itb.openie.pipeline.IOpenIePipelineElement;
-import id.ac.itb.openie.config.Config;
-import id.ac.itb.nlp.SentenceTokenizer;
-import id.ac.itb.openie.preprocess.IPreprocessorHandler;
 import id.ac.itb.openie.relations.Relations;
-import id.ac.itb.openie.utils.Utilities;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -35,9 +28,9 @@ public class Extractor implements IExtractorPipelineElement {
             String outputDirectory = getExtractorHandler().getAvailableConfigurations().get("Output Directory");
 
             if (inputDirectory != null) {
-                return "File Reader: " + inputDirectory;
+                return this.getExtractorHandler().getPluginName() + " : " + inputDirectory;
             } else if (outputDirectory != null) {
-                return "File Writer: " + outputDirectory;
+                return this.getExtractorHandler().getPluginName() + " : "  + outputDirectory;
             }
         }
 

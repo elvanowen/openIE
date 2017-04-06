@@ -23,7 +23,7 @@ public class Relation {
     }
 
     public String toString() {
-        return String.format("<%s || %s || %s>", firstEntity, relation, secondEntity);
+        return String.format("%s(%s, %s)", relation, firstEntity, secondEntity);
     }
 
     public Triple<String, String, String> getRelationTriple() {

@@ -27,7 +27,7 @@ public class CrawlerFileWriter extends Plugin {
         HashMap<String, String> availableConfigurations = new HashMap<>();
 
         public String getPluginName() {
-            return "File Writer";
+            return "Crawler File Writer";
         }
 
         @Override

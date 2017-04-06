@@ -1,8 +1,12 @@
 package id.ac.itb.openie.relations;
 
+import id.ac.itb.openie.utils.Utilities;
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by elvanowen on 2/23/17.
@@ -30,6 +34,16 @@ public class Relations {
         this.relations.addAll(relations.getRelations());
 
         return this;
+    }
+
+    public Relations(File file) {
+        String relationsString = Utilities.getFileContent(file).get(0);
+        Relations relations = new Relations();
+
+        Pattern p = Pattern.compile("(.*)\\((.*),(.*)\\)");
+        Matcher m = p.matcher(relationsString);
+
+        if (m.matches()) relations.addRelation(new Relation(m.group(2), m.group(1), m.group(3)));
     }
 
     public String toString() {

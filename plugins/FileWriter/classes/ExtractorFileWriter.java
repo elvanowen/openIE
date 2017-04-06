@@ -29,7 +29,7 @@ public class ExtractorFileWriter extends Plugin {
         HashMap<String, String> availableConfigurations = new HashMap<>();
 
         public String getPluginName() {
-            return "File Writer";
+            return "Extractor File Writer";
         }
 
         @Override

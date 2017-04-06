@@ -8,14 +8,21 @@ package id.ac.itb.gui;
 import id.ac.itb.gui.alert.Alert;
 import id.ac.itb.gui.config.ConfigDialog;
 import id.ac.itb.gui.progressbar.CrawlerProgress;
-import id.ac.itb.openie.config.Config;
 import id.ac.itb.openie.crawler.Crawler;
 import id.ac.itb.openie.crawler.CrawlerPipeline;
 import id.ac.itb.openie.crawler.ICrawlerHandler;
-import id.ac.itb.openie.extractor.*;
+import id.ac.itb.openie.extractor.Extractor;
+import id.ac.itb.openie.extractor.ExtractorPipeline;
+import id.ac.itb.openie.extractor.IExtractorHandler;
+import id.ac.itb.openie.extractor.IExtractorPipelineElement;
 import id.ac.itb.openie.pipeline.OpenIePipeline;
 import id.ac.itb.openie.plugins.PluginLoader;
-import id.ac.itb.openie.preprocess.*;
+import id.ac.itb.openie.postprocess.IPostprocessorHandler;
+import id.ac.itb.openie.postprocess.Postprocessor;
+import id.ac.itb.openie.preprocess.IPreprocessorHandler;
+import id.ac.itb.openie.preprocess.IPreprocessorPipelineElement;
+import id.ac.itb.openie.preprocess.Preprocessor;
+import id.ac.itb.openie.preprocess.PreprocessorPipeline;
 import id.ac.itb.util.UnzipUtility;
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -26,6 +33,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.HashMap;
 
 /**
  *
@@ -53,7 +61,8 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         pluginLoader
                 .registerAvailableExtensions(ICrawlerHandler.class)
                 .registerAvailableExtensions(IPreprocessorHandler.class)
-                .registerAvailableExtensions(IExtractorHandler.class);
+                .registerAvailableExtensions(IExtractorHandler.class)
+                .registerAvailableExtensions(IPostprocessorHandler.class);
     }
 
     private void loadPlugin() {
@@ -93,7 +102,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                 IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) pluginLoader.getExtensions(IPreprocessorHandler.class).get(i);
                 String pluginName = preprocessorHandler.getPluginName();
 
-                if (pluginName.equalsIgnoreCase("File Reader")) {
+                if (pluginName.contains("File Reader")) {
                     Preprocessor preprocessor = new Preprocessor().setPreprocessorHandler(preprocessorHandler);
                     preprocessor.getPreprocessorHandler().setAvailableConfigurations("Input Directory", selectedFile.getAbsolutePath());
 
@@ -156,6 +165,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         preprocessorPipelineDragDropList = new id.ac.itb.gui.dragdroplist.DragDropList(preprocessPipelineListModel);
         extractorPipelineDragDropList = new id.ac.itb.gui.dragdroplist.DragDropList(extractPipelineListModel);
         openIePipelineDragDropList = new id.ac.itb.gui.dragdroplist.DragDropList(openIePipelineListModel);
+        postprocessorPipelineDragDropList = new id.ac.itb.gui.dragdroplist.DragDropList(postprocessPipelineListModel);
         preprocessorListLabel = new javax.swing.JLabel();
         preprocessorComboBox = new javax.swing.JComboBox<>();
         preprocessorPipelineLabel = new javax.swing.JLabel();
@@ -226,7 +236,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         openIESectionPostprocessLabel.setText("Postprocesses");
 
-        openIESectionPostprocessComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        openIESectionPostprocessComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getExtensions(IPostprocessorHandler.class).toArray()));
 
         openIESectionAddPostprocessesButton.setText("+");
         openIESectionAddPostprocessesButton.addActionListener(new java.awt.event.ActionListener() {
@@ -237,7 +247,77 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         openIESectionExecutionPipelineLabel.setText("Execution Pipeline");
 
+        openIePipelineDragDropList.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent ev) {
+
+                Object selectedPipelineElement = openIePipelineDragDropList.getSelectedValue();
+
+                if (selectedPipelineElement != null) {
+
+                    HashMap<String, String> availableConfigurations = null;
+                    String pluginName = "";
+                    int nFileWriter = 0;
+
+                    if (selectedPipelineElement instanceof Crawler) {
+                        Crawler selectedCrawler = (Crawler) selectedPipelineElement;
+                        availableConfigurations = selectedCrawler.getCrawlerhandler().getAvailableConfigurations();
+                        pluginName = selectedCrawler.getCrawlerhandler().getPluginName();
+
+                        for (int i=0;i<openIePipelineDragDropList.getModel().getSize();i++) {
+                            if (((Crawler)openIePipelineDragDropList.getModel().getElementAt(i)).getCrawlerhandler().getPluginName().contains("File Writer")) {
+                                nFileWriter++;
+                            }
+                        }
+                    } else if (selectedPipelineElement instanceof Preprocessor) {
+                        Preprocessor selectedPreprocessor = (Preprocessor) selectedPipelineElement;
+                        availableConfigurations = selectedPreprocessor.getPreprocessorHandler().getAvailableConfigurations();
+                        pluginName = selectedPreprocessor.getPreprocessorHandler().getPluginName();
+
+                        for (int i=0;i<openIePipelineDragDropList.getModel().getSize();i++) {
+                            if (((Preprocessor)openIePipelineDragDropList.getModel().getElementAt(i)).getPreprocessorHandler().getPluginName().contains("File Writer")) {
+                                nFileWriter++;
+                            }
+                        }
+                    } else if (selectedPipelineElement instanceof Extractor) {
+                        Extractor selectedExtractor = (Extractor) selectedPipelineElement;
+                        availableConfigurations = selectedExtractor.getExtractorHandler().getAvailableConfigurations();
+                        pluginName = selectedExtractor.getExtractorHandler().getPluginName();
+
+                        for (int i=0;i<openIePipelineDragDropList.getModel().getSize();i++) {
+                            if (((Extractor)openIePipelineDragDropList.getModel().getElementAt(i)).getExtractorHandler().getPluginName().contains("File Writer")) {
+                                nFileWriter++;
+                            }
+                        }
+                    } else if (selectedPipelineElement instanceof Postprocessor) {
+                        Postprocessor selectedPostprocessor = (Postprocessor) selectedPipelineElement;
+                        availableConfigurations = selectedPostprocessor.getPostprocessorHandler().getAvailableConfigurations();
+                        pluginName = selectedPostprocessor.getPostprocessorHandler().getPluginName();
+
+                        for (int i=0;i<openIePipelineDragDropList.getModel().getSize();i++) {
+                            if (((Postprocessor)openIePipelineDragDropList.getModel().getElementAt(i)).getPostprocessorHandler().getPluginName().contains("File Writer")) {
+                                nFileWriter++;
+                            }
+                        }
+                    }
+
+                    if (availableConfigurations != null) {
+                        openIESectionConfigurePipelineElementButton1.setEnabled(true);
+                    } else {
+                        openIESectionConfigurePipelineElementButton1.setEnabled(false);
+                    }
+
+                    if (pluginName.contains("File Writer")) {
+                        if (nFileWriter > 1) openIESectionRemovePipelineElementButton.setEnabled(true);
+                        else openIESectionRemovePipelineElementButton.setEnabled(false);
+                    } else {
+                        openIESectionRemovePipelineElementButton.setEnabled(true);
+                    }
+                }
+            }
+        });
+
         openIESectionRemovePipelineElementButton.setText("Remove");
+        openIESectionRemovePipelineElementButton.setEnabled(false);
         openIESectionRemovePipelineElementButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         openIESectionRemovePipelineElementButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -257,6 +337,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         });
 
         openIESectionConfigurePipelineElementButton1.setText("Configure");
+        openIESectionConfigurePipelineElementButton1.setEnabled(false);
         openIESectionConfigurePipelineElementButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 openIESectionConfigurePipelineElementButton1ActionPerformed(evt);
@@ -430,7 +511,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             }
         });
 
-        crawlerListLabel.setText("Crawler List");
+        crawlerListLabel.setText("Pipeline Elements");
 
         removeCrawlerButton.setText("Remove From Pipeline");
         removeCrawlerButton.setEnabled(false);
@@ -496,7 +577,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Crawl", jPanel1);
 
-        preprocessorListLabel.setText("Preprocessor List");
+        preprocessorListLabel.setText("Pipeline Elements");
 
         preprocessorComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getExtensions(IPreprocessorHandler.class).toArray()));
 
@@ -505,7 +586,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) pluginLoader.getExtensions(IPreprocessorHandler.class).get(i);
             String pluginName = preprocessorHandler.getPluginName();
 
-            if (pluginName.equalsIgnoreCase("File Reader")) {
+            if (pluginName.contains("File Reader")) {
                 Preprocessor preprocessor = new Preprocessor().setPreprocessorHandler(preprocessorHandler);
                 preprocessPipelineListModel.addElement(preprocessor);
             }
@@ -516,7 +597,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) pluginLoader.getExtensions(IPreprocessorHandler.class).get(i);
             String pluginName = preprocessorHandler.getPluginName();
 
-            if (pluginName.equalsIgnoreCase("File Writer")) {
+            if (pluginName.contains("File Writer")) {
                 Preprocessor preprocessor = new Preprocessor().setPreprocessorHandler(preprocessorHandler);
                 preprocessPipelineListModel.addElement(preprocessor);
             }
@@ -562,7 +643,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             ICrawlerHandler crawlerHandler = (ICrawlerHandler) pluginLoader.getExtensions(ICrawlerHandler.class).get(i);
             String pluginName = crawlerHandler.getPluginName();
 
-            if (pluginName.equalsIgnoreCase("File Writer")) {
+            if (pluginName.contains("File Writer")) {
                 Crawler crawler = new Crawler().setCrawlerhandler(crawlerHandler);
                 crawlPipelineListModel.addElement(crawler);
             }
@@ -594,12 +675,12 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                     int nFileWriter = 0;
 
                     for (int i=0;i<crawlerPipelineDragDropList.getModel().getSize();i++) {
-                        if (((Crawler)crawlerPipelineDragDropList.getModel().getElementAt(i)).getCrawlerhandler().getPluginName().equalsIgnoreCase("File Writer")) {
+                        if (((Crawler)crawlerPipelineDragDropList.getModel().getElementAt(i)).getCrawlerhandler().getPluginName().contains("File Writer")) {
                             nFileWriter++;
                         }
                     }
 
-                    if (pluginName.equalsIgnoreCase("File Writer")) {
+                    if (pluginName.contains("File Writer")) {
                         if (nFileWriter > 1) removeCrawlerButton.setEnabled(true);
                         else removeCrawlerButton.setEnabled(false);
                     } else {
@@ -623,19 +704,19 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                     int nFileReader = 0, nFileWriter = 0;
 
                     for (int i=0;i<preprocessorPipelineDragDropList.getModel().getSize();i++) {
-                        if (((Preprocessor)preprocessorPipelineDragDropList.getModel().getElementAt(i)).getPreprocessorHandler().getPluginName().equalsIgnoreCase("File Reader")) {
+                        if (((Preprocessor)preprocessorPipelineDragDropList.getModel().getElementAt(i)).getPreprocessorHandler().getPluginName().contains("File Reader")) {
                             nFileReader++;
-                        } else if (((Preprocessor)preprocessorPipelineDragDropList.getModel().getElementAt(i)).getPreprocessorHandler().getPluginName().equalsIgnoreCase("File Writer")) {
+                        } else if (((Preprocessor)preprocessorPipelineDragDropList.getModel().getElementAt(i)).getPreprocessorHandler().getPluginName().contains("File Writer")) {
                             nFileWriter++;
                         }
                     }
 
-                    if (pluginName.equalsIgnoreCase("File Reader")) {
+                    if (pluginName.contains("File Reader")) {
                         if (nFileReader > 1) removePreprocessorButton.setEnabled(true);
                         else removePreprocessorButton.setEnabled(false);
                     }
 
-                    if (pluginName.equalsIgnoreCase("File Writer")) {
+                    if (pluginName.contains("File Writer")) {
                         if (nFileWriter > 1) removePreprocessorButton.setEnabled(true);
                         else removePreprocessorButton.setEnabled(false);
                     }
@@ -711,7 +792,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Preprocess", jPanel2);
 
-        extractorListLabel.setText("Extractor List");
+        extractorListLabel.setText("Pipeline Elements");
 
         extractorPipelineDragDropList.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent ev) {
@@ -727,17 +808,17 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                 int nFileReader = 0;
 
                 for (int i=0;i<extractorPipelineDragDropList.getModel().getSize();i++) {
-                    if (((Extractor)extractorPipelineDragDropList.getModel().getElementAt(i)).getExtractorHandler().getPluginName().equalsIgnoreCase("File Writer")) {
+                    if (((Extractor)extractorPipelineDragDropList.getModel().getElementAt(i)).getExtractorHandler().getPluginName().contains("File Writer")) {
                         nFileWriter++;
-                    } else if (((Extractor)extractorPipelineDragDropList.getModel().getElementAt(i)).getExtractorHandler().getPluginName().equalsIgnoreCase("File Reader")) {
+                    } else if (((Extractor)extractorPipelineDragDropList.getModel().getElementAt(i)).getExtractorHandler().getPluginName().contains("File Reader")) {
                         nFileReader++;
                     }
                 }
 
-                if (pluginName.equalsIgnoreCase("File Reader")) {
+                if (pluginName.contains("File Reader")) {
                     if (nFileReader > 1) removeExtractorButton.setEnabled(true);
                     else removeExtractorButton.setEnabled(false);
-                } else if (pluginName.equalsIgnoreCase("File Writer")) {
+                } else if (pluginName.contains("File Writer")) {
                     if (nFileWriter > 1) removeExtractorButton.setEnabled(true);
                     else removeExtractorButton.setEnabled(false);
                 } else {
@@ -753,7 +834,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             IExtractorHandler extractorHandler = (IExtractorHandler) pluginLoader.getExtensions(IExtractorHandler.class).get(i);
             String pluginName = extractorHandler.getPluginName();
 
-            if (pluginName.equalsIgnoreCase("File Reader")) {
+            if (pluginName.contains("File Reader")) {
                 Extractor extractor = new Extractor().setExtractorHandler(extractorHandler);
                 extractPipelineListModel.addElement(extractor);
             }
@@ -764,7 +845,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             IExtractorHandler extractorHandler = (IExtractorHandler) pluginLoader.getExtensions(IExtractorHandler.class).get(i);
             String pluginName = extractorHandler.getPluginName();
 
-            if (pluginName.equalsIgnoreCase("File Writer")) {
+            if (pluginName.contains("File Writer")) {
                 Extractor extractor = new Extractor().setExtractorHandler(extractorHandler);
                 extractPipelineListModel.addElement(extractor);
             }
@@ -872,11 +953,66 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Extract", jPanel3);
 
-        postprocessorListLabel.setText("Postprocessor List");
+        postprocessorListLabel.setText("Pipeline Elements");
         jScrollPane4.setViewportView(extractorPipelineDragDropList);
 
+        postprocessorPipelineDragDropList.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent ev) {
+                Postprocessor selectedPostprocessor = (Postprocessor) postprocessorPipelineDragDropList.getSelectedValue();
+                if (selectedPostprocessor != null && selectedPostprocessor.getPostprocessorHandler().getAvailableConfigurations() != null) {
+                    configurePostprocessorButton.setEnabled(true);
+                } else {
+                    configurePostprocessorButton.setEnabled(false);
+                }
 
-        postprocessorComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+                String pluginName = selectedPostprocessor.getPostprocessorHandler().getPluginName();
+                int nFileWriter = 0;
+                int nFileReader = 0;
+
+                for (int i=0;i<postprocessorPipelineDragDropList.getModel().getSize();i++) {
+                    if (((Postprocessor)postprocessorPipelineDragDropList.getModel().getElementAt(i)).getPostprocessorHandler().getPluginName().contains("File Writer")) {
+                        nFileWriter++;
+                    } else if (((Postprocessor)postprocessorPipelineDragDropList.getModel().getElementAt(i)).getPostprocessorHandler().getPluginName().contains("File Reader")) {
+                        nFileReader++;
+                    }
+                }
+
+                if (pluginName.contains("File Reader")) {
+                    if (nFileReader > 1) removePostprocessorButton.setEnabled(true);
+                    else removePostprocessorButton.setEnabled(false);
+                } else if (pluginName.contains("File Writer")) {
+                    if (nFileWriter > 1) removePostprocessorButton.setEnabled(true);
+                    else removePostprocessorButton.setEnabled(false);
+                } else {
+                    removePostprocessorButton.setEnabled(true);
+                }
+            }
+        });
+
+        postprocessorComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getExtensions(IPostprocessorHandler.class).toArray()));
+
+        // By default add File Reader to execution pipeline
+        for (int i=0;i<postprocessorComboBox.getItemCount(); i++) {
+            IPostprocessorHandler postprocessorHandler = (IPostprocessorHandler) pluginLoader.getExtensions(IPostprocessorHandler.class).get(i);
+            String pluginName = postprocessorHandler.getPluginName();
+
+            if (pluginName.contains("File Reader")) {
+                Postprocessor postprocessor = new Postprocessor().setPostprocessorHandler(postprocessorHandler);
+                postprocessPipelineListModel.addElement(postprocessor);
+            }
+        }
+
+        // By default add File Writer to execution pipeline
+        for (int i=0;i<postprocessorComboBox.getItemCount(); i++) {
+            IPostprocessorHandler postprocessorHandler = (IPostprocessorHandler) pluginLoader.getExtensions(IPostprocessorHandler.class).get(i);
+            String pluginName = postprocessorHandler.getPluginName();
+
+            if (pluginName.contains("File Writer")) {
+                Postprocessor postprocessor = new Postprocessor().setPostprocessorHandler(postprocessorHandler);
+                postprocessPipelineListModel.addElement(postprocessor);
+            }
+        }
+
         postprocessorComboBox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 postprocessorComboBoxActionPerformed(evt);
@@ -921,6 +1057,8 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                 runPostprocessorButtonActionPerformed(evt);
             }
         });
+
+        jScrollPane3.setViewportView(postprocessorPipelineDragDropList);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -1035,7 +1173,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         for (int i = 0; i< crawlPipelineListModel.size(); i++) {
             Crawler crawler = (Crawler) crawlPipelineListModel.get(i);
 
-            if (crawler.getCrawlerhandler().getPluginName().equalsIgnoreCase("File Writer")) {
+            if (crawler.getCrawlerhandler().getPluginName().contains("File Writer")) {
                 Crawler.addOutputDirectory(crawler.getCrawlerhandler().getAvailableConfigurations().get("Output Directory"));
             } else {
                 crawlerPipeline.addCrawler(crawler);
@@ -1162,10 +1300,22 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
     private void addPostprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPostprocessorButtonActionPerformed
         // TODO add your handling code here:
+
+        IPostprocessorHandler postprocessorHandler = (IPostprocessorHandler) pluginLoader.getExtensions(IPostprocessorHandler.class).get(postprocessorComboBox.getSelectedIndex());
+        Postprocessor postprocessor = new Postprocessor().setPostprocessorHandler(SerializationUtils.clone(postprocessorHandler));
+
+        postprocessPipelineListModel.add(postprocessPipelineListModel.size() - 1, postprocessor);
+//        preprocessPipelineListModel.addElement(preprocessor);
+        postprocessorPipelineDragDropList.printItems();
+
     }//GEN-LAST:event_addPostprocessorButtonActionPerformed
 
     private void removePostprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removePostprocessorButtonActionPerformed
         // TODO add your handling code here:
+
+        Postprocessor selectedPostprocessor = (Postprocessor) postprocessorPipelineDragDropList.getSelectedValue();
+        postprocessPipelineListModel.removeElement(selectedPostprocessor);
+
     }//GEN-LAST:event_removePostprocessorButtonActionPerformed
 
     private void loadPostprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadPostprocessorButtonActionPerformed
@@ -1226,6 +1376,14 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
     private void configurePostprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configurePostprocessorButtonActionPerformed
         // TODO add your handling code here:
+
+        Postprocessor selectedPostprocessor = (Postprocessor) postprocessorPipelineDragDropList.getSelectedValue();
+
+        if (selectedPostprocessor != null) {
+            // Show configuration dialog
+            new ConfigDialog(selectedPostprocessor.getPostprocessorHandler().getAvailableConfigurations()).setVisible(true);
+        }
+
     }//GEN-LAST:event_configurePostprocessorButtonActionPerformed
 
     private void postprocessorComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postprocessorComboBoxActionPerformed
@@ -1284,6 +1442,14 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
     private void openIESectionAddPostprocessesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openIESectionAddPostprocessesButtonActionPerformed
         // TODO add your handling code here:
+
+        IPostprocessorHandler postprocessorHandler = (IPostprocessorHandler) pluginLoader.getExtensions(IPostprocessorHandler.class).get(openIESectionPostprocessComboBox.getSelectedIndex());
+        Postprocessor postprocessor = new Postprocessor().setPostprocessorHandler(SerializationUtils.clone(postprocessorHandler));
+
+        //        openIePipelineListModel.add(preprocessPipelineListModel.size() - 1, preprocessor);
+        openIePipelineListModel.addElement(postprocessor);
+        openIePipelineDragDropList.printItems();
+
     }//GEN-LAST:event_openIESectionAddPostprocessesButtonActionPerformed
 
     private void openIESectionRemovePipelineElementButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openIESectionRemovePipelineElementButtonActionPerformed
@@ -1292,6 +1458,21 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
     private void openIESectionConfigurePipelineElementButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openIESectionConfigurePipelineElementButton1ActionPerformed
         // TODO add your handling code here:
+
+        Object selectedPipelineElement = openIePipelineDragDropList.getSelectedValue();
+
+        if (selectedPipelineElement != null) {
+            if (selectedPipelineElement instanceof Extractor) {
+                new ConfigDialog(((Extractor)selectedPipelineElement).getExtractorHandler().getAvailableConfigurations()).setVisible(true);
+            } else if (selectedPipelineElement instanceof Preprocessor) {
+                new ConfigDialog(((Preprocessor)selectedPipelineElement).getPreprocessorHandler().getAvailableConfigurations()).setVisible(true);
+            } else if (selectedPipelineElement instanceof Crawler) {
+                new ConfigDialog(((Crawler)selectedPipelineElement).getCrawlerhandler().getAvailableConfigurations()).setVisible(true);
+            } else if (selectedPipelineElement instanceof Postprocessor) {
+                new ConfigDialog(((Postprocessor)selectedPipelineElement).getPostprocessorHandler().getAvailableConfigurations()).setVisible(true);
+            }
+        }
+
     }//GEN-LAST:event_openIESectionConfigurePipelineElementButton1ActionPerformed
 
     private void openIESectionExecutePipelineElementButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openIESectionExecutePipelineElementButtonActionPerformed
@@ -1339,6 +1520,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private id.ac.itb.gui.dragdroplist.DragDropList preprocessorPipelineDragDropList;
     private id.ac.itb.gui.dragdroplist.DragDropList openIePipelineDragDropList;
     private id.ac.itb.gui.dragdroplist.DragDropList extractorPipelineDragDropList;
+    private id.ac.itb.gui.dragdroplist.DragDropList postprocessorPipelineDragDropList;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1374,7 +1556,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private javax.swing.JLabel openIESectionExecutionPipelineLabel;
     private javax.swing.JComboBox<Object> openIESectionExtractionComboBox;
     private javax.swing.JLabel openIESectionExtractionLabel;
-    private javax.swing.JComboBox<String> openIESectionPostprocessComboBox;
+    private javax.swing.JComboBox<Object> openIESectionPostprocessComboBox;
     private javax.swing.JLabel openIESectionPostprocessLabel;
     private javax.swing.JComboBox<Object> openIESectionPreprocessComboBox;
     private javax.swing.JLabel openIESectionPreprocessLabel;
