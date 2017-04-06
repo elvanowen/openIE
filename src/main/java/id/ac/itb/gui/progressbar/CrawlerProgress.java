@@ -41,7 +41,7 @@ public class CrawlerProgress extends javax.swing.JFrame {
         String trail = StringUtils.repeat(".", tick) + StringUtils.repeat(" ", 4 - tick);
 
         if (crawlerPipeline.getCurrentlyRunningCrawler() != null) {
-            crawlerName = crawlerPipeline.getCurrentlyRunningCrawler().getCrawlerhandler().getPluginName();
+            crawlerName = ((Crawler)crawlerPipeline.getCurrentlyRunningCrawler()).getCrawlerhandler().getPluginName();
         }
 
         for (ICrawlerPipelineElement crawlerPipelineElement: crawlerPipeline.getCrawlerPipelineElements()) {
@@ -56,7 +56,7 @@ public class CrawlerProgress extends javax.swing.JFrame {
         if (totalPagesToBeFetched > 0 && totalPagesFetched == totalPagesToBeFetched) {
             totalDocumentLabel.setText("Fetches Completed. Processing" + trail);
         } else {
-            totalDocumentLabel.setText(" " + totalPagesFetched + " / " + totalPagesToBeFetched + " pages.");
+            totalDocumentLabel.setText(" " + totalPagesFetched + " / " + totalPagesToBeFetched + " pages ");
         }
 
         updateProgressBar(totalPagesFetched, totalPagesToBeFetched);
@@ -118,7 +118,7 @@ public class CrawlerProgress extends javax.swing.JFrame {
                         .addComponent(currentRunningCrawlerLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(totalCrawlerLabel)
-                        .addGap(0, 237, Short.MAX_VALUE))
+                        .addGap(0, 252, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(totalDocumentLabel)))

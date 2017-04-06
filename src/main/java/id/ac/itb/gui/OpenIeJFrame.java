@@ -8,6 +8,7 @@ package id.ac.itb.gui;
 import id.ac.itb.gui.alert.Alert;
 import id.ac.itb.gui.config.ConfigDialog;
 import id.ac.itb.gui.progressbar.CrawlerProgress;
+import id.ac.itb.gui.progressbar.PreprocessorProgress;
 import id.ac.itb.openie.crawler.Crawler;
 import id.ac.itb.openie.crawler.CrawlerPipeline;
 import id.ac.itb.openie.crawler.ICrawlerHandler;
@@ -34,6 +35,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -1177,6 +1179,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         openIePipeline.addPipelineElement(crawlerPipeline);
 
         JFrame crawlerProgress = new CrawlerProgress(crawlerPipeline);
+        crawlerProgress.setVisible(true);
 
         SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
             @Override
@@ -1198,7 +1201,6 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         };
 
         worker.execute();
-        crawlerProgress.setVisible(true);
 
     }//GEN-LAST:event_runCrawlerButtonActionPerformed
 
@@ -1247,35 +1249,30 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         openIePipeline.clear();
         openIePipeline.addPipelineElement(preprocessorPipeline);
 
-        try {
-            openIePipeline.execute();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        JFrame preprocessorProgress = new PreprocessorProgress(preprocessorPipeline);
+        preprocessorProgress.setVisible(true);
 
-//        JFrame crawlerProgress = new CrawlerProgress(crawlerPipeline);
-//
-//        SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
-//            @Override
-//            protected String doInBackground() throws InterruptedException {
-//                try {
-//                    openIePipeline.execute();
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//
-//                return "";
-//            }
-//
-//            @Override
-//            protected void done() {
-//                ((CrawlerProgress) crawlerProgress).stopTimer();
-//                crawlerProgress.dispose();
-//            }
-//        };
-//
-//        worker.execute();
-//        crawlerProgress.setVisible(true);
+        SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+            @Override
+            protected String doInBackground() throws InterruptedException {
+                try {
+                    TimeUnit.SECONDS.sleep(3);
+                    openIePipeline.execute();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return "";
+            }
+
+            @Override
+            protected void done() {
+                ((PreprocessorProgress) preprocessorProgress).stopTimer();
+                preprocessorProgress.dispose();
+            }
+        };
+
+        worker.execute();
 
     }//GEN-LAST:event_runPreprocessorButtonActionPerformed
 

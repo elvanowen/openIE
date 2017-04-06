@@ -15,10 +15,18 @@ import java.util.Map;
 public class PreprocessorPipeline implements IOpenIePipelineElement {
 
     private ArrayList<IPreprocessorPipelineElement> preprocessorPipelineElements = new ArrayList<IPreprocessorPipelineElement>();
+    private int totalProcessedPreprocessor = 0;
+    private int totalDocumentsToBePreprocessed = 0;
+    private int currentlyPreprocessedDocuments = 0;
+    private IPreprocessorPipelineElement currentlyRunningPreprocessor = null;
 
     public PreprocessorPipeline addPipelineElement(IPreprocessorPipelineElement preprocessorPipelineElement) {
         preprocessorPipelineElements.add(preprocessorPipelineElement);
         return this;
+    }
+
+    public ArrayList<IPreprocessorPipelineElement> getPreprocessorPipelineElements() {
+        return this.preprocessorPipelineElements;
     }
 
     private void addReaderAndWriterIfNotExist() {
@@ -62,14 +70,20 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
         addReaderAndWriterIfNotExist();
 
         for (IPreprocessorPipelineElement preprocessorPipelineElement: preprocessorPipelineElements) {
+            this.totalProcessedPreprocessor++;
+            this.currentlyRunningPreprocessor = preprocessorPipelineElement;
+
             if (pipeQueue == null) {
                 pipeQueue = new HashMap<File, String>();
                 nextPipeQueue = new HashMap<File, String>();
 
                 HashMap<File, String> preprocessed = preprocessorPipelineElement.execute(null, null);
                 pipeQueue.putAll(preprocessed);
+                totalDocumentsToBePreprocessed = preprocessed.size();
             } else {
                 Iterator<Map.Entry<File, String>> it = pipeQueue.entrySet().iterator();
+
+                currentlyPreprocessedDocuments = 0;
 
                 while (it.hasNext()) {
                     Map.Entry<File, String> pair = it.next();
@@ -78,6 +92,7 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
                     HashMap<File, String> preprocessed = preprocessorPipelineElement.execute(pair.getKey(), pair.getValue());
 
                     nextPipeQueue.putAll(preprocessed);
+                    currentlyPreprocessedDocuments++;
 
                     it.remove(); // avoids a ConcurrentModificationException
                 }
@@ -86,5 +101,21 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
                 nextPipeQueue = new HashMap<File, String>();
             }
         }
+    }
+
+    public IPreprocessorPipelineElement getCurrentlyRunningPreprocessor() {
+        return currentlyRunningPreprocessor;
+    }
+
+    public int getTotalProcessedPreprocessor() {
+        return totalProcessedPreprocessor;
+    }
+
+    public int getTotalDocumentsToBePreprocessed() {
+        return totalDocumentsToBePreprocessed;
+    }
+
+    public int getCurrentlyPreprocessedDocuments() {
+        return currentlyPreprocessedDocuments;
     }
 }

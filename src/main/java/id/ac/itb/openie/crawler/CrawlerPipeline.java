@@ -12,7 +12,7 @@ public class CrawlerPipeline implements IOpenIePipelineElement {
 
     private ArrayList<ICrawlerPipelineElement> crawlerPipelineElements = new ArrayList<>();
     private int totalProcessedCrawler = 0;
-    private Crawler currentlyRunningCrawler = null;
+    private ICrawlerPipelineElement currentlyRunningCrawler = null;
 
     public CrawlerPipeline addPipelineElement(Crawler crawler) {
         this.crawlerPipelineElements.add(crawler);
@@ -75,7 +75,7 @@ public class CrawlerPipeline implements IOpenIePipelineElement {
 
         for (ICrawlerPipelineElement crawlerPipelineElement: crawlerPipelineElements) {
             this.totalProcessedCrawler++;
-            currentlyRunningCrawler = (Crawler)crawlerPipelineElement;
+            currentlyRunningCrawler = crawlerPipelineElement;
             crawlerPipelineElement.execute();
         }
     }
@@ -84,7 +84,7 @@ public class CrawlerPipeline implements IOpenIePipelineElement {
         return this.totalProcessedCrawler;
     }
 
-    public Crawler getCurrentlyRunningCrawler() {
+    public ICrawlerPipelineElement getCurrentlyRunningCrawler() {
         return this.currentlyRunningCrawler;
     }
 }

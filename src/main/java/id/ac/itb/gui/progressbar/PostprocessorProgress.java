@@ -9,12 +9,12 @@ package id.ac.itb.gui.progressbar;
  *
  * @author elvanowen
  */
-public class ExtractorProgress extends javax.swing.JFrame {
+public class PostprocessorProgress extends javax.swing.JFrame {
 
     /**
-     * Creates new form ExtractorProgress
+     * Creates new form PreprocessorProgress
      */
-    public ExtractorProgress() {
+    public PostprocessorProgress() {
         initComponents();
     }
 
@@ -27,18 +27,18 @@ public class ExtractorProgress extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         jProgressBar1 = new javax.swing.JProgressBar();
-        extractingDocumentsProgressLabel = new javax.swing.JLabel();
-        extractingPipelineProgressLabel = new javax.swing.JLabel();
+        runningPreprocessorLabel = new javax.swing.JLabel();
+        preprocessingDocumentsProgressLabel = new javax.swing.JLabel();
+        preprocessingPipelineProgressLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Running Extractor");
+        runningPreprocessorLabel.setText("Running preprocessor.");
 
-        extractingDocumentsProgressLabel.setText("10 / 250 documents");
+        preprocessingDocumentsProgressLabel.setText("10 / 250 documents");
 
-        extractingPipelineProgressLabel.setText("10 / 250 documents");
+        preprocessingPipelineProgressLabel.setText("10 / 250 documents");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -48,14 +48,14 @@ public class ExtractorProgress extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1)
+                        .addComponent(runningPreprocessorLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(extractingPipelineProgressLabel)
+                        .addComponent(preprocessingPipelineProgressLabel)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(extractingDocumentsProgressLabel)))
+                        .addComponent(preprocessingDocumentsProgressLabel)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -63,13 +63,13 @@ public class ExtractorProgress extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
-                    .addComponent(extractingPipelineProgressLabel))
+                    .addComponent(runningPreprocessorLabel)
+                    .addComponent(preprocessingPipelineProgressLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(extractingDocumentsProgressLabel)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addComponent(preprocessingDocumentsProgressLabel)
+                .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
@@ -92,28 +92,29 @@ public class ExtractorProgress extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(ExtractorProgress.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PostprocessorProgress.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(ExtractorProgress.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PostprocessorProgress.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(ExtractorProgress.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PostprocessorProgress.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(ExtractorProgress.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(PostprocessorProgress.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new ExtractorProgress().setVisible(true);
+                new PostprocessorProgress().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel extractingDocumentsProgressLabel;
-    private javax.swing.JLabel extractingPipelineProgressLabel;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JProgressBar jProgressBar1;
+    private javax.swing.JLabel preprocessingDocumentsProgressLabel;
+    private javax.swing.JLabel preprocessingPipelineProgressLabel;
+    private javax.swing.JLabel runningPreprocessorLabel;
     // End of variables declaration//GEN-END:variables
 }

@@ -5,16 +5,32 @@
  */
 package id.ac.itb.gui.progressbar;
 
+import id.ac.itb.openie.preprocess.Preprocessor;
+import id.ac.itb.openie.preprocess.PreprocessorPipeline;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.swing.*;
+
 /**
  *
  * @author elvanowen
  */
 public class PreprocessorProgress extends javax.swing.JFrame {
 
+    PreprocessorPipeline preprocessorPipeline;
+    private Timer processTimer = null;
+    private int tick;
+    private int counter = 0;
+
     /**
      * Creates new form PreprocessorProgress
      */
     public PreprocessorProgress() {
+        initComponents();
+    }
+
+    public PreprocessorProgress(PreprocessorPipeline preprocessorPipeline) {
+        this.preprocessorPipeline = preprocessorPipeline;
         initComponents();
     }
 
@@ -29,13 +45,19 @@ public class PreprocessorProgress extends javax.swing.JFrame {
 
         jProgressBar1 = new javax.swing.JProgressBar();
         runningPreprocessorLabel = new javax.swing.JLabel();
-        preprocessingProgressLabel = new javax.swing.JLabel();
+        postprocessingDocumentsProgressLabel = new javax.swing.JLabel();
+        postprocessingPipelineProgressLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        runningPreprocessorLabel.setText("Running preprocessor.");
+        runningPreprocessorLabel.setText("Setting up preprocessors");
 
-        preprocessingProgressLabel.setText("10 / 250 documents");
+        showProgressLabel();
+
+        processTimer = new Timer(30, e -> {
+            showProgressLabel();
+        });
+        processTimer.start();
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -46,27 +68,74 @@ public class PreprocessorProgress extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(runningPreprocessorLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(postprocessingPipelineProgressLabel)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                    .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(preprocessingProgressLabel)))
+                        .addComponent(postprocessingDocumentsProgressLabel)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(runningPreprocessorLabel)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(runningPreprocessorLabel)
+                    .addComponent(postprocessingPipelineProgressLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(preprocessingProgressLabel)
+                .addComponent(postprocessingDocumentsProgressLabel)
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void showProgressLabel() {
+        counter++;
+        int totalCurrentlyDocumentsPreprocessed = preprocessorPipeline.getCurrentlyPreprocessedDocuments();
+        int totalDocumentsToBePreprocessed = preprocessorPipeline.getTotalDocumentsToBePreprocessed();
+        String preprocessorName = "";
+        String trail = StringUtils.repeat(".", tick) + StringUtils.repeat(" ", 4 - tick);
+
+        if (counter % 10 == 0) {
+            tick = (tick % 4) + 1;
+        }
+
+        if (preprocessorPipeline.getCurrentlyRunningPreprocessor() != null) {
+            preprocessorName = ((Preprocessor)preprocessorPipeline.getCurrentlyRunningPreprocessor()).getPreprocessorHandler().getPluginName();
+        }
+
+        if (totalDocumentsToBePreprocessed > 0 && totalCurrentlyDocumentsPreprocessed == totalDocumentsToBePreprocessed) {
+            postprocessingDocumentsProgressLabel.setText("Preprocessed Completed. Processing" + trail);
+        } else {
+            postprocessingDocumentsProgressLabel.setText(" " + totalCurrentlyDocumentsPreprocessed + " / " + totalDocumentsToBePreprocessed + " documents ");
+        }
+
+        updateProgressBar(totalCurrentlyDocumentsPreprocessed, totalDocumentsToBePreprocessed);
+
+        int totalProcessedPreprocessor = preprocessorPipeline.getTotalProcessedPreprocessor();
+        int totalPreprocessor = preprocessorPipeline.getPreprocessorPipelineElements().size();
+
+        if (preprocessorName.equalsIgnoreCase("")) {
+            runningPreprocessorLabel.setText("Setting up preprocessors" + trail + StringUtils.repeat(" ", 40));
+        } else {
+            runningPreprocessorLabel.setText("Running " + preprocessorName + " ( " + totalProcessedPreprocessor + " / " + totalPreprocessor + " preprocessor" + (totalPreprocessor > 1 ? "s" : "") + " )");
+        }
+    }
+
+    private void updateProgressBar(int numerator, int denominator) {
+        jProgressBar1.setMinimum(0);
+        jProgressBar1.setMaximum(denominator);
+        jProgressBar1.setValue(numerator);
+    }
+
+    public void stopTimer() {
+        processTimer.stop();
+    }
 
     /**
      * @param args the command line arguments
@@ -105,7 +174,8 @@ public class PreprocessorProgress extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar jProgressBar1;
-    private javax.swing.JLabel preprocessingProgressLabel;
+    private javax.swing.JLabel postprocessingDocumentsProgressLabel;
+    private javax.swing.JLabel postprocessingPipelineProgressLabel;
     private javax.swing.JLabel runningPreprocessorLabel;
     // End of variables declaration//GEN-END:variables
 }
