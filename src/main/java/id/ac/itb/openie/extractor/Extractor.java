@@ -12,6 +12,7 @@ import java.util.HashMap;
 public class Extractor implements IExtractorPipelineElement {
 
     private IExtractorHandler extractorHandler;
+    private int totalDocumentExtracted = 0;
 
     public IExtractorHandler getExtractorHandler() {
         return extractorHandler;
@@ -40,5 +41,14 @@ public class Extractor implements IExtractorPipelineElement {
     @Override
     public HashMap<File, Pair<String, Relations>> execute(File file, String payload, Relations relations) throws Exception {
         return this.getExtractorHandler().extract(file, payload, relations);
+    }
+
+    public int getTotalDocumentExtracted() {
+        return totalDocumentExtracted;
+    }
+
+    public Extractor setTotalDocumentExtracted(int totalDocumentExtracted) {
+        this.totalDocumentExtracted = totalDocumentExtracted;
+        return this;
     }
 }

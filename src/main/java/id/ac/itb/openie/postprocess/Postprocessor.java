@@ -11,6 +11,7 @@ import java.util.HashMap;
 public class Postprocessor implements IPostprocessorPipelineElement {
 
     private IPostprocessorHandler postprocessorHandler;
+    private int totalDocumentPostprocessed = 0;
 
     @Override
     public HashMap<File, Relations> execute(File file, Relations relations) throws Exception {
@@ -38,6 +39,15 @@ public class Postprocessor implements IPostprocessorPipelineElement {
 
     public Postprocessor setPostprocessorHandler(IPostprocessorHandler postprocessorHandler) {
         this.postprocessorHandler = postprocessorHandler;
+        return this;
+    }
+
+    public int getTotalDocumentPostprocessed() {
+        return totalDocumentPostprocessed;
+    }
+
+    public Postprocessor setTotalDocumentPostprocessed(int totalDocumentPostprocessed) {
+        this.totalDocumentPostprocessed = totalDocumentPostprocessed;
         return this;
     }
 }

@@ -9,6 +9,7 @@ import java.util.HashMap;
 public class Preprocessor implements IPreprocessorPipelineElement {
 
     private IPreprocessorHandler preprocessorHandler;
+    private int totalDocumentPreprocessed = 0;
 
     @Override
     public HashMap<File, String> execute(File file, String payload) throws Exception {
@@ -37,5 +38,14 @@ public class Preprocessor implements IPreprocessorPipelineElement {
         }
 
         return this.getPreprocessorHandler().getPluginName();
+    }
+
+    public int getTotalDocumentPreprocessed() {
+        return totalDocumentPreprocessed;
+    }
+
+    public Preprocessor setTotalDocumentPreprocessed(int totalDocumentPreprocessed) {
+        this.totalDocumentPreprocessed = totalDocumentPreprocessed;
+        return this;
     }
 }
