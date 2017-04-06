@@ -7,13 +7,10 @@ package id.ac.itb.gui.progressbar;
 
 import id.ac.itb.openie.crawler.Crawler;
 import id.ac.itb.openie.crawler.CrawlerPipeline;
+import id.ac.itb.openie.crawler.ICrawlerPipelineElement;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 /**
  *
@@ -38,7 +35,7 @@ public class CrawlerProgress extends javax.swing.JFrame {
     }
 
     private void showProgressLabel() {
-        int totalDocumentsFetched = 0, totalDocumentsToBeFetched = 0;
+        int totalPagesFetched = 0, totalPagesToBeFetched = 0;
         String crawlerName = "";
         tick = (tick % 4) + 1;
         String trail = StringUtils.repeat(".", tick) + StringUtils.repeat(" ", 4 - tick);
@@ -47,21 +44,25 @@ public class CrawlerProgress extends javax.swing.JFrame {
             crawlerName = crawlerPipeline.getCurrentlyRunningCrawler().getCrawlerhandler().getPluginName();
         }
 
-        for (Crawler crawler: crawlerPipeline.getCrawlers()) {
-            totalDocumentsFetched += crawler.getTotalDocumentCrawled();
-            totalDocumentsToBeFetched += Integer.valueOf(crawler.getCrawlerhandler().getAvailableConfigurations().get("Max Pages to Fetch"));
+        for (ICrawlerPipelineElement crawlerPipelineElement: crawlerPipeline.getCrawlerPipelineElements()) {
+            totalPagesFetched += ((Crawler) crawlerPipelineElement).getTotalDocumentCrawled();
+            String maxPagesToFetch = ((Crawler) crawlerPipelineElement).getCrawlerhandler().getAvailableConfigurations().get("Max Pages to Fetch");
+
+            if (maxPagesToFetch != null) {
+                totalPagesToBeFetched += Integer.valueOf(maxPagesToFetch);
+            }
         }
 
-        if (totalDocumentsToBeFetched > 0 && totalDocumentsFetched == totalDocumentsToBeFetched) {
+        if (totalPagesToBeFetched > 0 && totalPagesFetched == totalPagesToBeFetched) {
             totalDocumentLabel.setText("Fetches Completed. Processing" + trail);
         } else {
-            totalDocumentLabel.setText(" " + totalDocumentsFetched + " / " + totalDocumentsToBeFetched + " documents.");
+            totalDocumentLabel.setText(" " + totalPagesFetched + " / " + totalPagesToBeFetched + " pages.");
         }
 
-        updateProgressBar(totalDocumentsFetched, totalDocumentsToBeFetched);
+        updateProgressBar(totalPagesFetched, totalPagesToBeFetched);
 
         int totalProcessedCrawler = crawlerPipeline.getTotalProcessedCrawler();
-        int totalCrawler = crawlerPipeline.getCrawlers().size();
+        int totalCrawler = crawlerPipeline.getCrawlerPipelineElements().size();
 
         if (crawlerName.equalsIgnoreCase("")) {
             totalCrawlerLabel.setText("Setting up crawlers" + trail + StringUtils.repeat(" ", 40));

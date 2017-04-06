@@ -1,8 +1,6 @@
 package classes;
 
-import id.ac.itb.openie.config.Config;
 import id.ac.itb.openie.crawler.ICrawlerHandler;
-import org.apache.commons.lang3.tuple.Pair;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -11,8 +9,6 @@ import ro.fortsoft.pf4j.Extension;
 import ro.fortsoft.pf4j.Plugin;
 import ro.fortsoft.pf4j.PluginWrapper;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -61,7 +57,7 @@ public class KompasCrawler extends Plugin {
             HashMap<String, String> output = new HashMap<>();
             Document doc = Jsoup.parse(html);
 
-            Elements contents = doc.getElementsByClass("kcm-read-text");
+            Elements contents = doc.getElementsByClass("read__content");
             for (Element content : contents) {
                 String contentText = content.text();
 

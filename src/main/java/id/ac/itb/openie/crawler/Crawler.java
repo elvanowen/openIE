@@ -22,14 +22,14 @@ import java.util.regex.Pattern;
 /**
  * Created by elvanowen on 2/22/17.
  */
-public class Crawler extends WebCrawler {
+public class Crawler extends WebCrawler implements ICrawlerPipelineElement {
 
     private static Crawler currentlyRunningCrawler = null;
     private static ArrayList<String> outputDirectories = new ArrayList<>();
     private ICrawlerHandler crawlerHandler = null;
     private int totalDocumentCrawled = 0;
 
-    public static void addOutputDirectory(String outputDirectory) {
+    static void addOutputDirectory(String outputDirectory) {
         outputDirectories.add(outputDirectory);
     }
 
@@ -46,7 +46,7 @@ public class Crawler extends WebCrawler {
         return crawlerHandler;
     }
 
-    public synchronized void setTotalDocumentCrawled(int totalDocumentCrawled) {
+    private synchronized void setTotalDocumentCrawled(int totalDocumentCrawled) {
         this.totalDocumentCrawled = totalDocumentCrawled;
     }
 
@@ -111,7 +111,7 @@ public class Crawler extends WebCrawler {
         }
     }
 
-    protected void writeToFile(String url, String content) {
+    private void writeToFile(String url, String content) {
         for (String outputDirectory: outputDirectories) {
             Utilities.writeToFile(outputDirectory, url, content);
         }

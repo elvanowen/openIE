@@ -581,27 +581,27 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         preprocessorComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getExtensions(IPreprocessorHandler.class).toArray()));
 
-        // By default add File Reader to execution pipeline
-        for (int i=0;i<preprocessorComboBox.getItemCount(); i++) {
-            IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) pluginLoader.getExtensions(IPreprocessorHandler.class).get(i);
-            String pluginName = preprocessorHandler.getPluginName();
-
-            if (pluginName.contains("File Reader")) {
-                Preprocessor preprocessor = new Preprocessor().setPreprocessorHandler(preprocessorHandler);
-                preprocessPipelineListModel.addElement(preprocessor);
-            }
-        }
-
-        // By default add File Writer to execution pipeline
-        for (int i=0;i<preprocessorComboBox.getItemCount(); i++) {
-            IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) pluginLoader.getExtensions(IPreprocessorHandler.class).get(i);
-            String pluginName = preprocessorHandler.getPluginName();
-
-            if (pluginName.contains("File Writer")) {
-                Preprocessor preprocessor = new Preprocessor().setPreprocessorHandler(preprocessorHandler);
-                preprocessPipelineListModel.addElement(preprocessor);
-            }
-        }
+//        // By default add File Reader to execution pipeline
+//        for (int i=0;i<preprocessorComboBox.getItemCount(); i++) {
+//            IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) pluginLoader.getExtensions(IPreprocessorHandler.class).get(i);
+//            String pluginName = preprocessorHandler.getPluginName();
+//
+//            if (pluginName.contains("File Reader")) {
+//                Preprocessor preprocessor = new Preprocessor().setPreprocessorHandler(preprocessorHandler);
+//                preprocessPipelineListModel.addElement(preprocessor);
+//            }
+//        }
+//
+//        // By default add File Writer to execution pipeline
+//        for (int i=0;i<preprocessorComboBox.getItemCount(); i++) {
+//            IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) pluginLoader.getExtensions(IPreprocessorHandler.class).get(i);
+//            String pluginName = preprocessorHandler.getPluginName();
+//
+//            if (pluginName.contains("File Writer")) {
+//                Preprocessor preprocessor = new Preprocessor().setPreprocessorHandler(preprocessorHandler);
+//                preprocessPipelineListModel.addElement(preprocessor);
+//            }
+//        }
 
         preprocessorPipelineLabel.setText("Preprocessor Pipeline");
 
@@ -639,15 +639,15 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         crawlerComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getExtensions(ICrawlerHandler.class).toArray()));
         // By default add File Writer to execution pipeline
-        for (int i=0;i<crawlerComboBox.getItemCount(); i++) {
-            ICrawlerHandler crawlerHandler = (ICrawlerHandler) pluginLoader.getExtensions(ICrawlerHandler.class).get(i);
-            String pluginName = crawlerHandler.getPluginName();
-
-            if (pluginName.contains("File Writer")) {
-                Crawler crawler = new Crawler().setCrawlerhandler(crawlerHandler);
-                crawlPipelineListModel.addElement(crawler);
-            }
-        }
+//        for (int i=0;i<crawlerComboBox.getItemCount(); i++) {
+//            ICrawlerHandler crawlerHandler = (ICrawlerHandler) pluginLoader.getExtensions(ICrawlerHandler.class).get(i);
+//            String pluginName = crawlerHandler.getPluginName();
+//
+//            if (pluginName.contains("File Writer")) {
+//                Crawler crawler = new Crawler().setCrawlerhandler(crawlerHandler);
+//                crawlPipelineListModel.addElement(crawler);
+//            }
+//        }
 
 
         configurePreprocessorButton.setText("Configure");
@@ -1160,24 +1160,17 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         ICrawlerHandler crawlerHandler = (ICrawlerHandler) pluginLoader.getExtensions(ICrawlerHandler.class).get(crawlerComboBox.getSelectedIndex());
         Crawler crawler = new Crawler().setCrawlerhandler(SerializationUtils.clone(crawlerHandler));
 
-        crawlPipelineListModel.add(crawlPipelineListModel.size() - 1, crawler);
-//        crawlPipelineListModel.addElement(crawler);
+//        crawlPipelineListModel.add(crawlPipelineListModel.size() - 1, crawler);
+        crawlPipelineListModel.addElement(crawler);
         crawlerPipelineDragDropList.printItems();
     }//GEN-LAST:event_addCrawlerButtonActionPerformed
 
     private void runCrawlerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runCrawlerButtonActionPerformed
         // TODO add your handling code here:
 
-        Crawler.clearOutputDirectory();
-
         for (int i = 0; i< crawlPipelineListModel.size(); i++) {
             Crawler crawler = (Crawler) crawlPipelineListModel.get(i);
-
-            if (crawler.getCrawlerhandler().getPluginName().contains("File Writer")) {
-                Crawler.addOutputDirectory(crawler.getCrawlerhandler().getAvailableConfigurations().get("Output Directory"));
-            } else {
-                crawlerPipeline.addCrawler(crawler);
-            }
+            crawlerPipeline.addPipelineElement(crawler);
         }
 
         openIePipeline.clear();
@@ -1222,8 +1215,8 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) pluginLoader.getExtensions(IPreprocessorHandler.class).get(preprocessorComboBox.getSelectedIndex());
         Preprocessor preprocessor = new Preprocessor().setPreprocessorHandler(SerializationUtils.clone(preprocessorHandler));
 
-        preprocessPipelineListModel.add(preprocessPipelineListModel.size() - 1, preprocessor);
-//        preprocessPipelineListModel.addElement(preprocessor);
+//        preprocessPipelineListModel.add(preprocessPipelineListModel.size() - 1, preprocessor);
+        preprocessPipelineListModel.addElement(preprocessor);
         preprocessorPipelineDragDropList.printItems();
 
     }//GEN-LAST:event_addPreprocessorButtonActionPerformed

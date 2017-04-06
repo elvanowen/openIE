@@ -1,6 +1,7 @@
 package id.ac.itb.openie.crawler;
 
 import id.ac.itb.openie.pipeline.IOpenIePipelineElement;
+import id.ac.itb.openie.plugins.PluginLoader;
 
 import java.util.ArrayList;
 
@@ -9,30 +10,73 @@ import java.util.ArrayList;
  */
 public class CrawlerPipeline implements IOpenIePipelineElement {
 
-    private ArrayList<Crawler> crawlers = new ArrayList<Crawler>();
+    private ArrayList<ICrawlerPipelineElement> crawlerPipelineElements = new ArrayList<>();
     private int totalProcessedCrawler = 0;
     private Crawler currentlyRunningCrawler = null;
 
-    public CrawlerPipeline addCrawler(Crawler crawler) {
-        this.crawlers.add(crawler);
+    public CrawlerPipeline addPipelineElement(Crawler crawler) {
+        this.crawlerPipelineElements.add(crawler);
         return this;
     }
 
-    public ArrayList<Crawler> getCrawlers() {
-        return this.crawlers;
+    public ArrayList<ICrawlerPipelineElement> getCrawlerPipelineElements() {
+        return this.crawlerPipelineElements;
     }
 
-    public void clear() {
-        crawlers = new ArrayList<>();
+    private void addWriterIfNotExist() {
+        if (crawlerPipelineElements.size() > 0) {
+            PluginLoader pluginLoader = new PluginLoader();
+            pluginLoader.registerAvailableExtensions(ICrawlerHandler.class);
+
+            if (!((Crawler)crawlerPipelineElements.get(crawlerPipelineElements.size() - 1)).getCrawlerhandler().getPluginName().equalsIgnoreCase("Crawler File Writer")) {
+                for (Object iCrawlerHandler: pluginLoader.getExtensions(ICrawlerHandler.class)) {
+                    ICrawlerHandler crawlerHandler = (ICrawlerHandler) iCrawlerHandler;
+                    String pluginName = crawlerHandler.getPluginName();
+
+                    if (pluginName.equalsIgnoreCase("Crawler File Writer")) {
+                        Crawler crawler = new Crawler().setCrawlerhandler(crawlerHandler);
+                        crawlerPipelineElements.add(crawler);
+                    }
+                }
+            }
+        }
+    }
+
+    private void setOutputDirectoriesToAllCrawlers() {
+
+        ArrayList<String> outputDirs = new ArrayList<>();
+        ArrayList<Object> toBeRemoved = new ArrayList<>();
+
+        // Keep output directories
+        for (ICrawlerPipelineElement crawlerPipelineElement: crawlerPipelineElements) {
+            if (((Crawler) crawlerPipelineElement).getCrawlerhandler().getPluginName().equalsIgnoreCase("Crawler File Writer")) {
+                outputDirs.add(((Crawler) crawlerPipelineElement).getCrawlerhandler().getAvailableConfigurations().get("Output Directory"));
+                toBeRemoved.add(crawlerPipelineElement);
+            }
+        }
+
+        // Remove File Writer
+        for (Object crawlerPipelineElement: toBeRemoved) {
+            crawlerPipelineElements.remove(crawlerPipelineElement);
+        }
+
+        // Set output directories to all crawlers
+        outputDirs.forEach(Crawler::addOutputDirectory);
     }
 
     public void execute() throws Exception {
         System.out.println("Running crawler pipeline...");
 
-        for (Crawler crawler: crawlers) {
+        // Make sure previous output directories are cleared
+        Crawler.clearOutputDirectory();
+
+        addWriterIfNotExist();
+        setOutputDirectoriesToAllCrawlers();
+
+        for (ICrawlerPipelineElement crawlerPipelineElement: crawlerPipelineElements) {
             this.totalProcessedCrawler++;
-            currentlyRunningCrawler = crawler;
-            crawler.execute();
+            currentlyRunningCrawler = (Crawler)crawlerPipelineElement;
+            crawlerPipelineElement.execute();
         }
     }
 
