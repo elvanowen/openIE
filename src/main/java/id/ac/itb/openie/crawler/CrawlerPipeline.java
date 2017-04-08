@@ -13,6 +13,7 @@ public class CrawlerPipeline implements IOpenIePipelineElement {
     private ArrayList<ICrawlerPipelineElement> crawlerPipelineElements = new ArrayList<>();
     private int totalProcessedCrawler = 0;
     private ICrawlerPipelineElement currentlyRunningCrawler = null;
+    private ICrawlerPipelineHook crawlerPipelineHook = null;
 
     public CrawlerPipeline addPipelineElement(ICrawlerPipelineElement crawlerPipelineElement) {
         this.crawlerPipelineElements.add(crawlerPipelineElement);
@@ -64,6 +65,13 @@ public class CrawlerPipeline implements IOpenIePipelineElement {
         outputDirs.forEach(Crawler::addOutputDirectory);
     }
 
+
+
+    @Override
+    public void willExecute() {
+        crawlerPipelineHook.willExecute();
+    }
+
     public void execute() throws Exception {
         System.out.println("Running crawler pipeline...");
 
@@ -80,11 +88,21 @@ public class CrawlerPipeline implements IOpenIePipelineElement {
         }
     }
 
+    @Override
+    public void didExecute() {
+        crawlerPipelineHook.didExecute();
+    }
+
     public int getTotalProcessedCrawler() {
         return this.totalProcessedCrawler;
     }
 
     public ICrawlerPipelineElement getCurrentlyRunningCrawler() {
         return this.currentlyRunningCrawler;
+    }
+
+    public CrawlerPipeline setCrawlerPipelineHook(ICrawlerPipelineHook crawlerPipelineHook) {
+        this.crawlerPipelineHook = crawlerPipelineHook;
+        return this;
     }
 }

@@ -21,6 +21,7 @@ public class ExtractorPipeline implements IOpenIePipelineElement {
     private int totalDocumentsToBeExtracted = 0;
     private int currentlyExtractedDocuments = 0;
     private IExtractorPipelineElement currentlyRunningExtractor = null;
+    private IExtractorPipelineHook extractorPipelineHook = null;
 
     public ExtractorPipeline addPipelineElement(IExtractorPipelineElement extractorPipelineElement) {
         extractorPipelineElements.add(extractorPipelineElement);
@@ -61,6 +62,11 @@ public class ExtractorPipeline implements IOpenIePipelineElement {
                 }
             }
         }
+    }
+
+    @Override
+    public void willExecute() {
+        extractorPipelineHook.willExecute();
     }
 
     public void execute() throws Exception {
@@ -106,6 +112,11 @@ public class ExtractorPipeline implements IOpenIePipelineElement {
         }
     }
 
+    @Override
+    public void didExecute() {
+        extractorPipelineHook.didExecute();
+    }
+
     public int getTotalProcessedExtractor() {
         return totalProcessedExtractor;
     }
@@ -120,5 +131,10 @@ public class ExtractorPipeline implements IOpenIePipelineElement {
 
     public IExtractorPipelineElement getCurrentlyRunningExtractor() {
         return currentlyRunningExtractor;
+    }
+
+    public ExtractorPipeline setExtractorPipelineHook(IExtractorPipelineHook extractorPipelineHook) {
+        this.extractorPipelineHook = extractorPipelineHook;
+        return this;
     }
 }

@@ -19,6 +19,7 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
     private int totalDocumentsToBePreprocessed = 0;
     private int currentlyPreprocessedDocuments = 0;
     private IPreprocessorPipelineElement currentlyRunningPreprocessor = null;
+    private IPreprocessorPipelineHook preprocessorPipelineHook = null;
 
     public PreprocessorPipeline addPipelineElement(IPreprocessorPipelineElement preprocessorPipelineElement) {
         preprocessorPipelineElements.add(preprocessorPipelineElement);
@@ -59,6 +60,11 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
                 }
             }
         }
+    }
+
+    @Override
+    public void willExecute() {
+        preprocessorPipelineHook.willExecute();
     }
 
     public void execute() throws Exception {
@@ -103,6 +109,11 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
         }
     }
 
+    @Override
+    public void didExecute() {
+        preprocessorPipelineHook.didExecute();
+    }
+
     public IPreprocessorPipelineElement getCurrentlyRunningPreprocessor() {
         return currentlyRunningPreprocessor;
     }
@@ -117,5 +128,10 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
 
     public int getCurrentlyPreprocessedDocuments() {
         return currentlyPreprocessedDocuments;
+    }
+
+    public PreprocessorPipeline setPreprocessorPipelineHook(IPreprocessorPipelineHook preprocessorPipelineHook) {
+        this.preprocessorPipelineHook = preprocessorPipelineHook;
+        return this;
     }
 }

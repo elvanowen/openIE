@@ -10,22 +10,13 @@ import id.ac.itb.gui.config.ConfigDialog;
 import id.ac.itb.gui.progressbar.CrawlerProgress;
 import id.ac.itb.gui.progressbar.ExtractorProgress;
 import id.ac.itb.gui.progressbar.PreprocessorProgress;
-import id.ac.itb.openie.crawler.Crawler;
-import id.ac.itb.openie.crawler.CrawlerPipeline;
-import id.ac.itb.openie.crawler.ICrawlerHandler;
-import id.ac.itb.openie.crawler.ICrawlerPipelineElement;
-import id.ac.itb.openie.extractor.Extractor;
-import id.ac.itb.openie.extractor.ExtractorPipeline;
-import id.ac.itb.openie.extractor.IExtractorHandler;
-import id.ac.itb.openie.extractor.IExtractorPipelineElement;
+import id.ac.itb.openie.crawler.*;
+import id.ac.itb.openie.extractor.*;
 import id.ac.itb.openie.pipeline.OpenIePipeline;
 import id.ac.itb.openie.plugins.PluginLoader;
 import id.ac.itb.openie.postprocess.IPostprocessorHandler;
 import id.ac.itb.openie.postprocess.Postprocessor;
-import id.ac.itb.openie.preprocess.IPreprocessorHandler;
-import id.ac.itb.openie.preprocess.IPreprocessorPipelineElement;
-import id.ac.itb.openie.preprocess.Preprocessor;
-import id.ac.itb.openie.preprocess.PreprocessorPipeline;
+import id.ac.itb.openie.preprocess.*;
 import id.ac.itb.util.UnzipUtility;
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -38,7 +29,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
-import java.util.concurrent.TimeUnit;
 
 /**
  *
@@ -255,16 +245,26 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             public void valueChanged(ListSelectionEvent ev) {
 
                 Object selectedPipelineElement = openIePipelineDragDropList.getSelectedValue();
+                HashMap<String, String> availableConfigurations = null;
 
                 if (selectedPipelineElement != null) {
-
-                    HashMap<String, String> availableConfigurations = null;
+                    if (selectedPipelineElement instanceof Crawler) {
+                        availableConfigurations = ((Crawler)selectedPipelineElement).getCrawlerhandler().getAvailableConfigurations();
+                    } else if (selectedPipelineElement instanceof Preprocessor) {
+                        availableConfigurations = ((Preprocessor)selectedPipelineElement).getPreprocessorHandler().getAvailableConfigurations();
+                    } else if (selectedPipelineElement instanceof Extractor) {
+                        availableConfigurations = ((Extractor)selectedPipelineElement).getExtractorHandler().getAvailableConfigurations();
+                    } else if (selectedPipelineElement instanceof Postprocessor) {
+                        availableConfigurations = ((Postprocessor)selectedPipelineElement).getPostprocessorHandler().getAvailableConfigurations();
+                    }
 
                     if (availableConfigurations != null) {
                         openIESectionConfigurePipelineElementButton1.setEnabled(true);
                     } else {
                         openIESectionConfigurePipelineElementButton1.setEnabled(false);
                     }
+
+                    openIESectionRemovePipelineElementButton.setEnabled(true);
                 }
             }
         });
@@ -555,16 +555,6 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         loadPreprocessorButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 loadPreprocessorButtonActionPerformed(evt);
-            }
-        });
-        crawlerPipelineDragDropList.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent ev) {
-                Crawler selectedCrawler = (Crawler) crawlerPipelineDragDropList.getSelectedValue();
-                if (selectedCrawler != null && selectedCrawler.getCrawlerhandler().getAvailableConfigurations() != null) {
-                    configureCrawlerButton.setEnabled(true);
-                } else {
-                    configureCrawlerButton.setEnabled(false);
-                }
             }
         });
 
@@ -1002,23 +992,17 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         openIePipeline.addPipelineElement(crawlerPipeline);
 
-        JFrame crawlerProgress = new CrawlerProgress(crawlerPipeline);
-        crawlerProgress.setVisible(true);
+        crawlerPipeline.setCrawlerPipelineHook(new ICrawlerPipelineHook() {
 
-        SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+            JFrame crawlerProgress = new CrawlerProgress(crawlerPipeline);
+
             @Override
-            protected String doInBackground() throws InterruptedException {
-                try {
-                    openIePipeline.execute();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                return "";
+            public void willExecute() {
+                crawlerProgress.setVisible(true);
             }
 
             @Override
-            protected void done() {
+            public void didExecute() {
                 ((CrawlerProgress) crawlerProgress).stopTimer();
                 crawlerProgress.dispose();
 
@@ -1051,6 +1035,19 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                         }
                     }
                 }
+            }
+        });
+
+        SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+            @Override
+            protected String doInBackground() throws InterruptedException {
+                try {
+                    openIePipeline.execute();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return "";
             }
         };
 
@@ -1104,24 +1101,17 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         openIePipeline.addPipelineElement(preprocessorPipeline);
 
-        JFrame preprocessorProgress = new PreprocessorProgress(preprocessorPipeline);
-        preprocessorProgress.setVisible(true);
+        preprocessorPipeline.setPreprocessorPipelineHook(new IPreprocessorPipelineHook() {
 
-        SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+            JFrame preprocessorProgress = new PreprocessorProgress(preprocessorPipeline);
+
             @Override
-            protected String doInBackground() throws InterruptedException {
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                    openIePipeline.execute();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                return "";
+            public void willExecute() {
+                preprocessorProgress.setVisible(true);
             }
 
             @Override
-            protected void done() {
+            public void didExecute() {
                 ((PreprocessorProgress) preprocessorProgress).stopTimer();
                 preprocessorProgress.dispose();
 
@@ -1154,6 +1144,19 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                         }
                     }
                 }
+            }
+        });
+
+        SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+            @Override
+            protected String doInBackground() throws InterruptedException {
+                try {
+                    openIePipeline.execute();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return "";
             }
         };
 
@@ -1242,24 +1245,17 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         openIePipeline.addPipelineElement(extractorPipeline);
 
-        JFrame extractorProgress = new ExtractorProgress(extractorPipeline);
-        extractorProgress.setVisible(true);
+        extractorPipeline.setExtractorPipelineHook(new IExtractorPipelineHook() {
 
-        SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+            JFrame extractorProgress = new ExtractorProgress(extractorPipeline);
+
             @Override
-            protected String doInBackground() throws InterruptedException {
-                try {
-                    TimeUnit.SECONDS.sleep(1);
-                    openIePipeline.execute();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                return "";
+            public void willExecute() {
+                extractorProgress.setVisible(true);
             }
 
             @Override
-            protected void done() {
+            public void didExecute() {
                 ((ExtractorProgress) extractorProgress).stopTimer();
                 extractorProgress.dispose();
 
@@ -1292,6 +1288,19 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                         }
                     }
                 }
+            }
+        });
+
+        SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+            @Override
+            protected String doInBackground() throws InterruptedException {
+                try {
+                    openIePipeline.execute();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return "";
             }
         };
 
@@ -1427,11 +1436,68 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         openIePipeline.addPipelineElement(preprocessorPipeline);
         openIePipeline.addPipelineElement(extractorPipeline);
 
-        try {
-            openIePipeline.execute();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        crawlerPipeline.setCrawlerPipelineHook(new ICrawlerPipelineHook() {
+
+            JFrame crawlerProgress = new CrawlerProgress(crawlerPipeline);
+
+            @Override
+            public void willExecute() {
+                crawlerProgress.setVisible(true);
+            }
+
+            @Override
+            public void didExecute() {
+                ((CrawlerProgress) crawlerProgress).stopTimer();
+                crawlerProgress.dispose();
+            }
+        });
+
+        preprocessorPipeline.setPreprocessorPipelineHook(new IPreprocessorPipelineHook() {
+
+            JFrame preprocessorProgress = new PreprocessorProgress(preprocessorPipeline);
+
+            @Override
+            public void willExecute() {
+                preprocessorProgress.setVisible(true);
+            }
+
+            @Override
+            public void didExecute() {
+                ((PreprocessorProgress) preprocessorProgress).stopTimer();
+                preprocessorProgress.dispose();
+            }
+        });
+
+        extractorPipeline.setExtractorPipelineHook(new IExtractorPipelineHook() {
+
+            JFrame extractorProgress = new ExtractorProgress(extractorPipeline);
+
+            @Override
+            public void willExecute() {
+                extractorProgress.setVisible(true);
+            }
+
+            @Override
+            public void didExecute() {
+                ((ExtractorProgress) extractorProgress).stopTimer();
+                extractorProgress.dispose();
+            }
+        });
+
+        SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+            @Override
+            protected String doInBackground() throws InterruptedException {
+                try {
+                    openIePipeline.execute();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return "";
+            }
+        };
+
+        worker.execute();
 
     }//GEN-LAST:event_openIESectionExecutePipelineElementButtonActionPerformed
 

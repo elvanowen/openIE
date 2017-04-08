@@ -18,7 +18,9 @@ public class OpenIePipeline {
         System.out.println("Running OpenIE pipeline...");
 
         for (IOpenIePipelineElement openIePipelineElement: openIePipelineElements) {
+            openIePipelineElement.willExecute();
             openIePipelineElement.execute();
+            openIePipelineElement.didExecute();
         }
     }
 }
