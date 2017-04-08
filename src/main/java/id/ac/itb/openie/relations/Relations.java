@@ -40,10 +40,10 @@ public class Relations {
         String relationsString = Utilities.getFileContent(file).get(0);
         Relations relations = new Relations();
 
-        Pattern p = Pattern.compile("(.*)\\((.*),(.*)\\)");
+        Pattern p = Pattern.compile("Kalimat:\\s(.*)\\nRelasi:\\s(.*)\\((.*),(.*)\\)\\n");
         Matcher m = p.matcher(relationsString);
 
-        if (m.matches()) relations.addRelation(new Relation(m.group(2), m.group(1), m.group(3)));
+        if (m.matches()) relations.addRelation(new Relation(m.group(3), m.group(2), m.group(4), m.group(1)));
     }
 
     public String toString() {

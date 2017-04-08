@@ -2,10 +2,8 @@ package classes;
 
 import id.ac.itb.openie.config.Config;
 import id.ac.itb.openie.extractor.IExtractorHandler;
-import id.ac.itb.openie.preprocess.IPreprocessorHandler;
 import id.ac.itb.openie.relations.Relations;
 import id.ac.itb.openie.utils.Utilities;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 import ro.fortsoft.pf4j.Extension;
 import ro.fortsoft.pf4j.Plugin;
@@ -34,7 +32,7 @@ public class ExtractorFileWriter extends Plugin {
 
         @Override
         public HashMap<String, String> getAvailableConfigurations() {
-            availableConfigurations.putIfAbsent("Output Directory", System.getProperty("user.dir") + File.separator + new Config().getProperty("PREPROCESSES_OUTPUT_RELATIVE_PATH"));
+            availableConfigurations.putIfAbsent("Output Directory", System.getProperty("user.dir") + File.separator + new Config().getProperty("EXTRACTIONS_OUTPUT_RELATIVE_PATH"));
 
             return availableConfigurations;
         }
@@ -44,6 +42,8 @@ public class ExtractorFileWriter extends Plugin {
             if (getAvailableConfigurations().get("Output Directory") == null) {
                 throw new Exception("Write directory path must be specified");
             } else {
+                System.out.println("Extractor file writer");
+                System.out.println(relations);
                 Utilities.writeToFile(availableConfigurations.get("Output Directory"), file.getName(), relations.toString());
 
                 HashMap<File, Pair<String, Relations>> pipelineItems = new HashMap<>();

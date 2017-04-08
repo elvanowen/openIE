@@ -9,21 +9,24 @@ public class Relation {
     private String firstEntity = null;
     private String relation = null;
     private String secondEntity = null;
+    private String originSentence = null;
 
-    public Relation(String firstEntity, String relation, String secondEntity) {
+    public Relation(String firstEntity, String relation, String secondEntity, String originSentence) {
         this.firstEntity = firstEntity;
         this.relation = relation;
         this.secondEntity = secondEntity;
+        this.originSentence = originSentence;
     }
 
-    public Relation(Triple<String, String, String> relation) {
+    public Relation(Triple<String, String, String> relation, String originSentence) {
         this.firstEntity = relation.getLeft();
         this.relation = relation.getMiddle();
         this.secondEntity = relation.getRight();
+        this.originSentence = originSentence;
     }
 
     public String toString() {
-        return String.format("%s(%s, %s)", relation, firstEntity, secondEntity);
+        return String.format("Kalimat: %s\nRelasi: %s(%s, %s)\n", originSentence, relation, firstEntity, secondEntity);
     }
 
     public Triple<String, String, String> getRelationTriple() {

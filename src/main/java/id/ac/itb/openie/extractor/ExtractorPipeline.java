@@ -1,6 +1,7 @@
 package id.ac.itb.openie.extractor;
 
 import id.ac.itb.openie.pipeline.IOpenIePipelineElement;
+import id.ac.itb.openie.plugins.PluginLoader;
 import id.ac.itb.openie.relations.Relations;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -30,8 +31,42 @@ public class ExtractorPipeline implements IOpenIePipelineElement {
         return this.extractorPipelineElements;
     }
 
+    private void addReaderAndWriterIfNotExist() {
+        if (extractorPipelineElements.size() > 0) {
+            PluginLoader pluginLoader = new PluginLoader();
+            pluginLoader.registerAvailableExtensions(IExtractorHandler.class);
+
+            // Prepend preprocessor file reader if not exist
+            if (!((Extractor) extractorPipelineElements.get(0)).getExtractorHandler().getPluginName().equalsIgnoreCase("Extractor File Reader")) {
+                for (Object iExtractorHandler: pluginLoader.getExtensions(IExtractorHandler.class)) {
+                    IExtractorHandler extractorHandler = (IExtractorHandler) iExtractorHandler;
+                    String pluginName = extractorHandler.getPluginName();
+
+                    if (pluginName.equalsIgnoreCase("Extractor File Reader")) {
+                        Extractor extractor = new Extractor().setExtractorHandler(extractorHandler);
+                        extractorPipelineElements.add(0, extractor);
+                    }
+                }
+            }
+
+            if (!((Extractor) extractorPipelineElements.get(extractorPipelineElements.size() - 1)).getExtractorHandler().getPluginName().equalsIgnoreCase("Extractor File Writer")) {
+                for (Object iExtractorHandler: pluginLoader.getExtensions(IExtractorHandler.class)) {
+                    IExtractorHandler extractorHandler = (IExtractorHandler) iExtractorHandler;
+                    String pluginName = extractorHandler.getPluginName();
+
+                    if (pluginName.equalsIgnoreCase("Extractor File Writer")) {
+                        Extractor extractor = new Extractor().setExtractorHandler(extractorHandler);
+                        extractorPipelineElements.add(extractor);
+                    }
+                }
+            }
+        }
+    }
+
     public void execute() throws Exception {
         System.out.println("Running extractor pipeline...");
+
+        addReaderAndWriterIfNotExist();
 
         HashMap<File, Pair<String, Relations>> pipeQueue = null;
         HashMap<File, Pair<String, Relations>> nextPipeQueue = null;

@@ -10,6 +10,7 @@ import java.util.ArrayList;
 public class POSTagger {
 
     public ArrayList<String[]> tag(String sentence) {
+        System.out.println(sentence);
         ArrayList<String[]> tags = IndonesianPOSTagger.doPOSTag(sentence);
 
         return tags;

@@ -258,62 +258,11 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                 if (selectedPipelineElement != null) {
 
                     HashMap<String, String> availableConfigurations = null;
-                    String pluginName = "";
-                    int nFileWriter = 0;
-
-                    if (selectedPipelineElement instanceof Crawler) {
-                        Crawler selectedCrawler = (Crawler) selectedPipelineElement;
-                        availableConfigurations = selectedCrawler.getCrawlerhandler().getAvailableConfigurations();
-                        pluginName = selectedCrawler.getCrawlerhandler().getPluginName();
-
-                        for (int i=0;i<openIePipelineDragDropList.getModel().getSize();i++) {
-                            if (((Crawler)openIePipelineDragDropList.getModel().getElementAt(i)).getCrawlerhandler().getPluginName().contains("File Writer")) {
-                                nFileWriter++;
-                            }
-                        }
-                    } else if (selectedPipelineElement instanceof Preprocessor) {
-                        Preprocessor selectedPreprocessor = (Preprocessor) selectedPipelineElement;
-                        availableConfigurations = selectedPreprocessor.getPreprocessorHandler().getAvailableConfigurations();
-                        pluginName = selectedPreprocessor.getPreprocessorHandler().getPluginName();
-
-                        for (int i=0;i<openIePipelineDragDropList.getModel().getSize();i++) {
-                            if (((Preprocessor)openIePipelineDragDropList.getModel().getElementAt(i)).getPreprocessorHandler().getPluginName().contains("File Writer")) {
-                                nFileWriter++;
-                            }
-                        }
-                    } else if (selectedPipelineElement instanceof Extractor) {
-                        Extractor selectedExtractor = (Extractor) selectedPipelineElement;
-                        availableConfigurations = selectedExtractor.getExtractorHandler().getAvailableConfigurations();
-                        pluginName = selectedExtractor.getExtractorHandler().getPluginName();
-
-                        for (int i=0;i<openIePipelineDragDropList.getModel().getSize();i++) {
-                            if (((Extractor)openIePipelineDragDropList.getModel().getElementAt(i)).getExtractorHandler().getPluginName().contains("File Writer")) {
-                                nFileWriter++;
-                            }
-                        }
-                    } else if (selectedPipelineElement instanceof Postprocessor) {
-                        Postprocessor selectedPostprocessor = (Postprocessor) selectedPipelineElement;
-                        availableConfigurations = selectedPostprocessor.getPostprocessorHandler().getAvailableConfigurations();
-                        pluginName = selectedPostprocessor.getPostprocessorHandler().getPluginName();
-
-                        for (int i=0;i<openIePipelineDragDropList.getModel().getSize();i++) {
-                            if (((Postprocessor)openIePipelineDragDropList.getModel().getElementAt(i)).getPostprocessorHandler().getPluginName().contains("File Writer")) {
-                                nFileWriter++;
-                            }
-                        }
-                    }
 
                     if (availableConfigurations != null) {
                         openIESectionConfigurePipelineElementButton1.setEnabled(true);
                     } else {
                         openIESectionConfigurePipelineElementButton1.setEnabled(false);
-                    }
-
-                    if (pluginName.contains("File Writer")) {
-                        if (nFileWriter > 1) openIESectionRemovePipelineElementButton.setEnabled(true);
-                        else openIESectionRemovePipelineElementButton.setEnabled(false);
-                    } else {
-                        openIESectionRemovePipelineElementButton.setEnabled(true);
                     }
                 }
             }
@@ -1446,7 +1395,6 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private void openIESectionRemovePipelineElementButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openIESectionRemovePipelineElementButtonActionPerformed
         // TODO add your handling code here:
 
-        System.out.println(openIePipelineDragDropList.getSelectedValue());
         openIePipelineListModel.removeElement(openIePipelineDragDropList.getSelectedValue());
     }//GEN-LAST:event_openIESectionRemovePipelineElementButtonActionPerformed
 

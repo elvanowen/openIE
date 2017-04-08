@@ -1,7 +1,7 @@
 package classes;
 
 import id.ac.itb.nlp.POSTagger;
-import id.ac.itb.openie.extractor.IExtractorPipelineElement;
+import id.ac.itb.nlp.SentenceTokenizer;
 import id.ac.itb.openie.relations.Relation;
 import id.ac.itb.openie.relations.Relations;
 import org.apache.commons.lang3.StringUtils;
@@ -241,6 +241,8 @@ public class ReverbExtractor {
         Pair<String, String> arguments = Pair.of("", "");
         String extractedVerb = "";
 
+        System.out.println("origin sentence : " + sentence);
+
         Relations relations = new Relations();
         ArrayList<Triple<String, Integer, Integer>> triples = extractVerbs(sentence);
 
@@ -254,7 +256,7 @@ public class ReverbExtractor {
             }
 
             if (!arguments.getLeft().equalsIgnoreCase("") && !extractedVerb.equalsIgnoreCase("") && !arguments.getRight().equalsIgnoreCase("")) {
-                relations.addRelation(new Relation(arguments.getLeft(), extractedVerb, arguments.getRight()));
+                relations.addRelation(new Relation(arguments.getLeft(), extractedVerb, arguments.getRight(), sentence));
             }
         }
 
@@ -264,7 +266,20 @@ public class ReverbExtractor {
     public HashMap<File, Pair<String, Relations>> extract(File file, String payload, Relations relations) throws Exception {
 
         HashMap<File, Pair<String, Relations>> pipelineItems = new HashMap<>();
-        pipelineItems.put(file, Pair.of(payload, extractRelationFromSentence(payload)));
+
+        SentenceTokenizer sentenceTokenizer = new SentenceTokenizer();
+
+        Relations extractedRelations = new Relations();
+
+        for (String sentence: sentenceTokenizer.tokenizeSentence(payload)) {
+            Relations _extractedRelations = extractRelationFromSentence(sentence);
+            extractedRelations.addRelations(_extractedRelations);
+        }
+
+        pipelineItems.put(file, Pair.of(payload, extractedRelations));
+
+        System.out.println("reverb pipelineItems");
+        System.out.println(pipelineItems);
 
         return pipelineItems;
     }
