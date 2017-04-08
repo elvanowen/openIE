@@ -14,8 +14,8 @@ public class CrawlerPipeline implements IOpenIePipelineElement {
     private int totalProcessedCrawler = 0;
     private ICrawlerPipelineElement currentlyRunningCrawler = null;
 
-    public CrawlerPipeline addPipelineElement(Crawler crawler) {
-        this.crawlerPipelineElements.add(crawler);
+    public CrawlerPipeline addPipelineElement(ICrawlerPipelineElement crawlerPipelineElement) {
+        this.crawlerPipelineElements.add(crawlerPipelineElement);
         return this;
     }
 

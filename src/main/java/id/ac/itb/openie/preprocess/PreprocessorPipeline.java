@@ -74,8 +74,8 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
             this.currentlyRunningPreprocessor = preprocessorPipelineElement;
 
             if (pipeQueue == null) {
-                pipeQueue = new HashMap<File, String>();
-                nextPipeQueue = new HashMap<File, String>();
+                pipeQueue = new HashMap<>();
+                nextPipeQueue = new HashMap<>();
 
                 HashMap<File, String> preprocessed = preprocessorPipelineElement.execute(null, null);
                 pipeQueue.putAll(preprocessed);
