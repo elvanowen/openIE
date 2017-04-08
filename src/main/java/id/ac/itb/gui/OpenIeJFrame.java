@@ -1110,7 +1110,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             @Override
             protected String doInBackground() throws InterruptedException {
                 try {
-                    TimeUnit.SECONDS.sleep(3);
+                    TimeUnit.SECONDS.sleep(1);
                     openIePipeline.execute();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1123,6 +1123,36 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             protected void done() {
                 ((PreprocessorProgress) preprocessorProgress).stopTimer();
                 preprocessorProgress.dispose();
+
+                int nFileWriter = 0;
+
+                for (IPreprocessorPipelineElement preprocessorPipelineElement: preprocessorPipeline.getPreprocessorPipelineElements()) {
+                    if (((Preprocessor) preprocessorPipelineElement).getPreprocessorHandler().getPluginName().equalsIgnoreCase("Preprocessor File Writer")) {
+                        nFileWriter++;
+
+                        try {
+                            Desktop.getDesktop().open(new File(((Preprocessor) preprocessorPipelineElement).getPreprocessorHandler().getAvailableConfigurations().get("Output Directory")));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                if (nFileWriter == 0) { // Open default folder
+                    for (Object iPreprocessorHandler: pluginLoader.getExtensions(IPreprocessorHandler.class)) {
+                        IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) iPreprocessorHandler;
+                        String pluginName = preprocessorHandler.getPluginName();
+
+                        if (pluginName.equalsIgnoreCase("Preprocessor File Writer")) {
+                            Preprocessor preprocessor = new Preprocessor().setPreprocessorHandler(preprocessorHandler);
+                            try {
+                                Desktop.getDesktop().open(new File((preprocessor.getPreprocessorHandler().getAvailableConfigurations().get("Output Directory"))));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
             }
         };
 

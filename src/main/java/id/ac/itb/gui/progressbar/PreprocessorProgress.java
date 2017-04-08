@@ -92,6 +92,8 @@ public class PreprocessorProgress extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
+        setTitle("Preprocessing Progress");
     }// </editor-fold>//GEN-END:initComponents
 
     private void showProgressLabel() {
