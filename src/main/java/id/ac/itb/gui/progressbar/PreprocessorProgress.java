@@ -112,7 +112,7 @@ public class PreprocessorProgress extends javax.swing.JFrame {
         }
 
         if (totalDocumentsToBePreprocessed > 0 && totalCurrentlyDocumentsPreprocessed == totalDocumentsToBePreprocessed) {
-            postprocessingDocumentsProgressLabel.setText("Preprocessed Completed. Processing" + trail);
+            postprocessingDocumentsProgressLabel.setText("Preprocessed Completed. Loading" + trail);
         } else {
             postprocessingDocumentsProgressLabel.setText(" " + totalCurrentlyDocumentsPreprocessed + " / " + totalDocumentsToBePreprocessed + " documents ");
         }

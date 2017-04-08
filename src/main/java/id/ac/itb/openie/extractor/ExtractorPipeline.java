@@ -81,6 +81,8 @@ public class ExtractorPipeline implements IOpenIePipelineElement {
 
                 HashMap<File, Pair<String, Relations>> extractedRelations = extractorPipelineElement.execute(null, null, null);
                 pipeQueue.putAll(extractedRelations);
+
+                totalDocumentsToBeExtracted = extractedRelations.size();
             } else {
                 Iterator<Map.Entry<File, Pair<String, Relations>>> it = pipeQueue.entrySet().iterator();
 

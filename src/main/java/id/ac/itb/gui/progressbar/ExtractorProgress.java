@@ -5,16 +5,32 @@
  */
 package id.ac.itb.gui.progressbar;
 
+import id.ac.itb.openie.extractor.Extractor;
+import id.ac.itb.openie.extractor.ExtractorPipeline;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.swing.*;
+
 /**
  *
  * @author elvanowen
  */
 public class ExtractorProgress extends javax.swing.JFrame {
 
+    ExtractorPipeline extractorPipeline;
+    private Timer processTimer = null;
+    private int tick;
+    private int counter = 0;
+
     /**
      * Creates new form ExtractorProgress
      */
     public ExtractorProgress() {
+        initComponents();
+    }
+
+    public ExtractorProgress(ExtractorPipeline extractorPipeline) {
+        this.extractorPipeline = extractorPipeline;
         initComponents();
     }
 
@@ -34,11 +50,14 @@ public class ExtractorProgress extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jLabel1.setText("Running Extractor");
+        jLabel1.setText("Setting up extractors");
 
-        extractingDocumentsProgressLabel.setText("10 / 250 documents");
+        showProgressLabel();
 
-        extractingPipelineProgressLabel.setText("10 / 250 documents");
+        processTimer = new Timer(30, e -> {
+            showProgressLabel();
+        });
+        processTimer.start();
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -73,7 +92,52 @@ public class ExtractorProgress extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
+        setTitle("Extracting Progress");
     }// </editor-fold>//GEN-END:initComponents
+
+    private void showProgressLabel() {
+        counter++;
+        int totalCurrentlyDocumentsExtracted = extractorPipeline.getCurrentlyExtractedDocuments();
+        int totalDocumentsToBeExtracted = extractorPipeline.getTotalDocumentsToBeExtracted();
+        String extractorName = "";
+        String trail = StringUtils.repeat(".", tick) + StringUtils.repeat(" ", 4 - tick);
+
+        if (counter % 10 == 0) {
+            tick = (tick % 4) + 1;
+        }
+
+        if (extractorPipeline.getCurrentlyRunningExtractor() != null) {
+            extractorName = ((Extractor)extractorPipeline.getCurrentlyRunningExtractor()).getExtractorHandler().getPluginName();
+        }
+
+        if (totalDocumentsToBeExtracted > 0 && totalCurrentlyDocumentsExtracted == totalDocumentsToBeExtracted) {
+            extractingDocumentsProgressLabel.setText("Extractions Completed. Loading" + trail);
+        } else {
+            extractingDocumentsProgressLabel.setText(" " + totalCurrentlyDocumentsExtracted + " / " + totalDocumentsToBeExtracted + " documents ");
+        }
+
+        updateProgressBar(totalCurrentlyDocumentsExtracted, totalDocumentsToBeExtracted);
+
+        int totalProcessedExtractor = extractorPipeline.getTotalProcessedExtractor();
+        int totalExtractor = extractorPipeline.getExtractorPipelineElements().size();
+
+        if (extractorName.equalsIgnoreCase("")) {
+            extractingPipelineProgressLabel.setText("Setting up extractors" + trail + StringUtils.repeat(" ", 40));
+        } else {
+            extractingPipelineProgressLabel.setText("Running " + extractorName + " ( " + totalProcessedExtractor + " / " + totalExtractor + " extractor" + (totalExtractor > 1 ? "s" : "") + " )");
+        }
+    }
+
+    private void updateProgressBar(int numerator, int denominator) {
+        jProgressBar1.setMinimum(0);
+        jProgressBar1.setMaximum(denominator);
+        jProgressBar1.setValue(numerator);
+    }
+
+    public void stopTimer() {
+        processTimer.stop();
+    }
 
     /**
      * @param args the command line arguments

@@ -54,7 +54,7 @@ public class CrawlerProgress extends javax.swing.JFrame {
         }
 
         if (totalPagesToBeFetched > 0 && totalPagesFetched == totalPagesToBeFetched) {
-            totalDocumentLabel.setText("Fetches Completed. Processing" + trail);
+            totalDocumentLabel.setText("Fetches Completed. Loading" + trail);
         } else {
             totalDocumentLabel.setText(" " + totalPagesFetched + " / " + totalPagesToBeFetched + " pages ");
         }

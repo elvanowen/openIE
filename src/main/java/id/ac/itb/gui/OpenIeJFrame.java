@@ -8,6 +8,7 @@ package id.ac.itb.gui;
 import id.ac.itb.gui.alert.Alert;
 import id.ac.itb.gui.config.ConfigDialog;
 import id.ac.itb.gui.progressbar.CrawlerProgress;
+import id.ac.itb.gui.progressbar.ExtractorProgress;
 import id.ac.itb.gui.progressbar.PreprocessorProgress;
 import id.ac.itb.openie.crawler.Crawler;
 import id.ac.itb.openie.crawler.CrawlerPipeline;
@@ -1241,11 +1242,60 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         openIePipeline.addPipelineElement(extractorPipeline);
 
-        try {
-            openIePipeline.execute();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        JFrame extractorProgress = new ExtractorProgress(extractorPipeline);
+        extractorProgress.setVisible(true);
+
+        SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+            @Override
+            protected String doInBackground() throws InterruptedException {
+                try {
+                    TimeUnit.SECONDS.sleep(1);
+                    openIePipeline.execute();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                return "";
+            }
+
+            @Override
+            protected void done() {
+                ((ExtractorProgress) extractorProgress).stopTimer();
+                extractorProgress.dispose();
+
+                int nFileWriter = 0;
+
+                for (IExtractorPipelineElement extractorPipelineElement: extractorPipeline.getExtractorPipelineElements()) {
+                    if (((Extractor) extractorPipelineElement).getExtractorHandler().getPluginName().equalsIgnoreCase("Extractor File Writer")) {
+                        nFileWriter++;
+
+                        try {
+                            Desktop.getDesktop().open(new File(((Extractor) extractorPipelineElement).getExtractorHandler().getAvailableConfigurations().get("Output Directory")));
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+
+                if (nFileWriter == 0) { // Open default folder
+                    for (Object iExtractorHandler: pluginLoader.getExtensions(IExtractorHandler.class)) {
+                        IExtractorHandler extractorHandler = (IExtractorHandler) iExtractorHandler;
+                        String pluginName = extractorHandler.getPluginName();
+
+                        if (pluginName.equalsIgnoreCase("Extractor File Writer")) {
+                            Extractor extractor = new Extractor().setExtractorHandler(extractorHandler);
+                            try {
+                                Desktop.getDesktop().open(new File((extractor.getExtractorHandler().getAvailableConfigurations().get("Output Directory"))));
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+                }
+            }
+        };
+
+        worker.execute();
 
     }//GEN-LAST:event_runExtractorButtonActionPerformed
 
