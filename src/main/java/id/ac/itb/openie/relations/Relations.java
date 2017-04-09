@@ -41,9 +41,7 @@ public class Relations {
         Pattern p = Pattern.compile("Source:\\s(.*)\\nKalimat:\\s(.*)\\nRelasi:\\s(.*)\\((.*),(.*)\\)\\n");
         Matcher m = p.matcher(relationsString);
 
-        if (m.matches()) {
-            this.relations.add(new Relation(m.group(4), m.group(3), m.group(5), m.group(1), m.group(2)));
-        }
+        while (m.find()) relations.add(new Relation(m.group(4), m.group(3), m.group(5), m.group(1), m.group(2)));
     }
 
     public String toString() {

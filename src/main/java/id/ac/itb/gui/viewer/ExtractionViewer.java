@@ -5,12 +5,18 @@
  */
 package id.ac.itb.gui.viewer;
 
+import id.ac.itb.openie.relations.Relation;
 import id.ac.itb.openie.relations.Relations;
 import id.ac.itb.openie.utils.Utilities;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashSet;
 
 /**
  *
@@ -71,12 +77,35 @@ public class ExtractionViewer extends javax.swing.JFrame {
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
+        jTextArea1.setEditable(false);
+        jTextArea1.setLineWrap(true);
+        jTextArea1.setMargin(new Insets(8,8,8,8));
         jScrollPane2.setViewportView(jTextArea1);
 
+        HashSet<File> _files = new HashSet<>();
+
+        for (Relation relation: relations.getRelations()) {
+            _files.add(new File(relation.getOriginFile()));
+        }
+
+        ArrayList<File> files = new ArrayList<>(_files);
+
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            public int getSize() { return relations.getRelations().size(); }
-            public String getElementAt(int i) { return new File(relations.getRelations().get(i).getOriginFile()).getName() ; }
+            public int getSize() { return files.size(); }
+            public String getElementAt(int i) { return (i+1) + ". " + files.get(i).getName() ; }
         });
+
+        jList1.addListSelectionListener(new ListSelectionListener() {
+
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                File selectedFile = files.get(jList1.getSelectedIndex());
+                System.out.println(selectedFile);
+                jTextArea1.setText(StringUtils.join(Utilities.getFileContent(selectedFile), ""));
+                setTitle(selectedFile.getName());
+            }
+        });
+
         jScrollPane3.setViewportView(jList1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -87,9 +116,9 @@ public class ExtractionViewer extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 618, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(12, 12, 12)
                         .addComponent(additionalInformationLabel)
@@ -103,7 +132,7 @@ public class ExtractionViewer extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane2)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE))
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(closeButton)
