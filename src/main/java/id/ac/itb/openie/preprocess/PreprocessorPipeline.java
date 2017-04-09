@@ -70,8 +70,8 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
     public void execute() throws Exception {
         System.out.println("Running preprocessor pipeline...");
 
-        HashMap<File, String> pipeQueue = null;
-        HashMap<File, String> nextPipeQueue = null;
+        HashMap<File, String> pipeQueue = new HashMap<>();
+        HashMap<File, String> nextPipeQueue = new HashMap<>();
 
         addReaderAndWriterIfNotExist();
 
@@ -79,13 +79,14 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
             this.totalProcessedPreprocessor++;
             this.currentlyRunningPreprocessor = preprocessorPipelineElement;
 
-            if (pipeQueue == null) {
-                pipeQueue = new HashMap<>();
-                nextPipeQueue = new HashMap<>();
-
+            if (((Preprocessor)preprocessorPipelineElement).getPreprocessorHandler().getPluginName().equalsIgnoreCase("Preprocessor File Reader")) {
                 HashMap<File, String> preprocessed = preprocessorPipelineElement.execute(null, null);
                 pipeQueue.putAll(preprocessed);
-                totalDocumentsToBePreprocessed = preprocessed.size();
+                totalDocumentsToBePreprocessed += preprocessed.size();
+            } else if (((Preprocessor)preprocessorPipelineElement).getPreprocessorHandler().getPluginName().equalsIgnoreCase("Preprocessor File Writer")) {
+                for (Map.Entry<File, String> pair : pipeQueue.entrySet()) {
+                    preprocessorPipelineElement.execute(pair.getKey(), pair.getValue());
+                }
             } else {
                 Iterator<Map.Entry<File, String>> it = pipeQueue.entrySet().iterator();
 
@@ -99,12 +100,10 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
 
                     nextPipeQueue.putAll(preprocessed);
                     currentlyPreprocessedDocuments++;
-
-                    it.remove(); // avoids a ConcurrentModificationException
                 }
 
                 pipeQueue = nextPipeQueue;
-                nextPipeQueue = new HashMap<File, String>();
+                nextPipeQueue = new HashMap<>();
             }
         }
     }
