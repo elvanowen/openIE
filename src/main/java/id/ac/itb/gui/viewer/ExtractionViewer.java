@@ -13,9 +13,13 @@ import org.apache.commons.lang3.StringUtils;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -26,6 +30,7 @@ public class ExtractionViewer extends javax.swing.JFrame {
 
     private File extractDirectory;
     private Relations relations = new Relations();
+    private ArrayList<File> files;
 
     /**
      * Creates new form ExtractionViewer
@@ -41,10 +46,63 @@ public class ExtractionViewer extends javax.swing.JFrame {
     }
 
     private void loadExtractions() {
-        ArrayList<File> files = Utilities.getDirectoryFiles(this.extractDirectory);
+        files = Utilities.getDirectoryFiles(this.extractDirectory);
 
         for (File file: files) {
             relations.addRelations(new Relations(file));
+        }
+    }
+
+    private void highlightRelations(Highlighter highlighter, String fileContent, Relations relations) {
+        Highlighter.HighlightPainter relationPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.orange);
+        Highlighter.HighlightPainter argumentPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.gray);
+
+        for (Relation relation: relations.getRelations()) {
+
+            String sentence = relation.getOriginSentence();
+            sentence = StringUtils.strip(sentence, ".").trim();
+
+            String rel = relation.getRelationTriple().getMiddle();
+            String arg1 = relation.getRelationTriple().getLeft();
+            String arg2 = relation.getRelationTriple().getRight();
+
+//            System.out.println("Check");
+//            System.out.println(fileContent);
+//            System.out.println(rel);
+//            System.out.println(fileContent.indexOf(rel));
+
+            int pointerRelStart = fileContent.indexOf(sentence) + sentence.indexOf(rel);
+            int pointerRelEnd = pointerRelStart + rel.length();
+
+            try {
+                if (pointerRelStart > 0) {
+                    highlighter.addHighlight(pointerRelStart, pointerRelEnd, relationPainter);
+                }
+            } catch (BadLocationException e1) {
+                e1.printStackTrace();
+            }
+
+            int pointerArg1Start = fileContent.indexOf(sentence) + sentence.indexOf(arg1);
+            int pointerArg1End = pointerArg1Start + arg1.length();
+
+            try {
+                if (pointerArg1Start > 0) {
+                    highlighter.addHighlight(pointerArg1Start, pointerArg1End, argumentPainter);
+                }
+            } catch (BadLocationException e1) {
+                e1.printStackTrace();
+            }
+
+            int pointerArg2Start = fileContent.indexOf(sentence) + sentence.indexOf(arg2);
+            int pointerArg2End = pointerArg2Start + arg2.length();
+
+            try {
+                if (pointerArg2Start > 0) {
+                    highlighter.addHighlight(pointerArg2Start, pointerArg2End, argumentPainter);
+                }
+            } catch (BadLocationException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 
@@ -73,7 +131,7 @@ public class ExtractionViewer extends javax.swing.JFrame {
             }
         });
 
-        additionalInformationLabel.setText(relations.getRelations().size() + " extraction files existed");
+        additionalInformationLabel.setText(files.size() + " extraction files existed");
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -83,9 +141,14 @@ public class ExtractionViewer extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTextArea1);
 
         HashSet<File> _files = new HashSet<>();
+        HashMap<String, Relations> relationsByFilename = new HashMap<>();
 
         for (Relation relation: relations.getRelations()) {
-            _files.add(new File(relation.getOriginFile()));
+            File relationSource = new File(relation.getOriginFile());
+            _files.add(relationSource);
+
+            relationsByFilename.putIfAbsent(relationSource.getName(), new Relations());
+            relationsByFilename.put(relationSource.getName(), relationsByFilename.get(relationSource.getName()).addRelation(relation));
         }
 
         ArrayList<File> files = new ArrayList<>(_files);
@@ -101,8 +164,15 @@ public class ExtractionViewer extends javax.swing.JFrame {
             public void valueChanged(ListSelectionEvent e) {
                 File selectedFile = files.get(jList1.getSelectedIndex());
                 System.out.println(selectedFile);
-                jTextArea1.setText(StringUtils.join(Utilities.getFileContent(selectedFile), ""));
+                String fileContent = StringUtils.join(Utilities.getFileContent(selectedFile), "");
+                jTextArea1.setText(fileContent);
                 setTitle(selectedFile.getName());
+
+                System.out.println(relationsByFilename.get(selectedFile.getName()));
+
+                Highlighter highlighter = jTextArea1.getHighlighter();
+
+                highlightRelations(highlighter, fileContent, relationsByFilename.get(selectedFile.getName()));
             }
         });
 
