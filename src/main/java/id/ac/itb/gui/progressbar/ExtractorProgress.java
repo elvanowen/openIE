@@ -120,7 +120,7 @@ public class ExtractorProgress extends javax.swing.JFrame {
         updateProgressBar(totalCurrentlyDocumentsExtracted, totalDocumentsToBeExtracted);
 
         int totalProcessedExtractor = extractorPipeline.getTotalProcessedExtractor();
-        int totalExtractor = extractorPipeline.getExtractorPipelineElements().size();
+        int totalExtractor = extractorPipeline.getNumberOfExtractors();
 
         if (extractorName.equalsIgnoreCase("")) {
             extractingPipelineProgressLabel.setText("Setting up extractors" + trail + StringUtils.repeat(" ", 40));

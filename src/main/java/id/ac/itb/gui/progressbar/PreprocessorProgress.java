@@ -120,7 +120,7 @@ public class PreprocessorProgress extends javax.swing.JFrame {
         updateProgressBar(totalCurrentlyDocumentsPreprocessed, totalDocumentsToBePreprocessed);
 
         int totalProcessedPreprocessor = preprocessorPipeline.getTotalProcessedPreprocessor();
-        int totalPreprocessor = preprocessorPipeline.getPreprocessorPipelineElements().size();
+        int totalPreprocessor = preprocessorPipeline.getNumberOfPreprocessors();
 
         if (preprocessorName.equalsIgnoreCase("")) {
             runningPreprocessorLabel.setText("Setting up preprocessors" + trail + StringUtils.repeat(" ", 40));

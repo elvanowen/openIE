@@ -32,6 +32,22 @@ public class ExtractorPipeline implements IOpenIePipelineElement {
         return this.extractorPipelineElements;
     }
 
+    public int getNumberOfExtractors() {
+        int n = 0;
+
+        for (IExtractorPipelineElement extractorPipelineElement: extractorPipelineElements) {
+            if (((Extractor)extractorPipelineElement).getExtractorHandler().getPluginName().equalsIgnoreCase("Extractor File Reader")) {
+                continue;
+            } else if (((Extractor)extractorPipelineElement).getExtractorHandler().getPluginName().equalsIgnoreCase("Extractor File Writer")) {
+                continue;
+            } else {
+                n++;
+            }
+        }
+
+        return n;
+    }
+
     private void addReaderAndWriterIfNotExist() {
         if (extractorPipelineElements.size() > 0) {
             PluginLoader pluginLoader = new PluginLoader();
@@ -66,7 +82,9 @@ public class ExtractorPipeline implements IOpenIePipelineElement {
 
     @Override
     public void willExecute() {
-        extractorPipelineHook.willExecute();
+        if (this.getNumberOfExtractors() > 0) {
+            extractorPipelineHook.willExecute();
+        }
     }
 
     public void execute() throws Exception {
@@ -74,47 +92,46 @@ public class ExtractorPipeline implements IOpenIePipelineElement {
 
         addReaderAndWriterIfNotExist();
 
-        HashMap<File, Pair<String, Relations>> pipeQueue = null;
-        HashMap<File, Pair<String, Relations>> nextPipeQueue = null;
+        HashMap<File, Pair<String, Relations>> pipeQueue = new HashMap<>();
+        HashMap<File, Pair<String, Relations>> nextPipeQueue = new HashMap<>();
 
         for (IExtractorPipelineElement extractorPipelineElement: extractorPipelineElements) {
-            this.totalProcessedExtractor++;
             this.currentlyRunningExtractor = extractorPipelineElement;
 
-            if (pipeQueue == null) {
-                pipeQueue = new HashMap<>();
-                nextPipeQueue = new HashMap<>();
-
+            if (((Extractor)extractorPipelineElement).getExtractorHandler().getPluginName().equalsIgnoreCase("Extractor File Reader")) {
                 HashMap<File, Pair<String, Relations>> extractedRelations = extractorPipelineElement.execute(null, null, null);
                 pipeQueue.putAll(extractedRelations);
-
-                totalDocumentsToBeExtracted = extractedRelations.size();
+                totalDocumentsToBeExtracted += extractedRelations.size();
+            } else if (((Extractor)extractorPipelineElement).getExtractorHandler().getPluginName().equalsIgnoreCase("Extractor File Writer")) {
+                for (Map.Entry<File, Pair<String, Relations>> pair : pipeQueue.entrySet()) {
+                    extractorPipelineElement.execute(pair.getKey(), pair.getValue().getLeft(), pair.getValue().getRight());
+                }
             } else {
+                this.totalProcessedExtractor++;
+
                 Iterator<Map.Entry<File, Pair<String, Relations>>> it = pipeQueue.entrySet().iterator();
 
                 currentlyExtractedDocuments = 0;
 
                 while (it.hasNext()) {
                     Map.Entry<File, Pair<String, Relations>> pair = it.next();
-                    System.out.println(pair.getKey() + " = " + pair.getValue());
-
                     HashMap<File, Pair<String, Relations>> preprocessed = extractorPipelineElement.execute(pair.getKey(), pair.getValue().getLeft(), pair.getValue().getRight());
 
                     nextPipeQueue.putAll(preprocessed);
                     currentlyExtractedDocuments++;
-
-                    it.remove(); // avoids a ConcurrentModificationException
                 }
 
                 pipeQueue = nextPipeQueue;
-                nextPipeQueue = new HashMap<File, Pair<String, Relations>>();
+                nextPipeQueue = new HashMap<>();
             }
         }
     }
 
     @Override
     public void didExecute() {
-        extractorPipelineHook.didExecute();
+        if (this.getNumberOfExtractors() > 0) {
+            extractorPipelineHook.didExecute();
+        }
     }
 
     public int getTotalProcessedExtractor() {

@@ -24,6 +24,20 @@ public class CrawlerPipeline implements IOpenIePipelineElement {
         return this.crawlerPipelineElements;
     }
 
+    public int getNumberOfCrawlers() {
+        int n = 0;
+
+        for (ICrawlerPipelineElement crawlerPipelineElement: crawlerPipelineElements) {
+            if (((Crawler)crawlerPipelineElement).getCrawlerhandler().getPluginName().equalsIgnoreCase("Crawler File Writer")) {
+                continue;
+            } else {
+                n++;
+            }
+        }
+
+        return n;
+    }
+
     private void addWriterIfNotExist() {
         if (crawlerPipelineElements.size() > 0) {
             PluginLoader pluginLoader = new PluginLoader();
@@ -69,7 +83,9 @@ public class CrawlerPipeline implements IOpenIePipelineElement {
 
     @Override
     public void willExecute() {
-        crawlerPipelineHook.willExecute();
+        if (this.getNumberOfCrawlers() > 0) {
+            crawlerPipelineHook.willExecute();
+        }
     }
 
     public void execute() throws Exception {
@@ -90,7 +106,9 @@ public class CrawlerPipeline implements IOpenIePipelineElement {
 
     @Override
     public void didExecute() {
-        crawlerPipelineHook.didExecute();
+        if (this.getNumberOfCrawlers() > 0) {
+            crawlerPipelineHook.didExecute();
+        }
     }
 
     public int getTotalProcessedCrawler() {

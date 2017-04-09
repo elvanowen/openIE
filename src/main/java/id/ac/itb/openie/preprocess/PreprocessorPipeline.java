@@ -30,6 +30,22 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
         return this.preprocessorPipelineElements;
     }
 
+    public int getNumberOfPreprocessors() {
+        int n = 0;
+
+        for (IPreprocessorPipelineElement preprocessorPipelineElement: preprocessorPipelineElements) {
+            if (((Preprocessor)preprocessorPipelineElement).getPreprocessorHandler().getPluginName().equalsIgnoreCase("Preprocessor File Reader")) {
+                continue;
+            } else if (((Preprocessor)preprocessorPipelineElement).getPreprocessorHandler().getPluginName().equalsIgnoreCase("Preprocessor File Writer")) {
+                continue;
+            } else {
+                n++;
+            }
+        }
+
+        return n;
+    }
+
     private void addReaderAndWriterIfNotExist() {
         if (preprocessorPipelineElements.size() > 0) {
             PluginLoader pluginLoader = new PluginLoader();
@@ -64,7 +80,9 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
 
     @Override
     public void willExecute() {
-        preprocessorPipelineHook.willExecute();
+        if (this.getNumberOfPreprocessors() > 0) {
+            preprocessorPipelineHook.willExecute();
+        }
     }
 
     public void execute() throws Exception {
@@ -76,7 +94,6 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
         addReaderAndWriterIfNotExist();
 
         for (IPreprocessorPipelineElement preprocessorPipelineElement: preprocessorPipelineElements) {
-            this.totalProcessedPreprocessor++;
             this.currentlyRunningPreprocessor = preprocessorPipelineElement;
 
             if (((Preprocessor)preprocessorPipelineElement).getPreprocessorHandler().getPluginName().equalsIgnoreCase("Preprocessor File Reader")) {
@@ -88,14 +105,13 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
                     preprocessorPipelineElement.execute(pair.getKey(), pair.getValue());
                 }
             } else {
+                this.totalProcessedPreprocessor++;
                 Iterator<Map.Entry<File, String>> it = pipeQueue.entrySet().iterator();
 
                 currentlyPreprocessedDocuments = 0;
 
                 while (it.hasNext()) {
                     Map.Entry<File, String> pair = it.next();
-                    System.out.println(pair.getKey() + " = " + pair.getValue());
-
                     HashMap<File, String> preprocessed = preprocessorPipelineElement.execute(pair.getKey(), pair.getValue());
 
                     nextPipeQueue.putAll(preprocessed);
@@ -110,7 +126,9 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
 
     @Override
     public void didExecute() {
-        preprocessorPipelineHook.didExecute();
+        if (this.getNumberOfPreprocessors() > 0) {
+            preprocessorPipelineHook.didExecute();
+        }
     }
 
     public IPreprocessorPipelineElement getCurrentlyRunningPreprocessor() {

@@ -26,9 +26,27 @@ public class PostprocessorPipeline implements IOpenIePipelineElement {
         return this;
     }
 
+    public int getNumberOfPostprocessors() {
+        int n = 0;
+
+        for (IPostprocessorPipelineElement postprocessorPipelineElement: postprocessorPipelineElements) {
+            if (((Postprocessor)postprocessorPipelineElement).getPostprocessorHandler().getPluginName().equalsIgnoreCase("Postprocessor File Reader")) {
+                continue;
+            } else if (((Postprocessor)postprocessorPipelineElement).getPostprocessorHandler().getPluginName().equalsIgnoreCase("Postprocessor File Writer")) {
+                continue;
+            } else {
+                n++;
+            }
+        }
+
+        return n;
+    }
+
     @Override
     public void willExecute() {
-        postprocessorPipelineHook.willExecute();
+        if (this.getNumberOfPostprocessors() > 0) {
+            postprocessorPipelineHook.willExecute();
+        }
     }
 
     public void execute() throws Exception {
@@ -38,35 +56,41 @@ public class PostprocessorPipeline implements IOpenIePipelineElement {
         HashMap<File, Relations> nextPipeQueue = null;
 
         for (IPostprocessorPipelineElement postprocessorPipelineElement: postprocessorPipelineElements) {
-            if (pipeQueue == null) {
-                pipeQueue = new HashMap<File, Relations>();
-                nextPipeQueue = new HashMap<File, Relations>();
+            this.currentlyRunningPostprocessor = postprocessorPipelineElement;
 
+            if (((Postprocessor)postprocessorPipelineElement).getPostprocessorHandler().getPluginName().equalsIgnoreCase("Postprocessor File Reader")) {
                 HashMap<File, Relations> postprocessed = postprocessorPipelineElement.execute(null, null);
                 pipeQueue.putAll(postprocessed);
+                totalDocumentsToBePostprocessed += postprocessed.size();
+            } else if (((Postprocessor)postprocessorPipelineElement).getPostprocessorHandler().getPluginName().equalsIgnoreCase("Postprocessor File Writer")) {
+                for (Map.Entry<File, Relations> pair : pipeQueue.entrySet()) {
+                    postprocessorPipelineElement.execute(pair.getKey(), pair.getValue());
+                }
             } else {
+                this.totalProcessedPostprocessor++;
                 Iterator<Map.Entry<File, Relations>> it = pipeQueue.entrySet().iterator();
+
+                currentlyPostprocessedDocuments = 0;
 
                 while (it.hasNext()) {
                     Map.Entry<File, Relations> pair = it.next();
-                    System.out.println(pair.getKey() + " = " + pair.getValue());
-
                     HashMap<File, Relations> preprocessed = postprocessorPipelineElement.execute(pair.getKey(), pair.getValue());
 
                     nextPipeQueue.putAll(preprocessed);
-
-                    it.remove(); // avoids a ConcurrentModificationException
+                    currentlyPostprocessedDocuments++;
                 }
 
                 pipeQueue = nextPipeQueue;
-                nextPipeQueue = new HashMap<File, Relations>();
+                nextPipeQueue = new HashMap<>();
             }
         }
     }
 
     @Override
     public void didExecute() {
-        postprocessorPipelineHook.didExecute();
+        if (this.getNumberOfPostprocessors() > 0) {
+            postprocessorPipelineHook.didExecute();
+        }
     }
 
     public int getTotalProcessedPostprocessor() {
