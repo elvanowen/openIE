@@ -1,14 +1,8 @@
 package id.ac.itb.openie.crawler;
 
-import org.apache.commons.lang3.tuple.Pair;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import ro.fortsoft.pf4j.ExtensionPoint;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -20,7 +14,7 @@ public interface ICrawlerHandler extends ExtensionPoint, Serializable {
     public HashMap<String, String> getAvailableConfigurations();
     public HashSet<String> getCrawlerStartingUrls();
     public Boolean shouldCrawlerFollowLink(String link);
-    public HashMap<String, String> extractContentFromHTML(String url, String html);
+    public HashMap<String, String> extract(String url, String html);
 
     // Hooks
     public void crawlerWillRun();

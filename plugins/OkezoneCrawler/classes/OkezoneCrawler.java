@@ -58,7 +58,7 @@ public class OkezoneCrawler extends Plugin {
             return link.contains("okezone.com/read");
         }
 
-        public HashMap<String, String> extractContentFromHTML(String url, String html) {
+        public HashMap<String, String> extract(String url, String html) {
             Document doc = Jsoup.parse(html);
             HashMap<String, String> output = new HashMap<>();
 

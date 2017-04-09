@@ -60,7 +60,7 @@ public class DetikNormalization extends Plugin {
         /* Input     : Semarang - Zebra Ujian SIM... */
         /* Output    : Zebra Ujian SIM... */
         private String removeMetadata(String fileContent) {
-            return fileContent.replaceFirst("(^.*?[—-]+)","").trim();
+            return fileContent.replaceFirst("(^.*?\\s[—-]+\\s)","").trim();
         }
 
         @Override

@@ -48,7 +48,7 @@ public class CrawlerFileWriter extends Plugin {
         }
 
         @Override
-        public HashMap<String, String> extractContentFromHTML(String url, String html) {
+        public HashMap<String, String> extract(String url, String html) {
             return null;
         }
 

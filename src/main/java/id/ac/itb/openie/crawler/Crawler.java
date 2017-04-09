@@ -98,7 +98,7 @@ public class Crawler extends WebCrawler implements ICrawlerPipelineElement {
             HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
             String html = htmlParseData.getHtml();
 
-            HashMap<String, String> fileContentMappings = currentlyRunningCrawler.getCrawlerhandler().extractContentFromHTML(url, html);
+            HashMap<String, String> fileContentMappings = currentlyRunningCrawler.getCrawlerhandler().extract(url, html);
             Iterator<Map.Entry<String, String>> it = fileContentMappings.entrySet().iterator();
 
             while (it.hasNext()) {

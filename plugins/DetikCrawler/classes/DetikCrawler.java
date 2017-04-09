@@ -1,6 +1,5 @@
 package classes;
 
-import id.ac.itb.openie.config.Config;
 import id.ac.itb.openie.crawler.ICrawlerHandler;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -10,7 +9,6 @@ import ro.fortsoft.pf4j.Extension;
 import ro.fortsoft.pf4j.Plugin;
 import ro.fortsoft.pf4j.PluginWrapper;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -65,7 +63,7 @@ public class DetikCrawler extends Plugin {
                     link.contains("detik.com/berita-ekonomi-bisnis/");
         }
 
-        public HashMap<String, String> extractContentFromHTML(String url, String html) {
+        public HashMap<String, String> extract(String url, String html) {
             Document doc = Jsoup.parse(html);
             HashMap<String, String> output = new HashMap<>();
 
