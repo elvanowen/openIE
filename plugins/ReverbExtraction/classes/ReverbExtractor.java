@@ -236,7 +236,7 @@ public class ReverbExtractor {
         return Pair.of(firstArgument, secondArgument);
     }
 
-    protected Relations extractRelationFromSentence(String sentence){
+    protected Relations extractRelationFromSentence(File file, String sentence){
 
         Pair<String, String> arguments = Pair.of("", "");
         String extractedVerb = "";
@@ -256,7 +256,7 @@ public class ReverbExtractor {
             }
 
             if (!arguments.getLeft().equalsIgnoreCase("") && !extractedVerb.equalsIgnoreCase("") && !arguments.getRight().equalsIgnoreCase("")) {
-                relations.addRelation(new Relation(arguments.getLeft(), extractedVerb, arguments.getRight(), sentence));
+                relations.addRelation(new Relation(arguments.getLeft(), extractedVerb, arguments.getRight(), file.getAbsolutePath(), sentence));
             }
         }
 
@@ -272,7 +272,7 @@ public class ReverbExtractor {
         Relations extractedRelations = new Relations();
 
         for (String sentence: sentenceTokenizer.tokenizeSentence(payload)) {
-            Relations _extractedRelations = extractRelationFromSentence(sentence);
+            Relations _extractedRelations = extractRelationFromSentence(file, sentence);
             extractedRelations.addRelations(_extractedRelations);
         }
 

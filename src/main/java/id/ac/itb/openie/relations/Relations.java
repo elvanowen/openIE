@@ -32,18 +32,18 @@ public class Relations {
 
     public Relations addRelations(Relations relations) {
         this.relations.addAll(relations.getRelations());
-
         return this;
     }
 
     public Relations(File file) {
-        String relationsString = Utilities.getFileContent(file).get(0);
-        Relations relations = new Relations();
+        String relationsString = StringUtils.join(Utilities.getFileContent(file), "\n");
 
-        Pattern p = Pattern.compile("Kalimat:\\s(.*)\\nRelasi:\\s(.*)\\((.*),(.*)\\)\\n");
+        Pattern p = Pattern.compile("Source:\\s(.*)\\nKalimat:\\s(.*)\\nRelasi:\\s(.*)\\((.*),(.*)\\)\\n");
         Matcher m = p.matcher(relationsString);
 
-        if (m.matches()) relations.addRelation(new Relation(m.group(3), m.group(2), m.group(4), m.group(1)));
+        if (m.matches()) {
+            this.relations.add(new Relation(m.group(4), m.group(3), m.group(5), m.group(1), m.group(2)));
+        }
     }
 
     public String toString() {

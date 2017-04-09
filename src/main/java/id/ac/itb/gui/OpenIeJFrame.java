@@ -10,6 +10,7 @@ import id.ac.itb.gui.config.ConfigDialog;
 import id.ac.itb.gui.progressbar.CrawlerProgress;
 import id.ac.itb.gui.progressbar.ExtractorProgress;
 import id.ac.itb.gui.progressbar.PreprocessorProgress;
+import id.ac.itb.gui.viewer.ExtractionViewer;
 import id.ac.itb.openie.crawler.*;
 import id.ac.itb.openie.extractor.*;
 import id.ac.itb.openie.pipeline.OpenIePipeline;
@@ -83,30 +84,43 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     }
 
     private void browseStartingDirectory() {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+//        JFileChooser fileChooser = new JFileChooser();
+//        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+//
+//        Preprocessor fileReaderPreprocessor = new Preprocessor();
+//
+//        for (Object iPreprocessorHandler: pluginLoader.getExtensions(IPreprocessorHandler.class)) {
+//            IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) iPreprocessorHandler;
+//            String pluginName = preprocessorHandler.getPluginName();
+//
+//            if (pluginName.equalsIgnoreCase("Preprocessor File Reader")) {
+//                fileReaderPreprocessor = new Preprocessor().setPreprocessorHandler(SerializationUtils.clone(preprocessorHandler));
+//                File defaultBrowseDirectory = new File(fileReaderPreprocessor.getPreprocessorHandler().getAvailableConfigurations().get("Input Directory"));
+//                fileChooser.setCurrentDirectory(new File(defaultBrowseDirectory.getParent()));
+//            }
+//        }
+//
+//        int returnValue = fileChooser.showOpenDialog(null);
+//        if (returnValue == JFileChooser.APPROVE_OPTION) {
+//            File selectedFile = fileChooser.getSelectedFile();
+//
+//            System.out.println(selectedFile);
+//
+//            fileReaderPreprocessor.getPreprocessorHandler().setAvailableConfigurations("Input Directory", selectedFile.getAbsolutePath());
+//            openIePipelineListModel.addElement(fileReaderPreprocessor);
+//        }
 
-        Preprocessor fileReaderPreprocessor = new Preprocessor();
+        for (Object iExtractorHandler: pluginLoader.getExtensions(IExtractorHandler.class)) {
+            IExtractorHandler extractorHandler = (IExtractorHandler) iExtractorHandler;
+            String pluginName = extractorHandler.getPluginName();
 
-        for (Object iPreprocessorHandler: pluginLoader.getExtensions(IPreprocessorHandler.class)) {
-            IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) iPreprocessorHandler;
-            String pluginName = preprocessorHandler.getPluginName();
+            if (pluginName.equalsIgnoreCase("Extractor File Writer")) {
+                Extractor fileWriterExtractor = new Extractor().setExtractorHandler(SerializationUtils.clone(extractorHandler));
+                File defaultBrowseDirectory = new File(fileWriterExtractor.getExtractorHandler().getAvailableConfigurations().get("Output Directory"));
 
-            if (pluginName.equalsIgnoreCase("Preprocessor File Reader")) {
-                fileReaderPreprocessor = new Preprocessor().setPreprocessorHandler(SerializationUtils.clone(preprocessorHandler));
-                File defaultBrowseDirectory = new File(fileReaderPreprocessor.getPreprocessorHandler().getAvailableConfigurations().get("Input Directory"));
-                fileChooser.setCurrentDirectory(new File(defaultBrowseDirectory.getParent()));
+                JFrame extractionViewer = new ExtractionViewer(defaultBrowseDirectory);
+                extractionViewer.setVisible(true);
             }
-        }
-
-        int returnValue = fileChooser.showOpenDialog(null);
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File selectedFile = fileChooser.getSelectedFile();
-
-            System.out.println(selectedFile);
-
-            fileReaderPreprocessor.getPreprocessorHandler().setAvailableConfigurations("Input Directory", selectedFile.getAbsolutePath());
-            openIePipelineListModel.addElement(fileReaderPreprocessor);
         }
     }
 
