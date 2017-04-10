@@ -16,7 +16,7 @@ import java.util.HashMap;
  * Created by elvanowen on 2/9/17.
  */
 
-public class ReverbExtractor {
+class ReverbExtractor {
 
     private enum EXTRACT_VERB_STATE {
         V, W, P
@@ -236,12 +236,10 @@ public class ReverbExtractor {
         return Pair.of(firstArgument, secondArgument);
     }
 
-    protected Relations extractRelationFromSentence(File file, String sentence){
+    private Relations extractRelationFromSentence(File file, String sentence){
 
         Pair<String, String> arguments = Pair.of("", "");
-        String extractedVerb = "";
-
-        System.out.println("origin sentence : " + sentence);
+        String extractedVerb;
 
         Relations relations = new Relations();
         ArrayList<Triple<String, Integer, Integer>> triples = extractVerbs(sentence);
@@ -256,7 +254,7 @@ public class ReverbExtractor {
             }
 
             if (!arguments.getLeft().equalsIgnoreCase("") && !extractedVerb.equalsIgnoreCase("") && !arguments.getRight().equalsIgnoreCase("")) {
-                relations.addRelation(new Relation(arguments.getLeft(), extractedVerb, arguments.getRight(), file.getAbsolutePath(), sentence));
+                relations.addRelation(new Relation(arguments.getLeft().trim(), extractedVerb.trim(), arguments.getRight().trim(), file.getAbsolutePath(), sentence));
             }
         }
 
@@ -272,14 +270,12 @@ public class ReverbExtractor {
         Relations extractedRelations = new Relations();
 
         for (String sentence: sentenceTokenizer.tokenizeSentence(payload)) {
+            System.out.println("Yuhu sentence" + sentence);
             Relations _extractedRelations = extractRelationFromSentence(file, sentence);
             extractedRelations.addRelations(_extractedRelations);
         }
 
         pipelineItems.put(file, Pair.of(payload, extractedRelations));
-
-        System.out.println("reverb pipelineItems");
-        System.out.println(pipelineItems);
 
         return pipelineItems;
     }

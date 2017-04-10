@@ -38,7 +38,7 @@ public class Relations {
     public Relations(File file) {
         String relationsString = StringUtils.join(Utilities.getFileContent(file), "\n");
 
-        Pattern p = Pattern.compile("Source:\\s(.*)\\nKalimat:\\s(.*)\\nRelasi:\\s(.*)\\((.*),(.*)\\)\\n");
+        Pattern p = Pattern.compile("Source:\\s(.*)\\nKalimat:\\s(.*)\\nRelasi:\\s(.*?)\\((.*),\\s(.*)\\)\\n");
         Matcher m = p.matcher(relationsString);
 
         while (m.find()) relations.add(new Relation(m.group(4), m.group(3), m.group(5), m.group(1), m.group(2)));

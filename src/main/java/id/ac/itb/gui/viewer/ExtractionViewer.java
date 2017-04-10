@@ -113,7 +113,7 @@ public class ExtractionViewer extends javax.swing.JFrame {
 
     private void highlightCurrentRelation() {
         Highlighter.HighlightPainter relationPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.orange);
-        Highlighter.HighlightPainter argumentPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.gray);
+        Highlighter.HighlightPainter argumentPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.green);
 
         String fileContent = StringUtils.join(Utilities.getFileContent(currentlySelectedFile), "");
         Relation relation = relationsByFilename.get(currentlySelectedFile.getName()).getRelations().get(currentRelationPointerIndex);
@@ -125,47 +125,80 @@ public class ExtractionViewer extends javax.swing.JFrame {
         String arg1 = relation.getRelationTriple().getLeft();
         String arg2 = relation.getRelationTriple().getRight();
 
-//            System.out.println("Check");
-//            System.out.println(fileContent);
-//            System.out.println(rel);
-//            System.out.println(fileContent.indexOf(rel));
+        System.out.println("Check");
+        System.out.println(fileContent);
+        System.out.println(sentence);
+        System.out.println(arg1);
+        System.out.println(rel);
+        System.out.println(arg2);
+        System.out.println(fileContent.indexOf(rel));
 
         // Remove old highlights
         for (Object highlight: currentHighlights) {
             highlighter.removeHighlight(highlight);
         }
 
-        int pointerRelStart = fileContent.indexOf(sentence) + sentence.indexOf(rel);
-        int pointerRelEnd = pointerRelStart + rel.length();
+        // Highlight each word in relation separately
+        String relSentence = sentence;
+        int offsetRelSentence = 0;
+        for (String word: rel.split("\\s")) {
+            int pointerRelStart = relSentence.indexOf(word);
+            int pointerRelEnd = pointerRelStart + word.length();
 
-        try {
-            if (pointerRelStart > 0) {
-                currentHighlights.add(highlighter.addHighlight(pointerRelStart, pointerRelEnd, relationPainter));
+            try {
+                if (pointerRelStart >= 0) {
+                    relSentence = relSentence.substring(pointerRelEnd);
+
+                    // Add offset
+                    currentHighlights.add(highlighter.addHighlight(fileContent.indexOf(sentence) + offsetRelSentence + pointerRelStart, fileContent.indexOf(sentence) + offsetRelSentence + pointerRelEnd, relationPainter));
+
+                    offsetRelSentence += pointerRelEnd;
+                }
+            } catch (BadLocationException e1) {
+                e1.printStackTrace();
             }
-        } catch (BadLocationException e1) {
-            e1.printStackTrace();
         }
 
-        int pointerArg1Start = fileContent.indexOf(sentence) + sentence.indexOf(arg1);
-        int pointerArg1End = pointerArg1Start + arg1.length();
+        // Highlight each word in 1st argument separately
+        String arg1Sentence = sentence;
+        int offsetArg1Sentence = 0;
+        for (String word: arg1.split("\\s")) {
+            int pointerArg1Start = arg1Sentence.indexOf(word);
+            int pointerArg1End = pointerArg1Start + word.length();
 
-        try {
-            if (pointerArg1Start > 0) {
-                currentHighlights.add(highlighter.addHighlight(pointerArg1Start, pointerArg1End, argumentPainter));
+            try {
+                if (pointerArg1Start >= 0) {
+                    arg1Sentence = arg1Sentence.substring(pointerArg1End);
+
+                    // Add offset
+                    currentHighlights.add(highlighter.addHighlight(fileContent.indexOf(sentence) + offsetArg1Sentence + pointerArg1Start, fileContent.indexOf(sentence) + offsetArg1Sentence + pointerArg1End, argumentPainter));
+
+                    offsetArg1Sentence += pointerArg1End;
+                }
+            } catch (BadLocationException e1) {
+                e1.printStackTrace();
             }
-        } catch (BadLocationException e1) {
-            e1.printStackTrace();
         }
 
-        int pointerArg2Start = fileContent.indexOf(sentence) + sentence.indexOf(arg2);
-        int pointerArg2End = pointerArg2Start + arg2.length();
+        // Highlight each word in 1st argument separately
+        String arg2Sentence = sentence;
+        int offsetArg2Sentence = 0;
+        for (String word: arg2.split("\\s")) {
+            int pointerArg2Start = arg2Sentence.indexOf(word);
+            int pointerArg2End = pointerArg2Start + word.length();
 
-        try {
-            if (pointerArg2Start > 0) {
-                currentHighlights.add(highlighter.addHighlight(pointerArg2Start, pointerArg2End, argumentPainter));
+            try {
+                if (pointerArg2Start >= 0) {
+                    arg2Sentence = arg2Sentence.substring(pointerArg2End);
+
+                    // Add offset
+                    currentHighlights.add(highlighter.addHighlight(fileContent.indexOf(sentence) + offsetArg2Sentence + pointerArg2Start, fileContent.indexOf(sentence) + offsetArg2Sentence + pointerArg2End, argumentPainter));
+
+                    offsetArg2Sentence += pointerArg2End;
+                }
+            } catch (BadLocationException e1) {
+                e1.printStackTrace();
             }
-        } catch (BadLocationException e1) {
-            e1.printStackTrace();
         }
     }
 
@@ -239,7 +272,13 @@ public class ExtractionViewer extends javax.swing.JFrame {
         jList1.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
+
+                // Reset pointer
+                currentRelationPointerIndex = 0;
+
+                // Set selected file
                 currentlySelectedFile = files.get(jList1.getSelectedIndex());
+
                 String fileContent = StringUtils.join(Utilities.getFileContent(currentlySelectedFile), "");
                 jTextArea1.setText(fileContent);
                 setTitle(currentlySelectedFile.getName());

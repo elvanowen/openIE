@@ -1497,6 +1497,32 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             public void didExecute() {
                 ((ExtractorProgress) extractorProgress).stopTimer();
                 extractorProgress.dispose();
+
+                int nFileWriter = 0;
+
+                for (IExtractorPipelineElement extractorPipelineElement: extractorPipeline.getExtractorPipelineElements()) {
+                    if (((Extractor) extractorPipelineElement).getExtractorHandler().getPluginName().equalsIgnoreCase("Extractor File Writer")) {
+                        nFileWriter++;
+
+                        File extractOutputDirectory = new File(((Extractor) extractorPipelineElement).getExtractorHandler().getAvailableConfigurations().get("Output Directory"));
+                        JFrame extractionViewer = new ExtractionViewer(extractOutputDirectory);
+                        extractionViewer.setVisible(true);
+                    }
+                }
+
+                if (nFileWriter == 0) { // Open default folder
+                    for (Object iExtractorHandler: pluginLoader.getExtensions(IExtractorHandler.class)) {
+                        IExtractorHandler extractorHandler = (IExtractorHandler) iExtractorHandler;
+                        String pluginName = extractorHandler.getPluginName();
+
+                        if (pluginName.equalsIgnoreCase("Extractor File Writer")) {
+                            Extractor extractor = new Extractor().setExtractorHandler(extractorHandler);
+                            File extractOutputDirectory = new File((extractor.getExtractorHandler().getAvailableConfigurations().get("Output Directory")));
+                            JFrame extractionViewer = new ExtractionViewer(extractOutputDirectory);
+                            extractionViewer.setVisible(true);
+                        }
+                    }
+                }
             }
         });
 
