@@ -121,6 +121,9 @@ public class ExtractionViewer extends javax.swing.JFrame {
         jTextArea1 = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
         jList1 = new javax.swing.JList<>();
+        nextButton = new javax.swing.JButton();
+        previousButton = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -157,9 +160,9 @@ public class ExtractionViewer extends javax.swing.JFrame {
             public int getSize() { return files.size(); }
             public String getElementAt(int i) { return (i+1) + ". " + files.get(i).getName() ; }
         });
+        jScrollPane3.setViewportView(jList1);
 
         jList1.addListSelectionListener(new ListSelectionListener() {
-
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 File selectedFile = files.get(jList1.getSelectedIndex());
@@ -168,15 +171,32 @@ public class ExtractionViewer extends javax.swing.JFrame {
                 jTextArea1.setText(fileContent);
                 setTitle(selectedFile.getName());
 
+                additionalInformationLabel.setText(relationsByFilename.get(selectedFile.getName()).getRelations().size() + " relations extracted.");
+
                 System.out.println(relationsByFilename.get(selectedFile.getName()));
 
                 Highlighter highlighter = jTextArea1.getHighlighter();
 
                 highlightRelations(highlighter, fileContent, relationsByFilename.get(selectedFile.getName()));
+
             }
         });
 
-        jScrollPane3.setViewportView(jList1);
+        nextButton.setText("Next");
+        nextButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nextButtonActionPerformed(evt);
+            }
+        });
+
+        previousButton.setText("Previous");
+        previousButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                previousButtonActionPerformed(evt);
+            }
+        });
+
+        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -193,6 +213,12 @@ public class ExtractionViewer extends javax.swing.JFrame {
                         .addGap(12, 12, 12)
                         .addComponent(additionalInformationLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(previousButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(nextButton)
+                        .addGap(4, 4, 4)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(2, 2, 2)
                         .addComponent(closeButton)))
                 .addContainerGap())
         );
@@ -204,9 +230,13 @@ public class ExtractionViewer extends javax.swing.JFrame {
                     .addComponent(jScrollPane2)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 577, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(closeButton)
-                    .addComponent(additionalInformationLabel))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(closeButton)
+                        .addComponent(additionalInformationLabel)
+                        .addComponent(nextButton)
+                        .addComponent(previousButton))
+                    .addComponent(jSeparator1))
                 .addContainerGap())
         );
 
@@ -221,6 +251,14 @@ public class ExtractionViewer extends javax.swing.JFrame {
         this.dispose();
 
     }//GEN-LAST:event_closeButtonActionPerformed
+
+    private void previousButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previousButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_previousButtonActionPerformed
+
+    private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_nextButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -263,6 +301,9 @@ public class ExtractionViewer extends javax.swing.JFrame {
     private javax.swing.JList<String> jList1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JButton nextButton;
+    private javax.swing.JButton previousButton;
     // End of variables declaration//GEN-END:variables
 }
