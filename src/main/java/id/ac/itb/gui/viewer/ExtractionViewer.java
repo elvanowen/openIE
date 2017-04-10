@@ -31,6 +31,11 @@ public class ExtractionViewer extends javax.swing.JFrame {
     private File extractDirectory;
     private Relations relations = new Relations();
     private ArrayList<File> files;
+    private int currentRelationPointerIndex = 0;
+    private ArrayList<Object> currentHighlights = new ArrayList<>();
+    private File currentlySelectedFile;
+    private HashMap<String, Relations> relationsByFilename = new HashMap<>();
+    private Highlighter highlighter;
 
     /**
      * Creates new form ExtractionViewer
@@ -106,6 +111,74 @@ public class ExtractionViewer extends javax.swing.JFrame {
         }
     }
 
+    private void highlightCurrentRelation() {
+        Highlighter.HighlightPainter relationPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.orange);
+        Highlighter.HighlightPainter argumentPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.gray);
+
+        String fileContent = StringUtils.join(Utilities.getFileContent(currentlySelectedFile), "");
+        Relation relation = relationsByFilename.get(currentlySelectedFile.getName()).getRelations().get(currentRelationPointerIndex);
+
+        String sentence = relation.getOriginSentence();
+        sentence = StringUtils.strip(sentence, ".").trim();
+
+        String rel = relation.getRelationTriple().getMiddle();
+        String arg1 = relation.getRelationTriple().getLeft();
+        String arg2 = relation.getRelationTriple().getRight();
+
+//            System.out.println("Check");
+//            System.out.println(fileContent);
+//            System.out.println(rel);
+//            System.out.println(fileContent.indexOf(rel));
+
+        // Remove old highlights
+        for (Object highlight: currentHighlights) {
+            highlighter.removeHighlight(highlight);
+        }
+
+        int pointerRelStart = fileContent.indexOf(sentence) + sentence.indexOf(rel);
+        int pointerRelEnd = pointerRelStart + rel.length();
+
+        try {
+            if (pointerRelStart > 0) {
+                currentHighlights.add(highlighter.addHighlight(pointerRelStart, pointerRelEnd, relationPainter));
+            }
+        } catch (BadLocationException e1) {
+            e1.printStackTrace();
+        }
+
+        int pointerArg1Start = fileContent.indexOf(sentence) + sentence.indexOf(arg1);
+        int pointerArg1End = pointerArg1Start + arg1.length();
+
+        try {
+            if (pointerArg1Start > 0) {
+                currentHighlights.add(highlighter.addHighlight(pointerArg1Start, pointerArg1End, argumentPainter));
+            }
+        } catch (BadLocationException e1) {
+            e1.printStackTrace();
+        }
+
+        int pointerArg2Start = fileContent.indexOf(sentence) + sentence.indexOf(arg2);
+        int pointerArg2End = pointerArg2Start + arg2.length();
+
+        try {
+            if (pointerArg2Start > 0) {
+                currentHighlights.add(highlighter.addHighlight(pointerArg2Start, pointerArg2End, argumentPainter));
+            }
+        } catch (BadLocationException e1) {
+            e1.printStackTrace();
+        }
+    }
+
+    private void showCurrentPointerProgress() {
+        int totalRelations = relationsByFilename.get(currentlySelectedFile.getName()).getRelations().size();
+
+        if (totalRelations > 0) {
+            additionalInformationLabel.setText(totalRelations + " relations extracted." + " Pointer : " + (currentRelationPointerIndex+1) + "/" + totalRelations);
+        } else {
+            additionalInformationLabel.setText("No relations extracted.");
+        }
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -144,7 +217,6 @@ public class ExtractionViewer extends javax.swing.JFrame {
         jScrollPane2.setViewportView(jTextArea1);
 
         HashSet<File> _files = new HashSet<>();
-        HashMap<String, Relations> relationsByFilename = new HashMap<>();
 
         for (Relation relation: relations.getRelations()) {
             File relationSource = new File(relation.getOriginFile());
@@ -162,23 +234,22 @@ public class ExtractionViewer extends javax.swing.JFrame {
         });
         jScrollPane3.setViewportView(jList1);
 
+        highlighter = jTextArea1.getHighlighter();
+
         jList1.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                File selectedFile = files.get(jList1.getSelectedIndex());
-                System.out.println(selectedFile);
-                String fileContent = StringUtils.join(Utilities.getFileContent(selectedFile), "");
+                currentlySelectedFile = files.get(jList1.getSelectedIndex());
+                String fileContent = StringUtils.join(Utilities.getFileContent(currentlySelectedFile), "");
                 jTextArea1.setText(fileContent);
-                setTitle(selectedFile.getName());
+                setTitle(currentlySelectedFile.getName());
 
-                additionalInformationLabel.setText(relationsByFilename.get(selectedFile.getName()).getRelations().size() + " relations extracted.");
+                showCurrentPointerProgress();
 
-                System.out.println(relationsByFilename.get(selectedFile.getName()));
+//                System.out.println(relationsByFilename.get(currentlySelectedFile.getName()));
 
-                Highlighter highlighter = jTextArea1.getHighlighter();
-
-                highlightRelations(highlighter, fileContent, relationsByFilename.get(selectedFile.getName()));
-
+//                highlightRelations(highlighter, fileContent, relationsByFilename.get(selectedFile.getName()));
+                highlightCurrentRelation();
             }
         });
 
@@ -254,10 +325,26 @@ public class ExtractionViewer extends javax.swing.JFrame {
 
     private void previousButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_previousButtonActionPerformed
         // TODO add your handling code here:
+
+        if (currentRelationPointerIndex - 1 >=0) {
+            currentRelationPointerIndex--;
+
+            highlightCurrentRelation();
+            showCurrentPointerProgress();
+        }
     }//GEN-LAST:event_previousButtonActionPerformed
 
     private void nextButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nextButtonActionPerformed
         // TODO add your handling code here:
+
+        int totalRelations = relationsByFilename.get(currentlySelectedFile.getName()).getRelations().size();
+
+        if (currentRelationPointerIndex + 1 < totalRelations) {
+            currentRelationPointerIndex++;
+
+            highlightCurrentRelation();
+            showCurrentPointerProgress();
+        }
     }//GEN-LAST:event_nextButtonActionPerformed
 
     /**
