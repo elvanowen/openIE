@@ -24,6 +24,9 @@ import org.apache.commons.lang3.SerializationUtils;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -36,10 +39,6 @@ import java.util.HashMap;
  */
 public class OpenIeJFrame extends javax.swing.JFrame {
 
-    private DefaultListModel crawlPipelineListModel = new DefaultListModel();
-    private DefaultListModel preprocessPipelineListModel = new DefaultListModel();
-    private DefaultListModel extractPipelineListModel = new DefaultListModel();
-    private DefaultListModel postprocessPipelineListModel = new DefaultListModel();
     private DefaultListModel openIePipelineListModel = new DefaultListModel();
     private PluginLoader pluginLoader = new PluginLoader();
 
@@ -108,19 +107,6 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             fileReaderPreprocessor.getPreprocessorHandler().setAvailableConfigurations("Input Directory", selectedFile.getAbsolutePath());
             openIePipelineListModel.addElement(fileReaderPreprocessor);
         }
-
-//        for (Object iExtractorHandler: pluginLoader.getExtensions(IExtractorHandler.class)) {
-//            IExtractorHandler extractorHandler = (IExtractorHandler) iExtractorHandler;
-//            String pluginName = extractorHandler.getPluginName();
-//
-//            if (pluginName.equalsIgnoreCase("Extractor File Writer")) {
-//                Extractor fileWriterExtractor = new Extractor().setExtractorHandler(SerializationUtils.clone(extractorHandler));
-//                File defaultBrowseDirectory = new File(fileWriterExtractor.getExtractorHandler().getAvailableConfigurations().get("Output Directory"));
-//
-//                JFrame extractionViewer = new ExtractionViewer(defaultBrowseDirectory);
-//                extractionViewer.setVisible(true);
-//            }
-//        }
     }
 
     /**
@@ -273,6 +259,35 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         openExtractionViewerLabel.setFont(new java.awt.Font("Lucida Grande", 2, 13)); // NOI18N
         openExtractionViewerLabel.setForeground(new java.awt.Color(0, 102, 255));
         openExtractionViewerLabel.setText("(open viewer)");
+        openExtractionViewerLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        openExtractionViewerLabel.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+
+                File defaultBrowseDirectory = null;
+
+                for (Object iExtractorHandler: pluginLoader.getExtensions(IExtractorHandler.class)) {
+                    IExtractorHandler extractorHandler = (IExtractorHandler) iExtractorHandler;
+                    String pluginName = extractorHandler.getPluginName();
+
+                    if (pluginName.equalsIgnoreCase("Extractor File Writer")) {
+                        Extractor fileWriterExtractor = new Extractor().setExtractorHandler(SerializationUtils.clone(extractorHandler));
+                        defaultBrowseDirectory = new File(fileWriterExtractor.getExtractorHandler().getAvailableConfigurations().get("Output Directory"));
+                    }
+                }
+
+                JFileChooser fileChooser = new JFileChooser();
+                fileChooser.setCurrentDirectory(new File(defaultBrowseDirectory.getParent()));
+                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+                int returnValue = fileChooser.showOpenDialog(null);
+                if (returnValue == JFileChooser.APPROVE_OPTION) {
+                    File browseDirectory = fileChooser.getSelectedFile();
+
+                    JFrame extractionViewer = new ExtractionViewer(browseDirectory);
+                    extractionViewer.setVisible(true);
+                }
+            }
+        });
 
         startingDirectoryLabel.setText("Starting Directory");
 
@@ -624,7 +639,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private void loadPluginsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadPluginsButtonActionPerformed
         // TODO add your handling code here:
 
-        browseStartingDirectory();
+        loadPlugin();
     }//GEN-LAST:event_loadPluginsButtonActionPerformed
 
     private void openIESectionAddCrawlersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openIESectionAddCrawlersButtonActionPerformed
@@ -818,6 +833,9 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
     private void browseStartingDirectoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseStartingDirectoryButtonActionPerformed
         // TODO add your handling code here:
+
+        browseStartingDirectory();
+
     }//GEN-LAST:event_browseStartingDirectoryButtonActionPerformed
 
     private void addEvaluationRelationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEvaluationRelationButtonActionPerformed
