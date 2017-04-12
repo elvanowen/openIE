@@ -24,7 +24,6 @@ import org.apache.commons.lang3.SerializationUtils;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -133,10 +132,11 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jSeparator1 = new javax.swing.JSeparator();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel5 = new javax.swing.JPanel();
-        startingDirectoryLabel = new javax.swing.JLabel();
-        browseStartingDirectoryButton = new javax.swing.JButton();
+        loadPluginsLabel = new javax.swing.JLabel();
+        loadPluginsButton = new javax.swing.JButton();
         jSeparator3 = new javax.swing.JSeparator();
         openIESectionPreprocessLabel = new javax.swing.JLabel();
         openIESectionPreprocessComboBox = new javax.swing.JComboBox<>();
@@ -151,6 +151,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         openIESectionAddPostprocessesButton = new javax.swing.JButton();
         openIESectionExecutionPipelineLabel = new javax.swing.JLabel();
         openIESectionRemovePipelineElementButton = new javax.swing.JButton();
+        openIePipelineDragDropList = new id.ac.itb.gui.dragdroplist.DragDropList(openIePipelineListModel);
         jSeparator12 = new javax.swing.JSeparator();
         jSeparator13 = new javax.swing.JSeparator();
         jScrollPane6 = new javax.swing.JScrollPane();
@@ -159,64 +160,37 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         openIESectionCrawlerLabel = new javax.swing.JLabel();
         openIESectionCrawlerComboBox = new javax.swing.JComboBox<>();
         openIESectionAddCrawlersButton = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
-        loadCrawlerButton = new javax.swing.JButton();
-        configureCrawlerButton = new javax.swing.JButton();
-        crawlerComboBox = new javax.swing.JComboBox<Object>();
-        runCrawlerButton = new javax.swing.JButton();
-        crawlerPipelineLabel = new javax.swing.JLabel();
-        addCrawlerButton = new javax.swing.JButton();
-        crawlerListLabel = new javax.swing.JLabel();
-        removeCrawlerButton = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JSeparator();
+        openExtractionViewerLabel = new javax.swing.JLabel();
+        startingDirectoryLabel = new javax.swing.JLabel();
+        browseStartingDirectoryButton = new javax.swing.JButton();
+        jSeparator14 = new javax.swing.JSeparator();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList<>();
+        jScrollPane7 = new javax.swing.JScrollPane();
+        jList2 = new javax.swing.JList<>();
+        sentencesLabel = new javax.swing.JLabel();
+        addNewRelationsLabel = new javax.swing.JLabel();
+        argument1EvaluationTextField = new javax.swing.JTextField();
+        relationEvaluationTextField = new javax.swing.JTextField();
+        argument2EvaluationTextField = new javax.swing.JTextField();
+        addEvaluationRelationButton = new javax.swing.JButton();
+        addedRelationsLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jPanel2 = new javax.swing.JPanel();
-        crawlerPipelineDragDropList = new id.ac.itb.gui.dragdroplist.DragDropList(crawlPipelineListModel);
-        preprocessorPipelineDragDropList = new id.ac.itb.gui.dragdroplist.DragDropList(preprocessPipelineListModel);
-        extractorPipelineDragDropList = new id.ac.itb.gui.dragdroplist.DragDropList(extractPipelineListModel);
-        openIePipelineDragDropList = new id.ac.itb.gui.dragdroplist.DragDropList(openIePipelineListModel);
-        postprocessorPipelineDragDropList = new id.ac.itb.gui.dragdroplist.DragDropList(postprocessPipelineListModel);
-        preprocessorListLabel = new javax.swing.JLabel();
-        preprocessorComboBox = new javax.swing.JComboBox<>();
-        preprocessorPipelineLabel = new javax.swing.JLabel();
-        addPreprocessorButton = new javax.swing.JButton();
-        removePreprocessorButton = new javax.swing.JButton();
-        jSeparator5 = new javax.swing.JSeparator();
-        loadPreprocessorButton = new javax.swing.JButton();
-        configurePreprocessorButton = new javax.swing.JButton();
-        runPreprocessorButton = new javax.swing.JButton();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        jPanel3 = new javax.swing.JPanel();
-        extractorListLabel = new javax.swing.JLabel();
-        extractorComboBox = new javax.swing.JComboBox<>();
-        extractorPipelineLabel = new javax.swing.JLabel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        addExtractorButton = new javax.swing.JButton();
-        removeExtractorButton = new javax.swing.JButton();
-        jSeparator8 = new javax.swing.JSeparator();
-        loadExtractorButton = new javax.swing.JButton();
-        configureExtractorButton = new javax.swing.JButton();
-        runExtractorButton = new javax.swing.JButton();
-        jPanel4 = new javax.swing.JPanel();
-        postprocessorListLabel = new javax.swing.JLabel();
-        postprocessorComboBox = new javax.swing.JComboBox<>();
-        postprocessorPipelineLabel = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        addPostprocessorButton = new javax.swing.JButton();
-        removePostprocessorButton = new javax.swing.JButton();
+        jList3 = new javax.swing.JList<>();
+        removeEvaluationButton = new javax.swing.JButton();
+        runEvaluationButton = new javax.swing.JButton();
+        saveEvaluationButton = new javax.swing.JButton();
         jSeparator2 = new javax.swing.JSeparator();
-        loadPostprocessorButton = new javax.swing.JButton();
-        configurePostprocessorButton = new javax.swing.JButton();
-        runPostprocessorButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        startingDirectoryLabel.setText("Starting Directory");
+        loadPluginsLabel.setText("Load Plugins");
 
-        browseStartingDirectoryButton.setText("Browse");
-        browseStartingDirectoryButton.addActionListener(new java.awt.event.ActionListener() {
+        loadPluginsButton.setText("Browse");
+        loadPluginsButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                browseStartingDirectoryButtonActionPerformed(evt);
+                loadPluginsButtonActionPerformed(evt);
             }
         });
 
@@ -257,34 +231,6 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         openIESectionExecutionPipelineLabel.setText("Execution Pipeline");
 
-        openIePipelineDragDropList.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent ev) {
-
-                Object selectedPipelineElement = openIePipelineDragDropList.getSelectedValue();
-                HashMap<String, String> availableConfigurations = null;
-
-                if (selectedPipelineElement != null) {
-                    if (selectedPipelineElement instanceof Crawler) {
-                        availableConfigurations = ((Crawler)selectedPipelineElement).getCrawlerhandler().getAvailableConfigurations();
-                    } else if (selectedPipelineElement instanceof Preprocessor) {
-                        availableConfigurations = ((Preprocessor)selectedPipelineElement).getPreprocessorHandler().getAvailableConfigurations();
-                    } else if (selectedPipelineElement instanceof Extractor) {
-                        availableConfigurations = ((Extractor)selectedPipelineElement).getExtractorHandler().getAvailableConfigurations();
-                    } else if (selectedPipelineElement instanceof Postprocessor) {
-                        availableConfigurations = ((Postprocessor)selectedPipelineElement).getPostprocessorHandler().getAvailableConfigurations();
-                    }
-
-                    if (availableConfigurations != null) {
-                        openIESectionConfigurePipelineElementButton1.setEnabled(true);
-                    } else {
-                        openIESectionConfigurePipelineElementButton1.setEnabled(false);
-                    }
-
-                    openIESectionRemovePipelineElementButton.setEnabled(true);
-                }
-            }
-        });
-
         openIESectionRemovePipelineElementButton.setText("Remove");
         openIESectionRemovePipelineElementButton.setEnabled(false);
         openIESectionRemovePipelineElementButton.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -324,8 +270,50 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         });
 
         jScrollPane6.setViewportView(openIePipelineDragDropList);
+        openExtractionViewerLabel.setFont(new java.awt.Font("Lucida Grande", 2, 13)); // NOI18N
+        openExtractionViewerLabel.setForeground(new java.awt.Color(0, 102, 255));
+        openExtractionViewerLabel.setText("(open viewer)");
+
+        startingDirectoryLabel.setText("Starting Directory");
+
+        browseStartingDirectoryButton.setText("Browse");
+        browseStartingDirectoryButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                browseStartingDirectoryButtonActionPerformed(evt);
+            }
+        });
+
+        jSeparator14.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        openIePipelineDragDropList.addListSelectionListener(new ListSelectionListener() {
+            public void valueChanged(ListSelectionEvent ev) {
+
+                Object selectedPipelineElement = openIePipelineDragDropList.getSelectedValue();
+                HashMap<String, String> availableConfigurations = null;
+
+                if (selectedPipelineElement != null) {
+                    if (selectedPipelineElement instanceof Crawler) {
+                        availableConfigurations = ((Crawler)selectedPipelineElement).getCrawlerhandler().getAvailableConfigurations();
+                    } else if (selectedPipelineElement instanceof Preprocessor) {
+                        availableConfigurations = ((Preprocessor)selectedPipelineElement).getPreprocessorHandler().getAvailableConfigurations();
+                    } else if (selectedPipelineElement instanceof Extractor) {
+                        availableConfigurations = ((Extractor)selectedPipelineElement).getExtractorHandler().getAvailableConfigurations();
+                    } else if (selectedPipelineElement instanceof Postprocessor) {
+                        availableConfigurations = ((Postprocessor)selectedPipelineElement).getPostprocessorHandler().getAvailableConfigurations();
+                    }
+
+                    if (availableConfigurations != null) {
+                        openIESectionConfigurePipelineElementButton1.setEnabled(true);
+                    } else {
+                        openIESectionConfigurePipelineElementButton1.setEnabled(false);
+                    }
+
+                    openIESectionRemovePipelineElementButton.setEnabled(true);
+                }
+            }
+        });
+
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -345,7 +333,9 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addComponent(openIESectionExtractionLabel)
-                                .addGap(63, 63, 63))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(openExtractionViewerLabel)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addComponent(openIESectionExtractionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -362,9 +352,6 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                     .addComponent(jSeparator3)
                     .addComponent(jSeparator11)
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(openIESectionExecutionPipelineLabel)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -373,18 +360,29 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                             .addComponent(openIESectionRemovePipelineElementButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(openIESectionExecutePipelineElementButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(startingDirectoryLabel)
-                            .addComponent(browseStartingDirectoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addComponent(openIESectionExecutionPipelineLabel)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(loadPluginsLabel)
+                            .addComponent(loadPluginsButton, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(openIESectionCrawlerLabel)
+                            .addComponent(startingDirectoryLabel)
+                            .addComponent(browseStartingDirectoryButton, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addComponent(openIESectionCrawlerComboBox, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(openIESectionAddCrawlersButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(openIESectionAddCrawlersButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addComponent(openIESectionCrawlerLabel)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -392,18 +390,23 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel5Layout.createSequentialGroup()
-                            .addComponent(startingDirectoryLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(browseStartingDirectoryButton))
-                        .addComponent(jSeparator12, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(openIESectionCrawlerLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(openIESectionCrawlerComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(openIESectionAddCrawlersButton))))
+                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(openIESectionCrawlerComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(openIESectionAddCrawlersButton))
+                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addComponent(startingDirectoryLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(browseStartingDirectoryButton))
+                            .addComponent(jSeparator14, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addComponent(loadPluginsLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(loadPluginsButton))
+                            .addComponent(jSeparator12, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(openIESectionCrawlerLabel)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(7, 7, 7)
@@ -416,7 +419,9 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                                 .addComponent(openIESectionPreprocessComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addComponent(openIESectionAddPreprocessesButton)))
                         .addGroup(jPanel5Layout.createSequentialGroup()
-                            .addComponent(openIESectionExtractionLabel)
+                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(openIESectionExtractionLabel)
+                                .addComponent(openExtractionViewerLabel))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(openIESectionExtractionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -439,7 +444,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                         .addComponent(openIESectionRemovePipelineElementButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(openIESectionConfigurePipelineElementButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 93, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 109, Short.MAX_VALUE)
                         .addComponent(openIESectionExecutePipelineElementButton))
                     .addComponent(jScrollPane6))
                 .addContainerGap())
@@ -447,503 +452,155 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Open IE", jPanel5);
 
-        loadCrawlerButton.setText("Browse");
-        loadCrawlerButton.addActionListener(new java.awt.event.ActionListener() {
+        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane2.setViewportView(jList1);
+
+        jList2.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane7.setViewportView(jList2);
+
+        sentencesLabel.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
+        sentencesLabel.setText("Sentences:");
+
+        addNewRelationsLabel.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
+        addNewRelationsLabel.setText("Add New Relations:");
+
+        argument1EvaluationTextField.setText("Argument 1");
+        argument1EvaluationTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                loadCrawlerButtonActionPerformed(evt);
+                argument1EvaluationTextFieldActionPerformed(evt);
             }
         });
 
-        configureCrawlerButton.setText("Configure");
-        configureCrawlerButton.setEnabled(false);
-        configureCrawlerButton.addActionListener(new java.awt.event.ActionListener() {
+        relationEvaluationTextField.setText("Relation");
+
+        argument2EvaluationTextField.setText("Argument 2");
+
+        addEvaluationRelationButton.setText("+");
+        addEvaluationRelationButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                configureCrawlerButtonActionPerformed(evt);
+                addEvaluationRelationButtonActionPerformed(evt);
             }
         });
 
-        crawlerComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        addedRelationsLabel.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
+        addedRelationsLabel.setText("Added Relations:");
 
-        runCrawlerButton.setText("Run Crawler Pipeline");
-        runCrawlerButton.addActionListener(new java.awt.event.ActionListener() {
+        jList3.setModel(new javax.swing.AbstractListModel<String>() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public String getElementAt(int i) { return strings[i]; }
+        });
+        jScrollPane1.setViewportView(jList3);
+
+        removeEvaluationButton.setText("Remove");
+        removeEvaluationButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                runCrawlerButtonActionPerformed(evt);
+                removeEvaluationButtonActionPerformed(evt);
             }
         });
 
-        crawlerPipelineLabel.setText("Crawler Pipeline");
-
-        addCrawlerButton.setText("+");
-        addCrawlerButton.addActionListener(new java.awt.event.ActionListener() {
+        runEvaluationButton.setText("Evaluate");
+        runEvaluationButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addCrawlerButtonActionPerformed(evt);
+                runEvaluationButtonActionPerformed(evt);
             }
         });
 
-        crawlerListLabel.setText("Pipeline Elements");
-
-        removeCrawlerButton.setText("Remove From Pipeline");
-        removeCrawlerButton.setEnabled(false);
-        removeCrawlerButton.addActionListener(new java.awt.event.ActionListener() {
+        saveEvaluationButton.setText("Save");
+        saveEvaluationButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removeCrawlerButtonActionPerformed(evt);
+                saveEvaluationButtonActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(crawlerComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(addCrawlerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(loadCrawlerButton))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(crawlerListLabel)
-                            .addComponent(crawlerPipelineLabel)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel6Layout.createSequentialGroup()
+                                        .addComponent(argument1EvaluationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(relationEvaluationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(argument2EvaluationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(addEvaluationRelationButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPanel6Layout.createSequentialGroup()
+                                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(sentencesLabel)
+                                            .addComponent(addNewRelationsLabel)
+                                            .addComponent(addedRelationsLabel))
+                                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addContainerGap())))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(runCrawlerButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(removeCrawlerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(configureCrawlerButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING))))
-                .addContainerGap())
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(removeEvaluationButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(saveEvaluationButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(runEvaluationButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(crawlerListLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(crawlerComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(addCrawlerButton)
-                    .addComponent(loadCrawlerButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(crawlerPipelineLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(removeCrawlerButton)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2)
+                    .addGroup(jPanel6Layout.createSequentialGroup()
+                        .addComponent(sentencesLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(configureCrawlerButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 177, Short.MAX_VALUE)
-                        .addComponent(runCrawlerButton))
-                    .addComponent(jScrollPane1))
+                        .addComponent(addNewRelationsLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(argument1EvaluationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(relationEvaluationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(argument2EvaluationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(addEvaluationRelationButton))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(addedRelationsLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1)
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addComponent(removeEvaluationButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(saveEvaluationButton)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(runEvaluationButton)))))
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Crawl", jPanel1);
-
-        preprocessorListLabel.setText("Pipeline Elements");
-
-        preprocessorComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getExtensions(IPreprocessorHandler.class).toArray()));
-
-        preprocessorPipelineLabel.setText("Preprocessor Pipeline");
-
-        addPreprocessorButton.setText("+");
-        addPreprocessorButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addPreprocessorButtonActionPerformed(evt);
-            }
-        });
-
-        removePreprocessorButton.setText("Remove From Pipeline");
-        removePreprocessorButton.setEnabled(false);
-        removePreprocessorButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removePreprocessorButtonActionPerformed(evt);
-            }
-        });
-
-        loadPreprocessorButton.setText("Browse");
-        loadPreprocessorButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                loadPreprocessorButtonActionPerformed(evt);
-            }
-        });
-
-        crawlerComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getExtensions(ICrawlerHandler.class).toArray()));
-
-        configurePreprocessorButton.setText("Configure");
-        configurePreprocessorButton.setEnabled(false);
-        configurePreprocessorButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                configurePreprocessorButtonActionPerformed(evt);
-            }
-        });
-        jScrollPane1.setViewportView(crawlerPipelineDragDropList);
-
-
-        crawlerPipelineDragDropList.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent ev) {
-                Crawler selectedCrawler = (Crawler) crawlerPipelineDragDropList.getSelectedValue();
-
-                if (selectedCrawler != null) {
-                    if (selectedCrawler.getCrawlerhandler().getAvailableConfigurations() != null) {
-                        configureCrawlerButton.setEnabled(true);
-                    } else {
-                        configureCrawlerButton.setEnabled(false);
-                    }
-
-                    removeCrawlerButton.setEnabled(true);
-                }
-            }
-        });
-        preprocessorPipelineDragDropList.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent ev) {
-                Preprocessor selectedPreprocessor = (Preprocessor) preprocessorPipelineDragDropList.getSelectedValue();
-
-                if (selectedPreprocessor != null) {
-                    if (selectedPreprocessor.getPreprocessorHandler().getAvailableConfigurations() != null) {
-                        configurePreprocessorButton.setEnabled(true);
-                    } else {
-                        configurePreprocessorButton.setEnabled(false);
-                    }
-
-                    String pluginName = selectedPreprocessor.getPreprocessorHandler().getPluginName();
-                    int nFileReader = 0, nFileWriter = 0;
-
-                    for (int i=0;i<preprocessorPipelineDragDropList.getModel().getSize();i++) {
-                        if (((Preprocessor)preprocessorPipelineDragDropList.getModel().getElementAt(i)).getPreprocessorHandler().getPluginName().contains("File Reader")) {
-                            nFileReader++;
-                        } else if (((Preprocessor)preprocessorPipelineDragDropList.getModel().getElementAt(i)).getPreprocessorHandler().getPluginName().contains("File Writer")) {
-                            nFileWriter++;
-                        }
-                    }
-
-                    if (pluginName.contains("File Reader")) {
-                        if (nFileReader > 1) removePreprocessorButton.setEnabled(true);
-                        else removePreprocessorButton.setEnabled(false);
-                    }
-
-                    if (pluginName.contains("File Writer")) {
-                        if (nFileWriter > 1) removePreprocessorButton.setEnabled(true);
-                        else removePreprocessorButton.setEnabled(false);
-                    }
-                }
-            }
-        });
-
-        runPreprocessorButton.setText("Run Preprocessor Pipeline");
-        runPreprocessorButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                runPreprocessorButtonActionPerformed(evt);
-            }
-        });
-
-        jScrollPane5.setViewportView(preprocessorPipelineDragDropList);
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(preprocessorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(addPreprocessorButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(loadPreprocessorButton)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(preprocessorListLabel)
-                                    .addComponent(preprocessorPipelineLabel))
-                                .addGap(277, 277, 277))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(runPreprocessorButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(removePreprocessorButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(configurePreprocessorButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jSeparator5, javax.swing.GroupLayout.Alignment.TRAILING))))
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(preprocessorListLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(preprocessorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(addPreprocessorButton)
-                    .addComponent(loadPreprocessorButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(preprocessorPipelineLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(removePreprocessorButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(configurePreprocessorButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 177, Short.MAX_VALUE)
-                        .addComponent(runPreprocessorButton))
-                    .addComponent(jScrollPane5))
-                .addContainerGap())
-        );
-
-        jTabbedPane1.addTab("Preprocess", jPanel2);
-
-        extractorListLabel.setText("Pipeline Elements");
-
-        extractorPipelineDragDropList.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent ev) {
-                Extractor selectedExtractor = (Extractor) extractorPipelineDragDropList.getSelectedValue();
-                if (selectedExtractor != null && selectedExtractor.getExtractorHandler().getAvailableConfigurations() != null) {
-                    configureExtractorButton.setEnabled(true);
-                } else {
-                    configureExtractorButton.setEnabled(false);
-                }
-
-                removeExtractorButton.setEnabled(true);
-            }
-        });
-
-        extractorComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getExtensions(IExtractorHandler.class).toArray()));
-
-        extractorComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                extractorComboBoxActionPerformed(evt);
-            }
-        });
-
-        extractorPipelineLabel.setText("Extractor Pipeline");
-
-        addExtractorButton.setText("+");
-        addExtractorButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addExtractorButtonActionPerformed(evt);
-            }
-        });
-
-        removeExtractorButton.setText("Remove From Pipeline");
-        removeExtractorButton.setEnabled(false);
-        removeExtractorButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removeExtractorButtonActionPerformed(evt);
-            }
-        });
-
-        loadExtractorButton.setText("Browse");
-        loadExtractorButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                loadExtractorButtonActionPerformed(evt);
-            }
-        });
-
-        configureExtractorButton.setText("Configure");
-        configureExtractorButton.setEnabled(false);
-        configureExtractorButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                configureExtractorButtonActionPerformed(evt);
-            }
-        });
-
-        runExtractorButton.setText("Run Extractor Pipeline");
-        runExtractorButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                runExtractorButtonActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(extractorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(addExtractorButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(loadExtractorButton)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(extractorListLabel)
-                            .addComponent(extractorPipelineLabel)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(runExtractorButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(removeExtractorButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(configureExtractorButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jSeparator8, javax.swing.GroupLayout.Alignment.TRAILING))))
-                .addContainerGap())
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(extractorListLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(extractorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(addExtractorButton)
-                    .addComponent(loadExtractorButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(extractorPipelineLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(removeExtractorButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator8, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(configureExtractorButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 177, Short.MAX_VALUE)
-                        .addComponent(runExtractorButton))
-                    .addComponent(jScrollPane4))
-                .addContainerGap())
-        );
-
-        jTabbedPane1.addTab("Extract", jPanel3);
-
-        postprocessorListLabel.setText("Pipeline Elements");
-        jScrollPane4.setViewportView(extractorPipelineDragDropList);
-
-        postprocessorPipelineDragDropList.addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent ev) {
-                Postprocessor selectedPostprocessor = (Postprocessor) postprocessorPipelineDragDropList.getSelectedValue();
-                if (selectedPostprocessor != null && selectedPostprocessor.getPostprocessorHandler().getAvailableConfigurations() != null) {
-                    configurePostprocessorButton.setEnabled(true);
-                } else {
-                    configurePostprocessorButton.setEnabled(false);
-                }
-
-                removePostprocessorButton.setEnabled(true);
-            }
-        });
-
-        postprocessorComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getExtensions(IPostprocessorHandler.class).toArray()));
-
-        postprocessorComboBox.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                postprocessorComboBoxActionPerformed(evt);
-            }
-        });
-
-        postprocessorPipelineLabel.setText("Postprocessor Pipeline");
-
-        addPostprocessorButton.setText("+");
-        addPostprocessorButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                addPostprocessorButtonActionPerformed(evt);
-            }
-        });
-
-        removePostprocessorButton.setText("Remove From Pipeline");
-        removePostprocessorButton.setEnabled(false);
-        removePostprocessorButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                removePostprocessorButtonActionPerformed(evt);
-            }
-        });
-
-        loadPostprocessorButton.setText("Browse");
-        loadPostprocessorButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                loadPostprocessorButtonActionPerformed(evt);
-            }
-        });
-
-        configurePostprocessorButton.setText("Configure");
-        configurePostprocessorButton.setEnabled(false);
-        configurePostprocessorButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                configurePostprocessorButtonActionPerformed(evt);
-            }
-        });
-
-        runPostprocessorButton.setText("Run Postprocessor Pipeline");
-        runPostprocessorButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                runPostprocessorButtonActionPerformed(evt);
-            }
-        });
-
-        jScrollPane3.setViewportView(postprocessorPipelineDragDropList);
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(postprocessorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 504, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(addPostprocessorButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(loadPostprocessorButton)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(postprocessorListLabel)
-                            .addComponent(postprocessorPipelineLabel)
-                            .addGroup(jPanel4Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(runPostprocessorButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(removePostprocessorButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(configurePostprocessorButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING))))
-                .addContainerGap())
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(postprocessorListLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(postprocessorComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(addPostprocessorButton)
-                    .addComponent(loadPostprocessorButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(postprocessorPipelineLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
-                        .addComponent(removePostprocessorButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(configurePostprocessorButton)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 177, Short.MAX_VALUE)
-                        .addComponent(runPostprocessorButton))
-                    .addComponent(jScrollPane3))
-                .addContainerGap())
-        );
-
-        jTabbedPane1.addTab("Postprocess", jPanel4);
+        jTabbedPane1.addTab("Evaluation", jPanel6);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -960,399 +617,15 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         );
 
         pack();
-        pack();
         setLocationRelativeTo(null);
         setTitle("Sistem Open IE Bahasa Indonesia");
     }// </editor-fold>//GEN-END:initComponents
 
-    private void configureCrawlerButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                  
-        // TODO add your handling code here:
-
-        Crawler selectedCrawler = (Crawler) crawlerPipelineDragDropList.getSelectedValue();
-
-        if (selectedCrawler != null) {
-            // Show configuration dialog
-            new ConfigDialog(selectedCrawler.getCrawlerhandler().getAvailableConfigurations()).setVisible(true);
-        }
-
-    }                                                 
-
-    private void removeCrawlerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCrawlerButton1ActionPerformed
-        // TODO add your handling code here:
-
-        Crawler selectedCrawler = (Crawler) crawlerPipelineDragDropList.getSelectedValue();
-        crawlPipelineListModel.removeElement(selectedCrawler);
-
-    }//GEN-LAST:event_addCrawlerButton1ActionPerformed
-
-    private void addCrawlerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addCrawlerButtonActionPerformed
-        // TODO add your handling code here:
-
-        ICrawlerHandler crawlerHandler = (ICrawlerHandler) pluginLoader.getExtensions(ICrawlerHandler.class).get(crawlerComboBox.getSelectedIndex());
-        Crawler crawler = new Crawler().setCrawlerhandler(SerializationUtils.clone(crawlerHandler));
-
-        crawlPipelineListModel.addElement(crawler);
-        crawlerPipelineDragDropList.printItems();
-    }//GEN-LAST:event_addCrawlerButtonActionPerformed
-
-    private void runCrawlerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runCrawlerButtonActionPerformed
-        // TODO add your handling code here:
-
-        CrawlerPipeline crawlerPipeline = new CrawlerPipeline();
-        OpenIePipeline openIePipeline = new OpenIePipeline();
-
-        for (int i = 0; i< crawlPipelineListModel.size(); i++) {
-            Crawler crawler = (Crawler) crawlPipelineListModel.get(i);
-            crawlerPipeline.addPipelineElement(crawler);
-        }
-
-        openIePipeline.addPipelineElement(crawlerPipeline);
-
-        crawlerPipeline.setCrawlerPipelineHook(new ICrawlerPipelineHook() {
-
-            JFrame crawlerProgress = new CrawlerProgress(crawlerPipeline);
-
-            @Override
-            public void willExecute() {
-                crawlerProgress.setVisible(true);
-            }
-
-            @Override
-            public void didExecute() {
-                ((CrawlerProgress) crawlerProgress).stopTimer();
-                crawlerProgress.dispose();
-
-                int nFileWriter = 0;
-
-                for (ICrawlerPipelineElement crawlerPipelineElement: crawlerPipeline.getCrawlerPipelineElements()) {
-                    if (((Crawler) crawlerPipelineElement).getCrawlerhandler().getPluginName().equalsIgnoreCase("Crawler File Writer")) {
-                        nFileWriter++;
-
-                        try {
-                            Desktop.getDesktop().open(new File(((Crawler) crawlerPipelineElement).getCrawlerhandler().getAvailableConfigurations().get("Output Directory")));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                if (nFileWriter == 0) { // Open default folder
-                    for (Object iCrawlerHandler: pluginLoader.getExtensions(ICrawlerHandler.class)) {
-                        ICrawlerHandler crawlerHandler = (ICrawlerHandler) iCrawlerHandler;
-                        String pluginName = crawlerHandler.getPluginName();
-
-                        if (pluginName.equalsIgnoreCase("Crawler File Writer")) {
-                            Crawler crawler = new Crawler().setCrawlerhandler(crawlerHandler);
-                            try {
-                                Desktop.getDesktop().open(new File((crawler.getCrawlerhandler().getAvailableConfigurations().get("Output Directory"))));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
-            @Override
-            protected String doInBackground() throws InterruptedException {
-                try {
-                    openIePipeline.execute();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                return "";
-            }
-        };
-
-        worker.execute();
-
-    }//GEN-LAST:event_runCrawlerButtonActionPerformed
-
-    private void loadCrawlerButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadCrawlerButtonActionPerformed
-        // TODO add your handling code here:
-
-        loadPlugin();
-
-    }//GEN-LAST:event_loadCrawlerButtonActionPerformed
-
-    private void addPreprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPreprocessorButtonActionPerformed
-        // TODO add your handling code here:
-
-        IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) pluginLoader.getExtensions(IPreprocessorHandler.class).get(preprocessorComboBox.getSelectedIndex());
-        Preprocessor preprocessor = new Preprocessor().setPreprocessorHandler(SerializationUtils.clone(preprocessorHandler));
-
-        preprocessPipelineListModel.addElement(preprocessor);
-        preprocessorPipelineDragDropList.printItems();
-
-    }//GEN-LAST:event_addPreprocessorButtonActionPerformed
-
-    private void removePreprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removePreprocessorButtonActionPerformed
-        // TODO add your handling code here:
-
-        Preprocessor selectedPreprocessor = (Preprocessor) preprocessorPipelineDragDropList.getSelectedValue();
-        preprocessPipelineListModel.removeElement(selectedPreprocessor);
-
-    }//GEN-LAST:event_removePreprocessorButtonActionPerformed
-
-    private void loadPreprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadPreprocessorButtonActionPerformed
-        // TODO add your handling code here:
-
-        loadPlugin();
-
-    }//GEN-LAST:event_loadPreprocessorButtonActionPerformed
-
-    private void runPreprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runPreprocessorButtonActionPerformed
-        // TODO add your handling code here:
-
-        PreprocessorPipeline preprocessorPipeline = new PreprocessorPipeline();
-        OpenIePipeline openIePipeline = new OpenIePipeline();
-
-        for (int i = 0; i< preprocessPipelineListModel.size(); i++) {
-            IPreprocessorPipelineElement preprocessorPipelineElement = (IPreprocessorPipelineElement) preprocessPipelineListModel.get(i);
-            preprocessorPipeline.addPipelineElement(preprocessorPipelineElement);
-        }
-
-        openIePipeline.addPipelineElement(preprocessorPipeline);
-
-        preprocessorPipeline.setPreprocessorPipelineHook(new IPreprocessorPipelineHook() {
-
-            JFrame preprocessorProgress = new PreprocessorProgress(preprocessorPipeline);
-
-            @Override
-            public void willExecute() {
-                preprocessorProgress.setVisible(true);
-            }
-
-            @Override
-            public void didExecute() {
-                ((PreprocessorProgress) preprocessorProgress).stopTimer();
-                preprocessorProgress.dispose();
-
-                int nFileWriter = 0;
-
-                for (IPreprocessorPipelineElement preprocessorPipelineElement: preprocessorPipeline.getPreprocessorPipelineElements()) {
-                    if (((Preprocessor) preprocessorPipelineElement).getPreprocessorHandler().getPluginName().equalsIgnoreCase("Preprocessor File Writer")) {
-                        nFileWriter++;
-
-                        try {
-                            Desktop.getDesktop().open(new File(((Preprocessor) preprocessorPipelineElement).getPreprocessorHandler().getAvailableConfigurations().get("Output Directory")));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                if (nFileWriter == 0) { // Open default folder
-                    for (Object iPreprocessorHandler: pluginLoader.getExtensions(IPreprocessorHandler.class)) {
-                        IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) iPreprocessorHandler;
-                        String pluginName = preprocessorHandler.getPluginName();
-
-                        if (pluginName.equalsIgnoreCase("Preprocessor File Writer")) {
-                            Preprocessor preprocessor = new Preprocessor().setPreprocessorHandler(preprocessorHandler);
-                            try {
-                                Desktop.getDesktop().open(new File((preprocessor.getPreprocessorHandler().getAvailableConfigurations().get("Output Directory"))));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
-            @Override
-            protected String doInBackground() throws InterruptedException {
-                try {
-                    openIePipeline.execute();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                return "";
-            }
-        };
-
-        worker.execute();
-
-    }//GEN-LAST:event_runPreprocessorButtonActionPerformed
-
-    private void configurePreprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configurePreprocessorButtonActionPerformed
-        // TODO add your handling code here:
-
-        Preprocessor selectedPreprocessor = (Preprocessor) preprocessorPipelineDragDropList.getSelectedValue();
-
-        if (selectedPreprocessor != null) {
-            // Show configuration dialog
-            new ConfigDialog(selectedPreprocessor.getPreprocessorHandler().getAvailableConfigurations()).setVisible(true);
-        }
-
-    }//GEN-LAST:event_configurePreprocessorButtonActionPerformed
-
-    private void addPostprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addPostprocessorButtonActionPerformed
-        // TODO add your handling code here:
-
-        IPostprocessorHandler postprocessorHandler = (IPostprocessorHandler) pluginLoader.getExtensions(IPostprocessorHandler.class).get(postprocessorComboBox.getSelectedIndex());
-        Postprocessor postprocessor = new Postprocessor().setPostprocessorHandler(SerializationUtils.clone(postprocessorHandler));
-
-        postprocessPipelineListModel.addElement(postprocessor);
-        postprocessorPipelineDragDropList.printItems();
-
-    }//GEN-LAST:event_addPostprocessorButtonActionPerformed
-
-    private void removePostprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removePostprocessorButtonActionPerformed
-        // TODO add your handling code here:
-
-        Postprocessor selectedPostprocessor = (Postprocessor) postprocessorPipelineDragDropList.getSelectedValue();
-        postprocessPipelineListModel.removeElement(selectedPostprocessor);
-
-    }//GEN-LAST:event_removePostprocessorButtonActionPerformed
-
-    private void loadPostprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadPostprocessorButtonActionPerformed
-        // TODO add your handling code here:
-
-        loadPlugin();
-
-    }//GEN-LAST:event_loadPostprocessorButtonActionPerformed
-
-    private void runPostprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runPostprocessorButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_runPostprocessorButtonActionPerformed
-
-    private void addExtractorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addExtractorButtonActionPerformed
-        // TODO add your handling code here:
-
-        IExtractorHandler extractorHandler = (IExtractorHandler) pluginLoader.getExtensions(IExtractorHandler.class).get(extractorComboBox.getSelectedIndex());
-        Extractor extractor = new Extractor().setExtractorHandler(SerializationUtils.clone(extractorHandler));
-
-        extractPipelineListModel.addElement(extractor);
-        extractorPipelineDragDropList.printItems();
-
-    }//GEN-LAST:event_addExtractorButtonActionPerformed
-
-    private void removeExtractorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeExtractorButtonActionPerformed
-        // TODO add your handling code here:
-
-        IExtractorHandler selectedExtractorHandler = (IExtractorHandler) extractorPipelineDragDropList.getSelectedValue();
-        extractPipelineListModel.removeElement(selectedExtractorHandler);
-
-    }//GEN-LAST:event_removeExtractorButtonActionPerformed
-
-    private void loadExtractorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadExtractorButtonActionPerformed
-        // TODO add your handling code here:
-
-        loadPlugin();
-
-    }//GEN-LAST:event_loadExtractorButtonActionPerformed
-
-    private void runExtractorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runExtractorButtonActionPerformed
-        // TODO add your handling code here:
-
-        ExtractorPipeline extractorPipeline = new ExtractorPipeline();
-        OpenIePipeline openIePipeline = new OpenIePipeline();
-
-        for (int i = 0; i< extractPipelineListModel.size(); i++) {
-            IExtractorPipelineElement extractorPipelineElement = (IExtractorPipelineElement) extractPipelineListModel.get(i);
-            extractorPipeline.addPipelineElement(extractorPipelineElement);
-        }
-
-        openIePipeline.addPipelineElement(extractorPipeline);
-
-        extractorPipeline.setExtractorPipelineHook(new IExtractorPipelineHook() {
-
-            JFrame extractorProgress = new ExtractorProgress(extractorPipeline);
-
-            @Override
-            public void willExecute() {
-                extractorProgress.setVisible(true);
-            }
-
-            @Override
-            public void didExecute() {
-                ((ExtractorProgress) extractorProgress).stopTimer();
-                extractorProgress.dispose();
-
-                int nFileWriter = 0;
-
-                for (IExtractorPipelineElement extractorPipelineElement: extractorPipeline.getExtractorPipelineElements()) {
-                    if (((Extractor) extractorPipelineElement).getExtractorHandler().getPluginName().equalsIgnoreCase("Extractor File Writer")) {
-                        nFileWriter++;
-
-                        try {
-                            Desktop.getDesktop().open(new File(((Extractor) extractorPipelineElement).getExtractorHandler().getAvailableConfigurations().get("Output Directory")));
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
-                if (nFileWriter == 0) { // Open default folder
-                    for (Object iExtractorHandler: pluginLoader.getExtensions(IExtractorHandler.class)) {
-                        IExtractorHandler extractorHandler = (IExtractorHandler) iExtractorHandler;
-                        String pluginName = extractorHandler.getPluginName();
-
-                        if (pluginName.equalsIgnoreCase("Extractor File Writer")) {
-                            Extractor extractor = new Extractor().setExtractorHandler(extractorHandler);
-                            try {
-                                Desktop.getDesktop().open(new File((extractor.getExtractorHandler().getAvailableConfigurations().get("Output Directory"))));
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                }
-            }
-        });
-
-        SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
-            @Override
-            protected String doInBackground() throws InterruptedException {
-                try {
-                    openIePipeline.execute();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                return "";
-            }
-        };
-
-        worker.execute();
-
-    }//GEN-LAST:event_runExtractorButtonActionPerformed
-
-    private void configurePostprocessorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configurePostprocessorButtonActionPerformed
-        // TODO add your handling code here:
-
-        Postprocessor selectedPostprocessor = (Postprocessor) postprocessorPipelineDragDropList.getSelectedValue();
-
-        if (selectedPostprocessor != null) {
-            // Show configuration dialog
-            new ConfigDialog(selectedPostprocessor.getPostprocessorHandler().getAvailableConfigurations()).setVisible(true);
-        }
-
-    }//GEN-LAST:event_configurePostprocessorButtonActionPerformed
-
-    private void postprocessorComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postprocessorComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_postprocessorComboBoxActionPerformed
-
-    private void configureExtractorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_configureExtractorButtonActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_configureExtractorButtonActionPerformed
-
-    private void extractorComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_extractorComboBoxActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_extractorComboBoxActionPerformed
-
-    private void browseStartingDirectoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseStartingDirectoryButtonActionPerformed
+    private void loadPluginsButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadPluginsButtonActionPerformed
         // TODO add your handling code here:
 
         browseStartingDirectory();
-    }//GEN-LAST:event_browseStartingDirectoryButtonActionPerformed
+    }//GEN-LAST:event_loadPluginsButtonActionPerformed
 
     private void openIESectionAddCrawlersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openIESectionAddCrawlersButtonActionPerformed
         // TODO add your handling code here:
@@ -1543,6 +816,30 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
     }//GEN-LAST:event_openIESectionExecutePipelineElementButtonActionPerformed
 
+    private void browseStartingDirectoryButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_browseStartingDirectoryButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_browseStartingDirectoryButtonActionPerformed
+
+    private void addEvaluationRelationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEvaluationRelationButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_addEvaluationRelationButtonActionPerformed
+
+    private void removeEvaluationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeEvaluationButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_removeEvaluationButtonActionPerformed
+
+    private void saveEvaluationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveEvaluationButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_saveEvaluationButtonActionPerformed
+
+    private void runEvaluationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runEvaluationButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_runEvaluationButtonActionPerformed
+
+    private void argument1EvaluationTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_argument1EvaluationTextFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_argument1EvaluationTextFieldActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1560,55 +857,38 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton addCrawlerButton;
-    private javax.swing.JButton addExtractorButton;
-    private javax.swing.JComboBox<Object> crawlerComboBox;
-    private javax.swing.JButton addPostprocessorButton;
-    private javax.swing.JButton addPreprocessorButton;
+    private javax.swing.JButton addEvaluationRelationButton;
+    private javax.swing.JLabel addNewRelationsLabel;
+    private javax.swing.JLabel addedRelationsLabel;
+    private javax.swing.JTextField argument1EvaluationTextField;
+    private javax.swing.JTextField argument2EvaluationTextField;
     private javax.swing.JButton browseStartingDirectoryButton;
-    private javax.swing.JButton configureCrawlerButton;
-    private javax.swing.JButton configureExtractorButton;
-    private javax.swing.JButton configurePostprocessorButton;
-    private javax.swing.JButton configurePreprocessorButton;
-    private javax.swing.JLabel crawlerListLabel;
-    private javax.swing.JLabel crawlerPipelineLabel;
-    private javax.swing.JComboBox<Object> extractorComboBox;
-    private javax.swing.JLabel extractorListLabel;
-    private javax.swing.JLabel extractorPipelineLabel;
-    private javax.swing.JPanel jPanel1;
-    private id.ac.itb.gui.dragdroplist.DragDropList crawlerPipelineDragDropList;
-    private id.ac.itb.gui.dragdroplist.DragDropList preprocessorPipelineDragDropList;
-    private id.ac.itb.gui.dragdroplist.DragDropList openIePipelineDragDropList;
-    private id.ac.itb.gui.dragdroplist.DragDropList extractorPipelineDragDropList;
-    private id.ac.itb.gui.dragdroplist.DragDropList postprocessorPipelineDragDropList;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
+    private javax.swing.JList<String> jList1;
+    private javax.swing.JList<String> jList2;
+    private javax.swing.JList<String> jList3;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator10;
     private javax.swing.JSeparator jSeparator11;
     private javax.swing.JSeparator jSeparator12;
     private javax.swing.JSeparator jSeparator13;
+    private javax.swing.JSeparator jSeparator14;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JSeparator jSeparator5;
-    private javax.swing.JSeparator jSeparator8;
+    private id.ac.itb.gui.dragdroplist.DragDropList openIePipelineDragDropList;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JButton loadCrawlerButton;
-    private javax.swing.JButton loadExtractorButton;
-    private javax.swing.JButton loadPostprocessorButton;
-    private javax.swing.JButton loadPreprocessorButton;
+    private javax.swing.JButton loadPluginsButton;
+    private javax.swing.JLabel loadPluginsLabel;
+    private javax.swing.JLabel openExtractionViewerLabel;
     private javax.swing.JButton openIESectionAddCrawlersButton;
     private javax.swing.JButton openIESectionAddExtractionButton;
     private javax.swing.JButton openIESectionAddPostprocessesButton;
     private javax.swing.JButton openIESectionAddPreprocessesButton;
-    private javax.swing.JComboBox<Object> postprocessorComboBox;
     private javax.swing.JButton openIESectionConfigurePipelineElementButton1;
     private javax.swing.JComboBox<Object> openIESectionCrawlerComboBox;
     private javax.swing.JLabel openIESectionCrawlerLabel;
@@ -1621,19 +901,11 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private javax.swing.JComboBox<Object> openIESectionPreprocessComboBox;
     private javax.swing.JLabel openIESectionPreprocessLabel;
     private javax.swing.JButton openIESectionRemovePipelineElementButton;
-    private javax.swing.JLabel postprocessorListLabel;
-    private javax.swing.JLabel postprocessorPipelineLabel;
-    private javax.swing.JComboBox<Object> preprocessorComboBox;
-    private javax.swing.JLabel preprocessorListLabel;
-    private javax.swing.JLabel preprocessorPipelineLabel;
-    private javax.swing.JButton removeCrawlerButton;
-    private javax.swing.JButton removeExtractorButton;
-    private javax.swing.JButton removePostprocessorButton;
-    private javax.swing.JButton removePreprocessorButton;
-    private javax.swing.JButton runCrawlerButton;
-    private javax.swing.JButton runExtractorButton;
-    private javax.swing.JButton runPostprocessorButton;
-    private javax.swing.JButton runPreprocessorButton;
+    private javax.swing.JTextField relationEvaluationTextField;
+    private javax.swing.JButton removeEvaluationButton;
+    private javax.swing.JButton runEvaluationButton;
+    private javax.swing.JButton saveEvaluationButton;
+    private javax.swing.JLabel sentencesLabel;
     private javax.swing.JLabel startingDirectoryLabel;
     // End of variables declaration//GEN-END:variables
 }
