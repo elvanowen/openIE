@@ -38,6 +38,10 @@ public class Utilities {
         }
     }
 
+    public static Boolean removeFile(File fileToBeRemoved) {
+        return fileToBeRemoved.delete();
+    }
+
     public static ArrayList<File> getDirectoryFiles(final File folder) {
 
         ArrayList<File> files = new ArrayList<File>();

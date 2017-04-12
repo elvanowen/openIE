@@ -12,6 +12,7 @@ import id.ac.itb.gui.progressbar.ExtractorProgress;
 import id.ac.itb.gui.progressbar.PreprocessorProgress;
 import id.ac.itb.gui.viewer.ExtractionViewer;
 import id.ac.itb.nlp.SentenceTokenizer;
+import id.ac.itb.openie.config.Config;
 import id.ac.itb.openie.crawler.*;
 import id.ac.itb.openie.extractor.*;
 import id.ac.itb.openie.pipeline.OpenIePipeline;
@@ -48,7 +49,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private PluginLoader pluginLoader = new PluginLoader();
     private ArrayList<File> evaluationFiles;
     private ArrayList<String> evaluationSentences;
-    private Relations evaluationRelations = new Relations();
+    private HashMap<File, Relations> evaluationRelationsMap = new HashMap<>();
 
     /**
      * Creates new form CustomizeCrawlerJFrame
@@ -115,6 +116,44 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             fileReaderPreprocessor.getPreprocessorHandler().setAvailableConfigurations("Input Directory", selectedFile.getAbsolutePath());
             openIePipelineListModel.addElement(fileReaderPreprocessor);
         }
+    }
+
+    private void refreshEvaluationRelationsList() {
+        Relations evaluationRelations = new Relations();
+
+        if (jList1.getSelectedIndex() > 0) {
+            File selectedEvaluationFile = evaluationFiles.get(jList1.getSelectedIndex());
+            Relations _evaluationRelations = evaluationRelationsMap.get(selectedEvaluationFile);
+
+            if (_evaluationRelations != null) {
+                evaluationRelations = _evaluationRelations;
+            } else {
+                // Load from file if exist
+                String evaluationDir = System.getProperty("user.dir") + File.separator + new Config().getProperty("EVALUATION_LABEL_OUTPUT_RELATIVE_PATH");
+
+                File evaluationRelationsFile = new File(evaluationDir + File.separator + selectedEvaluationFile.getName());
+                if (evaluationRelationsFile.exists()) {
+                    evaluationRelationsMap.put(selectedEvaluationFile, new Relations(evaluationRelationsFile));
+                } else {
+                    evaluationRelationsMap.put(selectedEvaluationFile, new Relations());
+                }
+            }
+        }
+
+        final Relations finalEvaluationRelations = evaluationRelations;
+        jList3.setModel(new javax.swing.AbstractListModel<String>() {
+            public int getSize() { return finalEvaluationRelations.getRelations().size(); }
+            public String getElementAt(int i) {
+                return String.format("%s. %s(%s, %s)\n", (i+1), finalEvaluationRelations.getRelations().get(i).getRelationTriple().getMiddle(), finalEvaluationRelations.getRelations().get(i).getRelationTriple().getLeft(), finalEvaluationRelations.getRelations().get(i).getRelationTriple().getRight());
+            }
+        });
+    }
+
+    private void refreshEvaluationSentencesList() {
+        jList2.setModel(new javax.swing.AbstractListModel<String>() {
+            public int getSize() { return evaluationSentences.size(); }
+            public String getElementAt(int i) { return (i+1) + ". " + evaluationSentences.get(i); }
+        });
     }
 
     /**
@@ -499,17 +538,20 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                 SentenceTokenizer sentenceTokenizer = new SentenceTokenizer();
                 evaluationSentences = sentenceTokenizer.tokenizeSentence(Utilities.getFileContent(currentlySelectedEvaluationFile));
 
-                jList2.setModel(new javax.swing.AbstractListModel<String>() {
-                    public int getSize() { return evaluationSentences.size(); }
-                    public String getElementAt(int i) { return (i+1) + ". " + evaluationSentences.get(i); }
-                });
+                refreshEvaluationSentencesList();
+                refreshEvaluationRelationsList();
             }
         });
 
         jList2.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                addEvaluationRelationButton.setEnabled(true);
+                if (jList2.getSelectedIndex() >= 0) {
+                    addEvaluationRelationButton.setEnabled(true);
+                } else {
+                    addEvaluationRelationButton.setEnabled(false);
+                }
+
             }
         });
 
@@ -543,16 +585,19 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         addedRelationsLabel.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
         addedRelationsLabel.setText("Added Relations:");
 
-        jList3.setModel(new javax.swing.AbstractListModel<String>() {
-            public int getSize() { return evaluationRelations.getRelations().size(); }
-            public String getElementAt(int i) {
-                return String.format("%s. %s(%s, %s)\n", (i+1), evaluationRelations.getRelations().get(i).getRelationTriple().getMiddle(), evaluationRelations.getRelations().get(i).getRelationTriple().getLeft(), evaluationRelations.getRelations().get(i).getRelationTriple().getRight());
-            }
-        });
+        refreshEvaluationRelationsList();
 
         jScrollPane1.setViewportView(jList3);
 
+        jList3.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                removeEvaluationButton.setEnabled(true);
+            }
+        });
+
         removeEvaluationButton.setText("Remove");
+        removeEvaluationButton.setEnabled(false);
         removeEvaluationButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeEvaluationButtonActionPerformed(evt);
@@ -881,6 +926,8 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         File currentlySelectedEvaluationFile = evaluationFiles.get(jList1.getSelectedIndex());
         String currentlySelectedEvaluationSentence = evaluationSentences.get(jList2.getSelectedIndex());
 
+        Relations evaluationRelations = evaluationRelationsMap.get(currentlySelectedEvaluationFile);
+
         evaluationRelations.addRelation(
                 new Relation(
                         argument1EvaluationTextField.getText(),
@@ -890,31 +937,34 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                         currentlySelectedEvaluationSentence
                 ));
 
-        jList3.setModel(new javax.swing.AbstractListModel<String>() {
-            public int getSize() { return evaluationRelations.getRelations().size(); }
-            public String getElementAt(int i) {
-                return String.format("%s. %s(%s, %s)\n", (i+1), evaluationRelations.getRelations().get(i).getRelationTriple().getMiddle(), evaluationRelations.getRelations().get(i).getRelationTriple().getLeft(), evaluationRelations.getRelations().get(i).getRelationTriple().getRight());
-            }
-        });
+        System.out.println("Add evaluation relation");
+
+        refreshEvaluationRelationsList();
 
     }//GEN-LAST:event_addEvaluationRelationButtonActionPerformed
 
     private void removeEvaluationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeEvaluationButtonActionPerformed
         // TODO add your handling code here:
 
-        evaluationRelations.removeRelation(jList3.getSelectedIndex());
+        evaluationRelationsMap.get(evaluationFiles.get(jList1.getSelectedIndex())).removeRelation(jList3.getSelectedIndex());
 
-        jList3.setModel(new javax.swing.AbstractListModel<String>() {
-            public int getSize() { return evaluationRelations.getRelations().size(); }
-            public String getElementAt(int i) {
-                return String.format("%s. %s(%s, %s)\n", (i+1), evaluationRelations.getRelations().get(i).getRelationTriple().getMiddle(), evaluationRelations.getRelations().get(i).getRelationTriple().getLeft(), evaluationRelations.getRelations().get(i).getRelationTriple().getRight());
-            }
-        });
+        refreshEvaluationRelationsList();
 
     }//GEN-LAST:event_removeEvaluationButtonActionPerformed
 
     private void saveEvaluationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveEvaluationButtonActionPerformed
         // TODO add your handling code here:
+
+        File selectedFile = evaluationFiles.get(jList1.getSelectedIndex());
+        Relations relationsToBeSaved = evaluationRelationsMap.get(selectedFile);
+        String evaluationDir = System.getProperty("user.dir") + File.separator + new Config().getProperty("EVALUATION_LABEL_OUTPUT_RELATIVE_PATH");
+
+        if (relationsToBeSaved.getRelations().size() == 0) {
+            Utilities.removeFile(new File(evaluationDir + File.separator + selectedFile.getName()));
+        } else {
+            Utilities.writeToFile(evaluationDir, selectedFile.getName(), relationsToBeSaved.toString());
+        }
+
     }//GEN-LAST:event_saveEvaluationButtonActionPerformed
 
     private void runEvaluationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runEvaluationButtonActionPerformed
