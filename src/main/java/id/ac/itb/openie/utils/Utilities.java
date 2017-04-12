@@ -69,7 +69,7 @@ public class Utilities {
             String sCurrentLine;
 
             while ((sCurrentLine = br.readLine()) != null) {
-                content += sCurrentLine;
+                content += sCurrentLine + "\n";
             }
         } catch (Exception e) {
             e.printStackTrace();

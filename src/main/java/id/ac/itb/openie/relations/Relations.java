@@ -40,7 +40,7 @@ public class Relations {
     }
 
     public Relations(File file) {
-        String relationsString = StringUtils.join(Utilities.getFileContent(file), "\n");
+        String relationsString = Utilities.getFileContent(file);
 
         Pattern p = Pattern.compile("Source:\\s(.*)\\nKalimat:\\s(.*)\\nRelasi:\\s(.*?)\\((.*),\\s(.*)\\)\\n");
         Matcher m = p.matcher(relationsString);

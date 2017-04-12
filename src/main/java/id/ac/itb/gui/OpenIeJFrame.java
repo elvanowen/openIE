@@ -132,6 +132,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                 String evaluationDir = System.getProperty("user.dir") + File.separator + new Config().getProperty("EVALUATION_LABEL_OUTPUT_RELATIVE_PATH");
 
                 File evaluationRelationsFile = new File(evaluationDir + File.separator + selectedEvaluationFile.getName());
+
                 if (evaluationRelationsFile.exists()) {
                     evaluationRelationsMap.put(selectedEvaluationFile, new Relations(evaluationRelationsFile));
                 } else {
@@ -937,7 +938,9 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                         currentlySelectedEvaluationSentence
                 ));
 
-        System.out.println("Add evaluation relation");
+        argument1EvaluationTextField.setText("Argument 1");
+        relationEvaluationTextField.setText("Relation");
+        argument2EvaluationTextField.setText("Argument 2");
 
         refreshEvaluationRelationsList();
 
