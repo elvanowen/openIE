@@ -84,44 +84,44 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     }
 
     private void browseStartingDirectory() {
-//        JFileChooser fileChooser = new JFileChooser();
-//        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-//
-//        Preprocessor fileReaderPreprocessor = new Preprocessor();
-//
-//        for (Object iPreprocessorHandler: pluginLoader.getExtensions(IPreprocessorHandler.class)) {
-//            IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) iPreprocessorHandler;
-//            String pluginName = preprocessorHandler.getPluginName();
-//
-//            if (pluginName.equalsIgnoreCase("Preprocessor File Reader")) {
-//                fileReaderPreprocessor = new Preprocessor().setPreprocessorHandler(SerializationUtils.clone(preprocessorHandler));
-//                File defaultBrowseDirectory = new File(fileReaderPreprocessor.getPreprocessorHandler().getAvailableConfigurations().get("Input Directory"));
-//                fileChooser.setCurrentDirectory(new File(defaultBrowseDirectory.getParent()));
-//            }
-//        }
-//
-//        int returnValue = fileChooser.showOpenDialog(null);
-//        if (returnValue == JFileChooser.APPROVE_OPTION) {
-//            File selectedFile = fileChooser.getSelectedFile();
-//
-//            System.out.println(selectedFile);
-//
-//            fileReaderPreprocessor.getPreprocessorHandler().setAvailableConfigurations("Input Directory", selectedFile.getAbsolutePath());
-//            openIePipelineListModel.addElement(fileReaderPreprocessor);
-//        }
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
-        for (Object iExtractorHandler: pluginLoader.getExtensions(IExtractorHandler.class)) {
-            IExtractorHandler extractorHandler = (IExtractorHandler) iExtractorHandler;
-            String pluginName = extractorHandler.getPluginName();
+        Preprocessor fileReaderPreprocessor = new Preprocessor();
 
-            if (pluginName.equalsIgnoreCase("Extractor File Writer")) {
-                Extractor fileWriterExtractor = new Extractor().setExtractorHandler(SerializationUtils.clone(extractorHandler));
-                File defaultBrowseDirectory = new File(fileWriterExtractor.getExtractorHandler().getAvailableConfigurations().get("Output Directory"));
+        for (Object iPreprocessorHandler: pluginLoader.getExtensions(IPreprocessorHandler.class)) {
+            IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) iPreprocessorHandler;
+            String pluginName = preprocessorHandler.getPluginName();
 
-                JFrame extractionViewer = new ExtractionViewer(defaultBrowseDirectory);
-                extractionViewer.setVisible(true);
+            if (pluginName.equalsIgnoreCase("Preprocessor File Reader")) {
+                fileReaderPreprocessor = new Preprocessor().setPreprocessorHandler(SerializationUtils.clone(preprocessorHandler));
+                File defaultBrowseDirectory = new File(fileReaderPreprocessor.getPreprocessorHandler().getAvailableConfigurations().get("Input Directory"));
+                fileChooser.setCurrentDirectory(new File(defaultBrowseDirectory.getParent()));
             }
         }
+
+        int returnValue = fileChooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+
+            System.out.println(selectedFile);
+
+            fileReaderPreprocessor.getPreprocessorHandler().setAvailableConfigurations("Input Directory", selectedFile.getAbsolutePath());
+            openIePipelineListModel.addElement(fileReaderPreprocessor);
+        }
+
+//        for (Object iExtractorHandler: pluginLoader.getExtensions(IExtractorHandler.class)) {
+//            IExtractorHandler extractorHandler = (IExtractorHandler) iExtractorHandler;
+//            String pluginName = extractorHandler.getPluginName();
+//
+//            if (pluginName.equalsIgnoreCase("Extractor File Writer")) {
+//                Extractor fileWriterExtractor = new Extractor().setExtractorHandler(SerializationUtils.clone(extractorHandler));
+//                File defaultBrowseDirectory = new File(fileWriterExtractor.getExtractorHandler().getAvailableConfigurations().get("Output Directory"));
+//
+//                JFrame extractionViewer = new ExtractionViewer(defaultBrowseDirectory);
+//                extractionViewer.setVisible(true);
+//            }
+//        }
     }
 
     /**
