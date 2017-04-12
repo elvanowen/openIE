@@ -593,7 +593,11 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         jList3.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                removeEvaluationButton.setEnabled(true);
+                if (jList3.getSelectedIndex() >= 0) {
+                    removeEvaluationButton.setEnabled(true);
+                } else {
+                    removeEvaluationButton.setEnabled(false);
+                }
             }
         });
 
