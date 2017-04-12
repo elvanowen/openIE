@@ -215,7 +215,8 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         removeEvaluationButton = new javax.swing.JButton();
         runEvaluationButton = new javax.swing.JButton();
         saveEvaluationButton = new javax.swing.JButton();
-        jSeparator2 = new javax.swing.JSeparator();
+        evaluationFilesLabel = new javax.swing.JLabel();
+        jSeparator4 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -507,7 +508,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                         .addComponent(openIESectionRemovePipelineElementButton)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(openIESectionConfigurePipelineElementButton1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 109, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 145, Short.MAX_VALUE)
                         .addComponent(openIESectionExecutePipelineElementButton))
                     .addComponent(jScrollPane6))
                 .addContainerGap())
@@ -525,12 +526,27 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             }
         }
 
+        jScrollPane2.setViewportView(jList1);
+
         final ArrayList<File> finalEvaluationFiles = evaluationFiles;
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
             public int getSize() { return finalEvaluationFiles.size(); }
             public String getElementAt(int i) { return (i+1) + ". " + finalEvaluationFiles.get(i).getName(); }
         });
-        jScrollPane2.setViewportView(jList1);
+        jScrollPane7.setViewportView(jList2);
+
+        sentencesLabel.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
+        sentencesLabel.setText("Sentences:");
+
+        addNewRelationsLabel.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
+        addNewRelationsLabel.setText("Add New Relations:");
+
+        argument1EvaluationTextField.setText("Argument 1");
+        argument1EvaluationTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                argument1EvaluationTextFieldActionPerformed(evt);
+            }
+        });
 
         jList1.addListSelectionListener(new ListSelectionListener() {
             @Override
@@ -556,20 +572,6 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             }
         });
 
-        jScrollPane7.setViewportView(jList2);
-
-        sentencesLabel.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
-        sentencesLabel.setText("Sentences:");
-
-        addNewRelationsLabel.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
-        addNewRelationsLabel.setText("Add New Relations:");
-
-        argument1EvaluationTextField.setText("Argument 1");
-        argument1EvaluationTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                argument1EvaluationTextFieldActionPerformed(evt);
-            }
-        });
 
         relationEvaluationTextField.setText("Relation");
 
@@ -587,7 +589,6 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         addedRelationsLabel.setText("Added Relations:");
 
         refreshEvaluationRelationsList();
-
         jScrollPane1.setViewportView(jList3);
 
         jList3.addListSelectionListener(new ListSelectionListener() {
@@ -602,14 +603,13 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         });
 
         removeEvaluationButton.setText("Remove");
-        removeEvaluationButton.setEnabled(false);
         removeEvaluationButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 removeEvaluationButtonActionPerformed(evt);
             }
         });
 
-        runEvaluationButton.setText("Evaluate");
+        runEvaluationButton.setText("Run Evaluation");
         runEvaluationButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 runEvaluationButtonActionPerformed(evt);
@@ -617,11 +617,15 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         });
 
         saveEvaluationButton.setText("Save");
+        removeEvaluationButton.setEnabled(false);
         saveEvaluationButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 saveEvaluationButtonActionPerformed(evt);
             }
         });
+
+        evaluationFilesLabel.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
+        evaluationFilesLabel.setText("Files:");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -629,54 +633,54 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(evaluationFilesLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(6, 6, 6)
+                        .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(jPanel6Layout.createSequentialGroup()
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addGap(6, 6, 6)
-                                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 434, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                .addComponent(argument1EvaluationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(relationEvaluationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(argument2EvaluationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(addEvaluationRelationButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel6Layout.createSequentialGroup()
-                                        .addComponent(argument1EvaluationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(relationEvaluationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(argument2EvaluationTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(addEvaluationRelationButton, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel6Layout.createSequentialGroup()
-                                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(sentencesLabel)
-                                            .addComponent(addNewRelationsLabel)
-                                            .addComponent(addedRelationsLabel))
-                                        .addGap(0, 0, Short.MAX_VALUE)))
-                                .addContainerGap())))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel6Layout.createSequentialGroup()
-                                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(sentencesLabel)
+                                    .addComponent(addNewRelationsLabel)
+                                    .addComponent(addedRelationsLabel))
                                 .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(removeEvaluationButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(saveEvaluationButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(runEvaluationButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPanel6Layout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(removeEvaluationButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(saveEvaluationButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jSeparator4))))
                         .addContainerGap())))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
+                .addComponent(runEvaluationButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(sentencesLabel)
+                    .addComponent(evaluationFilesLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2)
                     .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(sentencesLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(addNewRelationsLabel)
@@ -690,16 +694,17 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                         .addComponent(addedRelationsLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1)
                             .addGroup(jPanel6Layout.createSequentialGroup()
                                 .addComponent(removeEvaluationButton)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(saveEvaluationButton)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jSeparator4, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(runEvaluationButton)))))
-                .addContainerGap())
+                                .addComponent(saveEvaluationButton))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(runEvaluationButton))
         );
 
         jTabbedPane1.addTab("Evaluation", jPanel6);
@@ -1005,6 +1010,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private javax.swing.JTextField argument1EvaluationTextField;
     private javax.swing.JTextField argument2EvaluationTextField;
     private javax.swing.JButton browseStartingDirectoryButton;
+    private javax.swing.JLabel evaluationFilesLabel;
     private javax.swing.JList<String> jList1;
     private javax.swing.JList<String> jList2;
     private javax.swing.JList<String> jList3;
@@ -1020,8 +1026,8 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private javax.swing.JSeparator jSeparator12;
     private javax.swing.JSeparator jSeparator13;
     private javax.swing.JSeparator jSeparator14;
-    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
+    private javax.swing.JSeparator jSeparator4;
     private id.ac.itb.gui.dragdroplist.DragDropList openIePipelineDragDropList;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JButton loadPluginsButton;
