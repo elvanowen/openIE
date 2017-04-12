@@ -2,7 +2,6 @@ package classes;
 
 import id.ac.itb.openie.config.Config;
 import id.ac.itb.openie.extractor.IExtractorHandler;
-import id.ac.itb.openie.preprocess.IPreprocessorHandler;
 import id.ac.itb.openie.relations.Relations;
 import id.ac.itb.openie.utils.Utilities;
 import org.apache.commons.lang3.tuple.Pair;
@@ -50,7 +49,7 @@ public class ExtractorFileReader extends Plugin {
                     ArrayList<File> files = Utilities.getDirectoryFiles(new File(inputDir));
 
                     for (File _file: files) {
-                        pipelineItems.put(_file, Pair.of(Utilities.getFileContent(_file).get(0), null));
+                        pipelineItems.put(_file, Pair.of(Utilities.getFileContent(_file), null));
                     }
                 }
 

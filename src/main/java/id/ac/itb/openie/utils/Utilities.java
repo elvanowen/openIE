@@ -53,10 +53,10 @@ public class Utilities {
         return files;
     }
 
-    public static ArrayList<String> getFileContent(File file) {
+    public static String getFileContent(File file) {
         BufferedReader br = null;
         FileReader fr = null;
-        ArrayList<String> content = new ArrayList<String>();
+        String content = "";
 
         try {
             fr = new FileReader(file);
@@ -65,7 +65,7 @@ public class Utilities {
             String sCurrentLine;
 
             while ((sCurrentLine = br.readLine()) != null) {
-                content.add(sCurrentLine);
+                content += sCurrentLine;
             }
         } catch (Exception e) {
             e.printStackTrace();

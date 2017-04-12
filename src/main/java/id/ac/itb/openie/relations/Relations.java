@@ -30,6 +30,10 @@ public class Relations {
         return this;
     }
 
+    public void removeRelation(int index) {
+        relations.remove(index);
+    }
+
     public Relations addRelations(Relations relations) {
         this.relations.addAll(relations.getRelations());
         return this;

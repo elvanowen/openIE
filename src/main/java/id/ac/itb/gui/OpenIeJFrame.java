@@ -11,6 +11,7 @@ import id.ac.itb.gui.progressbar.CrawlerProgress;
 import id.ac.itb.gui.progressbar.ExtractorProgress;
 import id.ac.itb.gui.progressbar.PreprocessorProgress;
 import id.ac.itb.gui.viewer.ExtractionViewer;
+import id.ac.itb.nlp.SentenceTokenizer;
 import id.ac.itb.openie.crawler.*;
 import id.ac.itb.openie.extractor.*;
 import id.ac.itb.openie.pipeline.OpenIePipeline;
@@ -18,6 +19,9 @@ import id.ac.itb.openie.plugins.PluginLoader;
 import id.ac.itb.openie.postprocess.IPostprocessorHandler;
 import id.ac.itb.openie.postprocess.Postprocessor;
 import id.ac.itb.openie.preprocess.*;
+import id.ac.itb.openie.relations.Relation;
+import id.ac.itb.openie.relations.Relations;
+import id.ac.itb.openie.utils.Utilities;
 import id.ac.itb.util.UnzipUtility;
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -31,6 +35,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -41,6 +46,9 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
     private DefaultListModel openIePipelineListModel = new DefaultListModel();
     private PluginLoader pluginLoader = new PluginLoader();
+    private ArrayList<File> evaluationFiles;
+    private ArrayList<String> evaluationSentences;
+    private Relations evaluationRelations = new Relations();
 
     /**
      * Creates new form CustomizeCrawlerJFrame
@@ -467,18 +475,44 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Open IE", jPanel5);
 
+        for (Object iPreprocessorHandler: pluginLoader.getExtensions(IPreprocessorHandler.class)) {
+            IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) iPreprocessorHandler;
+            String pluginName = preprocessorHandler.getPluginName();
+
+            if (pluginName.equalsIgnoreCase("Preprocessor File Writer")) {
+                File defaultBrowseDirectory = new File(new Preprocessor().setPreprocessorHandler(SerializationUtils.clone(preprocessorHandler)).getPreprocessorHandler().getAvailableConfigurations().get("Output Directory"));
+                evaluationFiles = Utilities.getDirectoryFiles(defaultBrowseDirectory);
+            }
+        }
+
+        final ArrayList<File> finalEvaluationFiles = evaluationFiles;
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+            public int getSize() { return finalEvaluationFiles.size(); }
+            public String getElementAt(int i) { return (i+1) + ". " + finalEvaluationFiles.get(i).getName(); }
         });
         jScrollPane2.setViewportView(jList1);
 
-        jList2.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+        jList1.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                File currentlySelectedEvaluationFile = evaluationFiles.get(jList1.getSelectedIndex());
+                SentenceTokenizer sentenceTokenizer = new SentenceTokenizer();
+                evaluationSentences = sentenceTokenizer.tokenizeSentence(Utilities.getFileContent(currentlySelectedEvaluationFile));
+
+                jList2.setModel(new javax.swing.AbstractListModel<String>() {
+                    public int getSize() { return evaluationSentences.size(); }
+                    public String getElementAt(int i) { return (i+1) + ". " + evaluationSentences.get(i); }
+                });
+            }
         });
+
+        jList2.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                addEvaluationRelationButton.setEnabled(true);
+            }
+        });
+
         jScrollPane7.setViewportView(jList2);
 
         sentencesLabel.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
@@ -499,6 +533,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         argument2EvaluationTextField.setText("Argument 2");
 
         addEvaluationRelationButton.setText("+");
+        addEvaluationRelationButton.setEnabled(false);
         addEvaluationRelationButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 addEvaluationRelationButtonActionPerformed(evt);
@@ -509,10 +544,12 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         addedRelationsLabel.setText("Added Relations:");
 
         jList3.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+            public int getSize() { return evaluationRelations.getRelations().size(); }
+            public String getElementAt(int i) {
+                return String.format("%s. %s(%s, %s)\n", (i+1), evaluationRelations.getRelations().get(i).getRelationTriple().getMiddle(), evaluationRelations.getRelations().get(i).getRelationTriple().getLeft(), evaluationRelations.getRelations().get(i).getRelationTriple().getRight());
+            }
         });
+
         jScrollPane1.setViewportView(jList3);
 
         removeEvaluationButton.setText("Remove");
@@ -840,10 +877,40 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
     private void addEvaluationRelationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEvaluationRelationButtonActionPerformed
         // TODO add your handling code here:
+
+        File currentlySelectedEvaluationFile = evaluationFiles.get(jList1.getSelectedIndex());
+        String currentlySelectedEvaluationSentence = evaluationSentences.get(jList2.getSelectedIndex());
+
+        evaluationRelations.addRelation(
+                new Relation(
+                        argument1EvaluationTextField.getText(),
+                        relationEvaluationTextField.getText(),
+                        argument2EvaluationTextField.getText(),
+                        currentlySelectedEvaluationFile.getName(),
+                        currentlySelectedEvaluationSentence
+                ));
+
+        jList3.setModel(new javax.swing.AbstractListModel<String>() {
+            public int getSize() { return evaluationRelations.getRelations().size(); }
+            public String getElementAt(int i) {
+                return String.format("%s. %s(%s, %s)\n", (i+1), evaluationRelations.getRelations().get(i).getRelationTriple().getMiddle(), evaluationRelations.getRelations().get(i).getRelationTriple().getLeft(), evaluationRelations.getRelations().get(i).getRelationTriple().getRight());
+            }
+        });
+
     }//GEN-LAST:event_addEvaluationRelationButtonActionPerformed
 
     private void removeEvaluationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeEvaluationButtonActionPerformed
         // TODO add your handling code here:
+
+        evaluationRelations.removeRelation(jList3.getSelectedIndex());
+
+        jList3.setModel(new javax.swing.AbstractListModel<String>() {
+            public int getSize() { return evaluationRelations.getRelations().size(); }
+            public String getElementAt(int i) {
+                return String.format("%s. %s(%s, %s)\n", (i+1), evaluationRelations.getRelations().get(i).getRelationTriple().getMiddle(), evaluationRelations.getRelations().get(i).getRelationTriple().getLeft(), evaluationRelations.getRelations().get(i).getRelationTriple().getRight());
+            }
+        });
+
     }//GEN-LAST:event_removeEvaluationButtonActionPerformed
 
     private void saveEvaluationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveEvaluationButtonActionPerformed

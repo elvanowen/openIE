@@ -53,7 +53,7 @@ public class PreprocessorFileReader extends Plugin {
                     ArrayList<File> files = Utilities.getDirectoryFiles(new File(inputDir));
 
                     for (File _file: files) {
-                        pipelineItems.put(_file, Utilities.getFileContent(_file).get(0));
+                        pipelineItems.put(_file, Utilities.getFileContent(_file));
                     }
                 }
 
