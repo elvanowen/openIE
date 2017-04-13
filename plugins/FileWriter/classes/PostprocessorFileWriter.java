@@ -51,7 +51,11 @@ public class PostprocessorFileWriter extends Plugin {
             if (getAvailableConfigurations().get("Output Directory") == null) {
                 throw new Exception("Write directory path must be specified");
             } else {
-                Utilities.writeToFile(availableConfigurations.get("Output Directory"), file.getName(), relations.toString());
+                if (relations != null) {
+                    Utilities.writeToFile(availableConfigurations.get("Output Directory"), file.getName(), relations.toString());
+                } else {
+                    Utilities.writeToFile(availableConfigurations.get("Output Directory"), file.getName(), "");
+                }
 
                 HashMap<File, Relations> pipelineItems = new HashMap<>();
                 pipelineItems.put(file, relations);

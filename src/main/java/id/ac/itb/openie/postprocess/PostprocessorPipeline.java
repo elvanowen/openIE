@@ -1,6 +1,7 @@
 package id.ac.itb.openie.postprocess;
 
 import id.ac.itb.openie.pipeline.IOpenIePipelineElement;
+import id.ac.itb.openie.plugins.PluginLoader;
 import id.ac.itb.openie.relations.Relations;
 
 import java.io.File;
@@ -42,6 +43,38 @@ public class PostprocessorPipeline implements IOpenIePipelineElement {
         return n;
     }
 
+    private void addReaderAndWriterIfNotExist() {
+        if (postprocessorPipelineElements.size() > 0) {
+            PluginLoader pluginLoader = new PluginLoader();
+            pluginLoader.registerAvailableExtensions(IPostprocessorHandler.class);
+
+            // Prepend postprocessor file reader if not exist
+            if (!((Postprocessor) postprocessorPipelineElements.get(0)).getPostprocessorHandler().getPluginName().equalsIgnoreCase("Postprocessor File Reader")) {
+                for (Object iPostprocessorHandler: pluginLoader.getExtensions(IPostprocessorHandler.class)) {
+                    IPostprocessorHandler postprocessorHandler = (IPostprocessorHandler) iPostprocessorHandler;
+                    String pluginName = postprocessorHandler.getPluginName();
+
+                    if (pluginName.equalsIgnoreCase("Postprocessor File Reader")) {
+                        Postprocessor postprocessor = new Postprocessor().setPostprocessorHandler(postprocessorHandler);
+                        postprocessorPipelineElements.add(0, postprocessor);
+                    }
+                }
+            }
+
+            if (!((Postprocessor) postprocessorPipelineElements.get(postprocessorPipelineElements.size() - 1)).getPostprocessorHandler().getPluginName().equalsIgnoreCase("Postprocessor File Writer")) {
+                for (Object iPostprocessorHandler: pluginLoader.getExtensions(IPostprocessorHandler.class)) {
+                    IPostprocessorHandler postprocessorHandler = (IPostprocessorHandler) iPostprocessorHandler;
+                    String pluginName = postprocessorHandler.getPluginName();
+
+                    if (pluginName.equalsIgnoreCase("Postprocessor File Writer")) {
+                        Postprocessor postprocessor = new Postprocessor().setPostprocessorHandler(postprocessorHandler);
+                        postprocessorPipelineElements.add(postprocessor);
+                    }
+                }
+            }
+        }
+    }
+
     @Override
     public void willExecute() {
         if (this.getNumberOfPostprocessors() > 0) {
@@ -52,19 +85,22 @@ public class PostprocessorPipeline implements IOpenIePipelineElement {
     public void execute() throws Exception {
         System.out.println("Running postprocessor pipeline...");
 
-        HashMap<File, Relations> pipeQueue = null;
-        HashMap<File, Relations> nextPipeQueue = null;
+        HashMap<File, Relations> pipeQueue = new HashMap<>();
+        HashMap<File, Relations> nextPipeQueue = new HashMap<>();
+
+        addReaderAndWriterIfNotExist();
 
         for (IPostprocessorPipelineElement postprocessorPipelineElement: postprocessorPipelineElements) {
             this.currentlyRunningPostprocessor = postprocessorPipelineElement;
 
             if (((Postprocessor)postprocessorPipelineElement).getPostprocessorHandler().getPluginName().equalsIgnoreCase("Postprocessor File Reader")) {
                 HashMap<File, Relations> postprocessed = postprocessorPipelineElement.execute(null, null);
-                pipeQueue.putAll(postprocessed);
+                nextPipeQueue.putAll(postprocessed);
                 totalDocumentsToBePostprocessed += postprocessed.size();
             } else if (((Postprocessor)postprocessorPipelineElement).getPostprocessorHandler().getPluginName().equalsIgnoreCase("Postprocessor File Writer")) {
                 for (Map.Entry<File, Relations> pair : pipeQueue.entrySet()) {
-                    postprocessorPipelineElement.execute(pair.getKey(), pair.getValue());
+                    HashMap<File, Relations> postprocessed = postprocessorPipelineElement.execute(pair.getKey(), pair.getValue());
+                    nextPipeQueue.putAll(postprocessed);
                 }
             } else {
                 this.totalProcessedPostprocessor++;
@@ -74,15 +110,15 @@ public class PostprocessorPipeline implements IOpenIePipelineElement {
 
                 while (it.hasNext()) {
                     Map.Entry<File, Relations> pair = it.next();
-                    HashMap<File, Relations> preprocessed = postprocessorPipelineElement.execute(pair.getKey(), pair.getValue());
+                    HashMap<File, Relations> postprocessed = postprocessorPipelineElement.execute(pair.getKey(), pair.getValue());
 
-                    nextPipeQueue.putAll(preprocessed);
+                    nextPipeQueue.putAll(postprocessed);
                     currentlyPostprocessedDocuments++;
                 }
-
-                pipeQueue = nextPipeQueue;
-                nextPipeQueue = new HashMap<>();
             }
+
+            pipeQueue = nextPipeQueue;
+            nextPipeQueue = new HashMap<>();
         }
     }
 

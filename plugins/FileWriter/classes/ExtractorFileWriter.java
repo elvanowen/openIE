@@ -42,9 +42,11 @@ public class ExtractorFileWriter extends Plugin {
             if (getAvailableConfigurations().get("Output Directory") == null) {
                 throw new Exception("Write directory path must be specified");
             } else {
-                System.out.println("Extractor file writer");
-                System.out.println(relations);
-                Utilities.writeToFile(availableConfigurations.get("Output Directory"), file.getName(), relations.toString());
+                if (relations != null) {
+                    Utilities.writeToFile(availableConfigurations.get("Output Directory"), file.getName(), relations.toString());
+                } else {
+                    Utilities.writeToFile(availableConfigurations.get("Output Directory"), file.getName(), "");
+                }
 
                 HashMap<File, Pair<String, Relations>> pipelineItems = new HashMap<>();
                 pipelineItems.put(file, Pair.of(payload, relations));

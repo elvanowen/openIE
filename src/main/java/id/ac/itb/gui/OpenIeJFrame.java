@@ -9,6 +9,7 @@ import id.ac.itb.gui.alert.Alert;
 import id.ac.itb.gui.config.ConfigDialog;
 import id.ac.itb.gui.progressbar.CrawlerProgress;
 import id.ac.itb.gui.progressbar.ExtractorProgress;
+import id.ac.itb.gui.progressbar.PostprocessorProgress;
 import id.ac.itb.gui.progressbar.PreprocessorProgress;
 import id.ac.itb.gui.viewer.ExtractionViewer;
 import id.ac.itb.nlp.SentenceTokenizer;
@@ -17,8 +18,7 @@ import id.ac.itb.openie.crawler.*;
 import id.ac.itb.openie.extractor.*;
 import id.ac.itb.openie.pipeline.OpenIePipeline;
 import id.ac.itb.openie.plugins.PluginLoader;
-import id.ac.itb.openie.postprocess.IPostprocessorHandler;
-import id.ac.itb.openie.postprocess.Postprocessor;
+import id.ac.itb.openie.postprocess.*;
 import id.ac.itb.openie.preprocess.*;
 import id.ac.itb.openie.relations.Relation;
 import id.ac.itb.openie.relations.Relations;
@@ -808,6 +808,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         CrawlerPipeline crawlerPipeline = new CrawlerPipeline();
         PreprocessorPipeline preprocessorPipeline = new PreprocessorPipeline();
+        PostprocessorPipeline postprocessorPipeline = new PostprocessorPipeline();
         ExtractorPipeline extractorPipeline = new ExtractorPipeline();
         OpenIePipeline openIePipeline = new OpenIePipeline();
 
@@ -825,12 +826,16 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             } else if (selectedPipelineElement instanceof ICrawlerPipelineElement) {
                 ICrawlerPipelineElement crawlerPipelineElement = (ICrawlerPipelineElement) selectedPipelineElement;
                 crawlerPipeline.addPipelineElement(crawlerPipelineElement);
+            } else if (selectedPipelineElement instanceof IPostprocessorPipelineElement) {
+                IPostprocessorPipelineElement postprocessorPipelineElement = (IPostprocessorPipelineElement) selectedPipelineElement;
+                postprocessorPipeline.addPipelineElement(postprocessorPipelineElement);
             }
         }
 
         openIePipeline.addPipelineElement(crawlerPipeline);
         openIePipeline.addPipelineElement(preprocessorPipeline);
         openIePipeline.addPipelineElement(extractorPipeline);
+        openIePipeline.addPipelineElement(postprocessorPipeline);
 
         crawlerPipeline.setCrawlerPipelineHook(new ICrawlerPipelineHook() {
 
@@ -903,6 +908,22 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                         }
                     }
                 }
+            }
+        });
+
+        postprocessorPipeline.setPostprocessorPipelineHook(new IPostprocessorPipelineHook() {
+
+            JFrame postprocessorProgress = new PostprocessorProgress(postprocessorPipeline);
+
+            @Override
+            public void willExecute() {
+                postprocessorProgress.setVisible(true);
+            }
+
+            @Override
+            public void didExecute() {
+                ((PostprocessorProgress) postprocessorProgress).stopTimer();
+                postprocessorProgress.dispose();
             }
         });
 

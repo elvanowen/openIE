@@ -100,11 +100,12 @@ public class ExtractorPipeline implements IOpenIePipelineElement {
 
             if (((Extractor)extractorPipelineElement).getExtractorHandler().getPluginName().equalsIgnoreCase("Extractor File Reader")) {
                 HashMap<File, Pair<String, Relations>> extractedRelations = extractorPipelineElement.execute(null, null, null);
-                pipeQueue.putAll(extractedRelations);
+                nextPipeQueue.putAll(extractedRelations);
                 totalDocumentsToBeExtracted += extractedRelations.size();
             } else if (((Extractor)extractorPipelineElement).getExtractorHandler().getPluginName().equalsIgnoreCase("Extractor File Writer")) {
                 for (Map.Entry<File, Pair<String, Relations>> pair : pipeQueue.entrySet()) {
-                    extractorPipelineElement.execute(pair.getKey(), pair.getValue().getLeft(), pair.getValue().getRight());
+                    HashMap<File, Pair<String, Relations>> extractedRelations = extractorPipelineElement.execute(pair.getKey(), pair.getValue().getLeft(), pair.getValue().getRight());
+                    nextPipeQueue.putAll(extractedRelations);
                 }
             } else {
                 this.totalProcessedExtractor++;
@@ -120,10 +121,10 @@ public class ExtractorPipeline implements IOpenIePipelineElement {
                     nextPipeQueue.putAll(preprocessed);
                     currentlyExtractedDocuments++;
                 }
-
-                pipeQueue = nextPipeQueue;
-                nextPipeQueue = new HashMap<>();
             }
+
+            pipeQueue = nextPipeQueue;
+            nextPipeQueue = new HashMap<>();
         }
     }
 

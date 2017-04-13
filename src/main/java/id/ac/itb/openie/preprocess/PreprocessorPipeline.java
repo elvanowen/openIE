@@ -98,11 +98,12 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
 
             if (((Preprocessor)preprocessorPipelineElement).getPreprocessorHandler().getPluginName().equalsIgnoreCase("Preprocessor File Reader")) {
                 HashMap<File, String> preprocessed = preprocessorPipelineElement.execute(null, null);
-                pipeQueue.putAll(preprocessed);
+                nextPipeQueue.putAll(preprocessed);
                 totalDocumentsToBePreprocessed += preprocessed.size();
             } else if (((Preprocessor)preprocessorPipelineElement).getPreprocessorHandler().getPluginName().equalsIgnoreCase("Preprocessor File Writer")) {
                 for (Map.Entry<File, String> pair : pipeQueue.entrySet()) {
-                    preprocessorPipelineElement.execute(pair.getKey(), pair.getValue());
+                    HashMap<File, String> preprocessed = preprocessorPipelineElement.execute(pair.getKey(), pair.getValue());
+                    nextPipeQueue.putAll(preprocessed);
                 }
             } else {
                 this.totalProcessedPreprocessor++;
@@ -117,10 +118,10 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
                     nextPipeQueue.putAll(preprocessed);
                     currentlyPreprocessedDocuments++;
                 }
-
-                pipeQueue = nextPipeQueue;
-                nextPipeQueue = new HashMap<>();
             }
+
+            pipeQueue = nextPipeQueue;
+            nextPipeQueue = new HashMap<>();
         }
     }
 

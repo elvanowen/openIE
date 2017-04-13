@@ -5,11 +5,22 @@
  */
 package id.ac.itb.gui.progressbar;
 
+import id.ac.itb.openie.postprocess.Postprocessor;
+import id.ac.itb.openie.postprocess.PostprocessorPipeline;
+import org.apache.commons.lang3.StringUtils;
+
+import javax.swing.*;
+
 /**
  *
  * @author elvanowen
  */
 public class PostprocessorProgress extends javax.swing.JFrame {
+
+    PostprocessorPipeline postprocessorPipeline;
+    private Timer processTimer = null;
+    private int tick;
+    private int counter = 0;
 
     /**
      * Creates new form PreprocessorProgress
@@ -17,6 +28,12 @@ public class PostprocessorProgress extends javax.swing.JFrame {
     public PostprocessorProgress() {
         initComponents();
     }
+
+    public PostprocessorProgress(PostprocessorPipeline postprocessorPipeline) {
+        this.postprocessorPipeline = postprocessorPipeline;
+        initComponents();
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -28,17 +45,20 @@ public class PostprocessorProgress extends javax.swing.JFrame {
     private void initComponents() {
 
         jProgressBar1 = new javax.swing.JProgressBar();
-        runningPreprocessorLabel = new javax.swing.JLabel();
-        preprocessingDocumentsProgressLabel = new javax.swing.JLabel();
-        preprocessingPipelineProgressLabel = new javax.swing.JLabel();
+        runningPostprocessorLabel = new javax.swing.JLabel();
+        postprocessingDocumentsProgressLabel = new javax.swing.JLabel();
+        postprocessingPipelineProgressLabel = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        runningPreprocessorLabel.setText("Running preprocessor.");
+        runningPostprocessorLabel.setText("Setting up postprocessors");
 
-        preprocessingDocumentsProgressLabel.setText("10 / 250 documents");
+        showProgressLabel();
 
-        preprocessingPipelineProgressLabel.setText("10 / 250 documents");
+        processTimer = new javax.swing.Timer(30, e -> {
+            showProgressLabel();
+        });
+        processTimer.start();
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -48,14 +68,14 @@ public class PostprocessorProgress extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(runningPreprocessorLabel)
+                        .addComponent(runningPostprocessorLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(preprocessingPipelineProgressLabel)
+                        .addComponent(postprocessingPipelineProgressLabel)
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jProgressBar1, javax.swing.GroupLayout.DEFAULT_SIZE, 488, Short.MAX_VALUE)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(preprocessingDocumentsProgressLabel)))
+                        .addComponent(postprocessingDocumentsProgressLabel)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -63,16 +83,18 @@ public class PostprocessorProgress extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(runningPreprocessorLabel)
-                    .addComponent(preprocessingPipelineProgressLabel))
+                    .addComponent(runningPostprocessorLabel)
+                    .addComponent(postprocessingPipelineProgressLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jProgressBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(preprocessingDocumentsProgressLabel)
+                .addComponent(postprocessingDocumentsProgressLabel)
                 .addContainerGap(16, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
+        setTitle("Postprocessing Progress");
     }// </editor-fold>//GEN-END:initComponents
 
     /**
@@ -111,10 +133,53 @@ public class PostprocessorProgress extends javax.swing.JFrame {
         });
     }
 
+    private void showProgressLabel() {
+        counter++;
+        int totalCurrentlyDocumentsPostprocessed = postprocessorPipeline.getCurrentlyPostprocessedDocuments();
+        int totalDocumentsToBePostprocessed = postprocessorPipeline.getTotalDocumentsToBePostprocessed();
+        String postprocessorName = "";
+        String trail = StringUtils.repeat(".", tick) + StringUtils.repeat(" ", 4 - tick);
+
+        if (counter % 10 == 0) {
+            tick = (tick % 4) + 1;
+        }
+
+        if (postprocessorPipeline.getCurrentlyRunningPostprocessor() != null) {
+            postprocessorName = ((Postprocessor)postprocessorPipeline.getCurrentlyRunningPostprocessor()).getPostprocessorHandler().getPluginName();
+        }
+
+        if (totalDocumentsToBePostprocessed > 0 && totalCurrentlyDocumentsPostprocessed == totalDocumentsToBePostprocessed) {
+            postprocessingDocumentsProgressLabel.setText("Postprocessed Completed. Loading" + trail);
+        } else {
+            postprocessingDocumentsProgressLabel.setText(" " + totalCurrentlyDocumentsPostprocessed + " / " + totalDocumentsToBePostprocessed + " documents ");
+        }
+
+        updateProgressBar(totalCurrentlyDocumentsPostprocessed, totalDocumentsToBePostprocessed);
+
+        int totalProcessedPostprocessor = postprocessorPipeline.getTotalProcessedPostprocessor();
+        int totalPostprocessor = postprocessorPipeline.getNumberOfPostprocessors();
+
+        if (postprocessorName.equalsIgnoreCase("")) {
+            runningPostprocessorLabel.setText("Setting up postprocessors" + trail + StringUtils.repeat(" ", 40));
+        } else {
+            runningPostprocessorLabel.setText("Running " + postprocessorName + " ( " + totalProcessedPostprocessor + " / " + totalPostprocessor + " postprocessor" + (totalPostprocessor > 1 ? "s" : "") + " )");
+        }
+    }
+
+    private void updateProgressBar(int numerator, int denominator) {
+        jProgressBar1.setMinimum(0);
+        jProgressBar1.setMaximum(denominator);
+        jProgressBar1.setValue(numerator);
+    }
+
+    public void stopTimer() {
+        processTimer.stop();
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JProgressBar jProgressBar1;
-    private javax.swing.JLabel preprocessingDocumentsProgressLabel;
-    private javax.swing.JLabel preprocessingPipelineProgressLabel;
-    private javax.swing.JLabel runningPreprocessorLabel;
+    private javax.swing.JLabel postprocessingDocumentsProgressLabel;
+    private javax.swing.JLabel postprocessingPipelineProgressLabel;
+    private javax.swing.JLabel runningPostprocessorLabel;
     // End of variables declaration//GEN-END:variables
 }

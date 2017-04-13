@@ -15,7 +15,7 @@ public class Postprocessor implements IPostprocessorPipelineElement {
 
     @Override
     public HashMap<File, Relations> execute(File file, Relations relations) throws Exception {
-        return null;
+        return this.getPostprocessorHandler().postprocess(file, relations);
     }
 
     public String toString() {
