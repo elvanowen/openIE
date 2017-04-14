@@ -11,6 +11,7 @@ import id.ac.itb.gui.progressbar.CrawlerProgress;
 import id.ac.itb.gui.progressbar.ExtractorProgress;
 import id.ac.itb.gui.progressbar.PostprocessorProgress;
 import id.ac.itb.gui.progressbar.PreprocessorProgress;
+import id.ac.itb.gui.viewer.EvaluationViewer;
 import id.ac.itb.gui.viewer.ExtractionViewer;
 import id.ac.itb.nlp.SentenceTokenizer;
 import id.ac.itb.openie.config.Config;
@@ -1021,6 +1022,9 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         int returnValue = fileChooser.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File extractionsDirectory = fileChooser.getSelectedFile();
+
+            EvaluationViewer evaluationViewer = new EvaluationViewer();
+            evaluationViewer.setVisible(true);
         }
 
     }//GEN-LAST:event_runEvaluationButtonActionPerformed
