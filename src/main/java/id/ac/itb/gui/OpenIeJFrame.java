@@ -1002,6 +1002,27 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
     private void runEvaluationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runEvaluationButtonActionPerformed
         // TODO add your handling code here:
+
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Select extractions folder");
+        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+        for (Object iExtractorHandler: pluginLoader.getExtensions(IExtractorHandler.class)) {
+            IExtractorHandler extractorHandler = (IExtractorHandler) iExtractorHandler;
+            String pluginName = extractorHandler.getPluginName();
+
+            if (pluginName.equalsIgnoreCase("Extractor File Writer")) {
+                Extractor fileWriterExtractor = new Extractor().setExtractorHandler(SerializationUtils.clone(extractorHandler));
+                File defaultBrowseDirectory = new File(fileWriterExtractor.getExtractorHandler().getAvailableConfigurations().get("Output Directory"));
+                fileChooser.setCurrentDirectory(new File(defaultBrowseDirectory.getParent()));
+            }
+        }
+
+        int returnValue = fileChooser.showOpenDialog(null);
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            File extractionsDirectory = fileChooser.getSelectedFile();
+        }
+
     }//GEN-LAST:event_runEvaluationButtonActionPerformed
 
     private void argument1EvaluationTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_argument1EvaluationTextFieldActionPerformed
