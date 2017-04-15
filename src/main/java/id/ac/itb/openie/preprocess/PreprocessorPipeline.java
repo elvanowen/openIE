@@ -52,7 +52,7 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
             pluginLoader.registerAvailableExtensions(IPreprocessorHandler.class);
 
             // Prepend preprocessor file reader if not exist
-            for (Object iPreprocessorHandler: pluginLoader.getImplementedExtensions(IPreprocessorHandler.class)) {
+            for (Object iPreprocessorHandler: pluginLoader.getAllExtensions(IPreprocessorHandler.class)) {
                 IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) iPreprocessorHandler;
                 String pluginName = preprocessorHandler.getPluginName();
 
@@ -62,7 +62,7 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
                 }
             }
 
-            for (Object iPreprocessorHandler: pluginLoader.getImplementedExtensions(IPreprocessorHandler.class)) {
+            for (Object iPreprocessorHandler: pluginLoader.getAllExtensions(IPreprocessorHandler.class)) {
                 IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) iPreprocessorHandler;
                 String pluginName = preprocessorHandler.getPluginName();
 

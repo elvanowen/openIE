@@ -25,9 +25,6 @@ public class PluginLoader {
     }
 
     public PluginLoader registerAvailableExtensions(Class type) {
-//        implementedExtensions.put(type, pluginManager.getExtensions(type));
-//        allAvailableExtensions.put(type, pluginManager.getExtensions(type));
-
         implementedExtensions.put(type, new ArrayList<>());
         allAvailableExtensions.put(type, new ArrayList<>());
 
@@ -90,8 +87,6 @@ public class PluginLoader {
                 return lhs.toString().compareTo(rhs.toString());
             }
         });
-
-        System.out.println(implementedExtensions.get(type));
 
         return implementedExtensions.get(type);
     }

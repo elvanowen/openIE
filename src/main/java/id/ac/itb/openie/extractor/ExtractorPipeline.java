@@ -54,7 +54,7 @@ public class ExtractorPipeline implements IOpenIePipelineElement {
             pluginLoader.registerAvailableExtensions(IExtractorHandler.class);
 
             // Prepend preprocessor file reader if not exist
-            for (Object iExtractorHandler: pluginLoader.getImplementedExtensions(IExtractorHandler.class)) {
+            for (Object iExtractorHandler: pluginLoader.getAllExtensions(IExtractorHandler.class)) {
                 IExtractorHandler extractorHandler = (IExtractorHandler) iExtractorHandler;
                 String pluginName = extractorHandler.getPluginName();
 
@@ -64,7 +64,7 @@ public class ExtractorPipeline implements IOpenIePipelineElement {
                 }
             }
 
-            for (Object iExtractorHandler: pluginLoader.getImplementedExtensions(IExtractorHandler.class)) {
+            for (Object iExtractorHandler: pluginLoader.getAllExtensions(IExtractorHandler.class)) {
                 IExtractorHandler extractorHandler = (IExtractorHandler) iExtractorHandler;
                 String pluginName = extractorHandler.getPluginName();
 

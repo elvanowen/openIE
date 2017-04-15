@@ -13,6 +13,7 @@ import id.ac.itb.gui.progressbar.PostprocessorProgress;
 import id.ac.itb.gui.progressbar.PreprocessorProgress;
 import id.ac.itb.gui.viewer.EvaluationViewer;
 import id.ac.itb.gui.viewer.ExtractionViewer;
+import id.ac.itb.openie.config.Config;
 import id.ac.itb.openie.crawler.*;
 import id.ac.itb.openie.evaluation.ExtractionsEvaluation;
 import id.ac.itb.openie.evaluation.ExtractionsEvaluationLabeller;
@@ -47,19 +48,36 @@ import java.util.HashMap;
  */
 public class OpenIeJFrame extends javax.swing.JFrame {
 
-    private DefaultListModel openIePipelineListModel = new DefaultListModel();
-    private PluginLoader pluginLoader = new PluginLoader();
-    private ExtractionsEvaluationLabeller extractionsEvaluationLabeller = new ExtractionsEvaluationLabeller();
+    private DefaultListModel openIePipelineListModel;
+    private PluginLoader pluginLoader;
+    private ExtractionsEvaluationLabeller extractionsEvaluationLabeller;
 
     /**
      * Creates new form CustomizeCrawlerJFrame
      */
     public OpenIeJFrame() {
+        setupFolders();
         initPlugins();
         initComponents();
     }
 
+    private void setupFolders() {
+        File crawlerDirectory = new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("CRAWLER_OUTPUT_RELATIVE_PATH"));
+        File preprocessDirectory = new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("PREPROCESSES_OUTPUT_RELATIVE_PATH"));
+        File extractionDirectory = new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("EXTRACTIONS_OUTPUT_RELATIVE_PATH"));
+        File postprocessDirectory = new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("POSTPROCESSES_OUTPUT_RELATIVE_PATH"));
+        File labelDirectory = new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("EVALUATION_LABEL_OUTPUT_RELATIVE_PATH"));
+
+        if (!crawlerDirectory.exists()) crawlerDirectory.mkdir();
+        if (!preprocessDirectory.exists()) preprocessDirectory.mkdir();
+        if (!extractionDirectory.exists()) extractionDirectory.mkdir();
+        if (!postprocessDirectory.exists()) postprocessDirectory.mkdir();
+        if (!labelDirectory.exists()) labelDirectory.mkdir();
+    }
+
     private void initPlugins() {
+        pluginLoader = new PluginLoader();
+
         pluginLoader
                 .registerAvailableExtensions(ICrawlerHandler.class)
                 .registerAvailableExtensions(IPreprocessorHandler.class)
@@ -148,7 +166,8 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-
+        openIePipelineListModel = new DefaultListModel();
+        extractionsEvaluationLabeller = new ExtractionsEvaluationLabeller();
         jSeparator1 = new javax.swing.JSeparator();
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPanel5 = new javax.swing.JPanel();

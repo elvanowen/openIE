@@ -43,7 +43,7 @@ public class CrawlerPipeline implements IOpenIePipelineElement {
             PluginLoader pluginLoader = new PluginLoader();
             pluginLoader.registerAvailableExtensions(ICrawlerHandler.class);
 
-            for (Object iCrawlerHandler: pluginLoader.getImplementedExtensions(ICrawlerHandler.class)) {
+            for (Object iCrawlerHandler: pluginLoader.getAllExtensions(ICrawlerHandler.class)) {
                 ICrawlerHandler crawlerHandler = (ICrawlerHandler) iCrawlerHandler;
                 String pluginName = crawlerHandler.getPluginName();
 
