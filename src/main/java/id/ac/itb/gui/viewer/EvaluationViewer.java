@@ -220,13 +220,13 @@ public class EvaluationViewer extends javax.swing.JFrame {
         EvaluationResultFMeasureFormulaValuejLabel.setText("= " + extractionsEvaluationResult.getfMeasureFormulaValue());
 
         EvaluationResultRecallValuejLabel.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        EvaluationResultRecallValuejLabel.setText("= " + extractionsEvaluationResult.getRecall());
+        EvaluationResultRecallValuejLabel.setText("= " + String.format("%.5f", extractionsEvaluationResult.getRecall()));
 
         EvaluationResultPrecisionValuejLabel.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        EvaluationResultPrecisionValuejLabel.setText("= " + extractionsEvaluationResult.getPrecision());
+        EvaluationResultPrecisionValuejLabel.setText("= " + String.format("%.5f", extractionsEvaluationResult.getPrecision()));
 
         EvaluationResultFMeasureValuejLabel.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        EvaluationResultFMeasureValuejLabel.setText("= " + extractionsEvaluationResult.getfMeasure());
+        EvaluationResultFMeasureValuejLabel.setText("= " + String.format("%.5f", extractionsEvaluationResult.getfMeasure()));
 
         jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
 

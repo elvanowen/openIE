@@ -50,7 +50,6 @@ public class ExtractionsEvaluationModel {
 
         for (Relation relation: labelledRelations.getRelations()) {
             File relationSource = new File(relation.getOriginFile());
-            _files.add(relationSource);
 
             labelledRelationsByFilename.putIfAbsent(relationSource.getName(), new Relations());
             labelledRelationsByFilename.put(relationSource.getName(), labelledRelationsByFilename.get(relationSource.getName()).addRelation(relation));

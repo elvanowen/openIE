@@ -17,20 +17,20 @@ public class ExtractionsEvaluationResult {
     private HashMap<String, Relations> correctRelationsByFilename = new HashMap<>();
     private Relations correctRelations = new Relations();
     private ExtractionsEvaluationModel extractionsEvaluationModel;
-    private String recallFormula = "#Correct / #Extractions";
-    private String precisionFormula = "#Correct / #Relations";
+    private String recallFormula = "#Correct / #Relations";
+    private String precisionFormula = "#Correct / #Extractions";
     private String fMeasureFormula = "2PR / (P + R)";
 
     public double getRecall() {
-        return getnCorrect() / getnExtractions();
+        return (double) getnCorrect() / (double) getnRelations();
     }
 
     public double getPrecision() {
-        return getnCorrect() / getnRelations();
+        return (double) getnCorrect() / (double) getnExtractions();
     }
 
     public double getfMeasure() {
-        return 2 * getPrecision() * getRecall() / ( getPrecision() + getRecall() );
+        return 2 * getPrecision() * getRecall() / (getPrecision() + getRecall());
     }
 
     public int getnCorrect() {
@@ -58,11 +58,11 @@ public class ExtractionsEvaluationResult {
     }
 
     public String getRecallFormulaValue() {
-        return String.format("%1$d / %2$d", getnCorrect(), getnExtractions());
+        return String.format("%1$d / %2$d", getnCorrect(), getnRelations());
     }
 
     public String getPrecisionFormulaValue() {
-        return String.format("%1$d / %2$d", getnCorrect(), getnRelations());
+        return String.format("%1$d / %2$d", getnCorrect(), getnExtractions());
     }
 
     public String getfMeasureFormulaValue() {
