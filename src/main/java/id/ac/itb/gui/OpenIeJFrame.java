@@ -313,30 +313,8 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         openExtractionViewerLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         openExtractionViewerLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-
-                File defaultBrowseDirectory = null;
-
-                for (Object iExtractorHandler: pluginLoader.getImplementedExtensions(IExtractorHandler.class)) {
-                    IExtractorHandler extractorHandler = (IExtractorHandler) iExtractorHandler;
-                    String pluginName = extractorHandler.getPluginName();
-
-                    if (pluginName.equalsIgnoreCase("Extractor File Writer")) {
-                        Extractor fileWriterExtractor = new Extractor().setExtractorHandler(SerializationUtils.clone(extractorHandler));
-                        defaultBrowseDirectory = new File(fileWriterExtractor.getExtractorHandler().getAvailableConfigurations().get("Output Directory"));
-                    }
-                }
-
-                JFileChooser fileChooser = new JFileChooser();
-                fileChooser.setCurrentDirectory(new File(defaultBrowseDirectory.getParent()));
-                fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
-                int returnValue = fileChooser.showOpenDialog(null);
-                if (returnValue == JFileChooser.APPROVE_OPTION) {
-                    File browseDirectory = fileChooser.getSelectedFile();
-
-                    JFrame extractionViewer = new ExtractionViewer(browseDirectory);
-                    extractionViewer.setVisible(true);
-                }
+                JFrame extractionViewer = new ExtractionViewer(new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("EXTRACTIONS_OUTPUT_RELATIVE_PATH")));
+                extractionViewer.setVisible(true);
             }
         });
 
@@ -558,7 +536,6 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
             }
         });
-
 
         relationEvaluationTextField.setText("Relation");
 
@@ -802,8 +779,6 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         for (int i = 0; i< openIePipelineListModel.size(); i++) {
             Object selectedPipelineElement = openIePipelineListModel.get(i);
 
-            System.out.println(selectedPipelineElement);
-
             if (selectedPipelineElement instanceof IExtractorPipelineElement) {
                 IExtractorPipelineElement extractorPipelineElement = (IExtractorPipelineElement) selectedPipelineElement;
                 extractorPipeline.addPipelineElement(extractorPipelineElement);
@@ -870,31 +845,8 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                 ((ExtractorProgress) extractorProgress).stopTimer();
                 extractorProgress.dispose();
 
-                int nFileWriter = 0;
-
-                for (IExtractorPipelineElement extractorPipelineElement: extractorPipeline.getExtractorPipelineElements()) {
-                    if (((Extractor) extractorPipelineElement).getExtractorHandler().getPluginName().equalsIgnoreCase("Extractor File Writer")) {
-                        nFileWriter++;
-
-                        File extractOutputDirectory = new File(((Extractor) extractorPipelineElement).getExtractorHandler().getAvailableConfigurations().get("Output Directory"));
-                        JFrame extractionViewer = new ExtractionViewer(extractOutputDirectory);
-                        extractionViewer.setVisible(true);
-                    }
-                }
-
-                if (nFileWriter == 0) { // Open default folder
-                    for (Object iExtractorHandler: pluginLoader.getImplementedExtensions(IExtractorHandler.class)) {
-                        IExtractorHandler extractorHandler = (IExtractorHandler) iExtractorHandler;
-                        String pluginName = extractorHandler.getPluginName();
-
-                        if (pluginName.equalsIgnoreCase("Extractor File Writer")) {
-                            Extractor extractor = new Extractor().setExtractorHandler(extractorHandler);
-                            File extractOutputDirectory = new File((extractor.getExtractorHandler().getAvailableConfigurations().get("Output Directory")));
-                            JFrame extractionViewer = new ExtractionViewer(extractOutputDirectory);
-                            extractionViewer.setVisible(true);
-                        }
-                    }
-                }
+                JFrame extractionViewer = new ExtractionViewer(new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("EXTRACTIONS_OUTPUT_RELATIVE_PATH")));
+                extractionViewer.setVisible(true);
             }
         });
 
