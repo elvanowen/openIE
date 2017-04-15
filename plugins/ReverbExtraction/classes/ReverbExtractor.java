@@ -236,7 +236,7 @@ class ReverbExtractor {
         return Pair.of(firstArgument, secondArgument);
     }
 
-    private Relations extractRelationFromSentence(File file, String sentence){
+    private Relations extractRelationFromSentence(File file, String sentence, int idxSentence){
 
         Pair<String, String> arguments = Pair.of("", "");
         String extractedVerb;
@@ -254,7 +254,7 @@ class ReverbExtractor {
             }
 
             if (!arguments.getLeft().equalsIgnoreCase("") && !extractedVerb.equalsIgnoreCase("") && !arguments.getRight().equalsIgnoreCase("")) {
-                relations.addRelation(new Relation(arguments.getLeft().trim(), extractedVerb.trim(), arguments.getRight().trim(), file.getAbsolutePath(), sentence));
+                relations.addRelation(new Relation(arguments.getLeft().trim(), extractedVerb.trim(), arguments.getRight().trim(), file.getAbsolutePath(), idxSentence, sentence));
             }
         }
 
@@ -269,9 +269,10 @@ class ReverbExtractor {
 
         Relations extractedRelations = new Relations();
 
-        for (String sentence: sentenceTokenizer.tokenizeSentence(payload)) {
-            System.out.println("Yuhu sentence" + sentence);
-            Relations _extractedRelations = extractRelationFromSentence(file, sentence);
+        ArrayList<String> sentences = sentenceTokenizer.tokenizeSentence(payload);
+
+        for (int i=0;i<sentences.size();i++) {
+            Relations _extractedRelations = extractRelationFromSentence(file, sentences.get(i), i);
             extractedRelations.addRelations(_extractedRelations);
         }
 

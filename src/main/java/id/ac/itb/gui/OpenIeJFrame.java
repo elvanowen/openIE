@@ -951,6 +951,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                         relationEvaluationTextField.getText(),
                         argument2EvaluationTextField.getText(),
                         selectedDocument.getName(),
+                        jList2.getSelectedIndex(),
                         selectedSentence
                 ));
 

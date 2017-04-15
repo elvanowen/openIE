@@ -10,26 +10,29 @@ public class Relation {
     private String relation = null;
     private String secondEntity = null;
     private String originSentence = null;
+    private int idxSentence;
     private String originFile = null;
 
-    public Relation(String firstEntity, String relation, String secondEntity, String originFile, String originSentence) {
+    public Relation(String firstEntity, String relation, String secondEntity, String originFile, int idxSentence, String originSentence) {
         this.firstEntity = firstEntity;
         this.relation = relation;
         this.secondEntity = secondEntity;
+        this.idxSentence = idxSentence;
         this.originSentence = originSentence;
         this.originFile = originFile;
     }
 
-    public Relation(Triple<String, String, String> relation, String originFile, String originSentence) {
+    public Relation(Triple<String, String, String> relation, String originFile, int idxSentence, String originSentence) {
         this.firstEntity = relation.getLeft();
         this.relation = relation.getMiddle();
         this.secondEntity = relation.getRight();
+        this.idxSentence = idxSentence;
         this.originSentence = originSentence;
         this.originFile = originFile;
     }
 
     public String toString() {
-        return String.format("Source: %s\nKalimat: %s\nRelasi: %s(%s, %s)\n", originFile, originSentence, relation, firstEntity, secondEntity);
+        return String.format("Source: %s\nKalimat ke-%s: %s\nRelasi: %s(%s, %s)\n", originFile, (idxSentence + 1), originSentence, relation, firstEntity, secondEntity);
     }
 
     public Triple<String, String, String> getRelationTriple() {
@@ -42,5 +45,9 @@ public class Relation {
 
     public String getOriginSentence() {
         return this.originSentence;
+    }
+
+    public int getSentenceIndex() {
+        return this.idxSentence;
     }
 }
