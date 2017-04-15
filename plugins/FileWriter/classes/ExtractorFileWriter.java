@@ -2,7 +2,7 @@ package classes;
 
 import id.ac.itb.openie.config.Config;
 import id.ac.itb.openie.extractor.IExtractorHandler;
-import id.ac.itb.openie.relations.Relations;
+import id.ac.itb.openie.relation.Relations;
 import id.ac.itb.openie.utils.Utilities;
 import org.apache.commons.lang3.tuple.Pair;
 import ro.fortsoft.pf4j.Extension;

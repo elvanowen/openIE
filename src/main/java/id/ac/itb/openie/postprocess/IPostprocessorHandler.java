@@ -1,7 +1,6 @@
 package id.ac.itb.openie.postprocess;
 
-import id.ac.itb.openie.relations.Relations;
-import org.apache.commons.lang3.tuple.Pair;
+import id.ac.itb.openie.relation.Relations;
 import ro.fortsoft.pf4j.ExtensionPoint;
 
 import java.io.File;

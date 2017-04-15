@@ -2,7 +2,7 @@ package id.ac.itb.openie.postprocess;
 
 import id.ac.itb.openie.pipeline.IOpenIePipelineElement;
 import id.ac.itb.openie.plugins.PluginLoader;
-import id.ac.itb.openie.relations.Relations;
+import id.ac.itb.openie.relation.Relations;
 
 import java.io.File;
 import java.util.ArrayList;

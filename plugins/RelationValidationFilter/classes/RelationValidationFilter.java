@@ -1,7 +1,7 @@
 package classes;
 
 import id.ac.itb.openie.postprocess.IPostprocessorHandler;
-import id.ac.itb.openie.relations.Relations;
+import id.ac.itb.openie.relation.Relations;
 import ro.fortsoft.pf4j.Extension;
 import ro.fortsoft.pf4j.Plugin;
 import ro.fortsoft.pf4j.PluginWrapper;
@@ -46,7 +46,7 @@ public class RelationValidationFilter extends Plugin {
         public HashMap<File, Relations> postprocess(File file, Relations relations) throws Exception {
             System.out.println("my file");
             System.out.println(file);
-            System.out.println("my relations");
+            System.out.println("my relation");
             System.out.println(relations);
 
             HashMap<File, Relations> pipelineItems = new HashMap<>();

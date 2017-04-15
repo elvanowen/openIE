@@ -2,7 +2,7 @@ package classes;
 
 import id.ac.itb.openie.config.Config;
 import id.ac.itb.openie.postprocess.IPostprocessorHandler;
-import id.ac.itb.openie.relations.Relations;
+import id.ac.itb.openie.relation.Relations;
 import id.ac.itb.openie.utils.Utilities;
 import ro.fortsoft.pf4j.Extension;
 import ro.fortsoft.pf4j.Plugin;

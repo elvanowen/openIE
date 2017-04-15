@@ -1,21 +1,14 @@
 package classes;
 
-import id.ac.itb.openie.crawler.ICrawlerHandler;
 import id.ac.itb.openie.extractor.IExtractorHandler;
-import id.ac.itb.openie.relations.Relations;
+import id.ac.itb.openie.relation.Relations;
 import org.apache.commons.lang3.tuple.Pair;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import ro.fortsoft.pf4j.Extension;
 import ro.fortsoft.pf4j.Plugin;
 import ro.fortsoft.pf4j.PluginWrapper;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  * Created by elvanowen on 2/24/17.

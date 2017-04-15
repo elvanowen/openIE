@@ -1,7 +1,6 @@
 package id.ac.itb.openie.extractor;
 
-import id.ac.itb.openie.preprocess.IPreprocessorPipelineElement;
-import id.ac.itb.openie.relations.Relations;
+import id.ac.itb.openie.relation.Relations;
 import org.apache.commons.lang3.tuple.Pair;
 import ro.fortsoft.pf4j.ExtensionPoint;
 

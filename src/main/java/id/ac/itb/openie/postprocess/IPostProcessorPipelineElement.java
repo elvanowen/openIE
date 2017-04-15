@@ -1,10 +1,8 @@
 package id.ac.itb.openie.postprocess;
 
-import id.ac.itb.openie.relations.Relations;
-import org.apache.commons.lang3.tuple.Pair;
+import id.ac.itb.openie.relation.Relations;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**

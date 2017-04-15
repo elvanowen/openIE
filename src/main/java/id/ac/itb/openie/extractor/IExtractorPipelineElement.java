@@ -1,11 +1,9 @@
 package id.ac.itb.openie.extractor;
 
-import id.ac.itb.openie.relations.Relations;
+import id.ac.itb.openie.relation.Relations;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.lang3.tuple.Triple;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**

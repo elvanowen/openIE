@@ -1,4 +1,4 @@
-package id.ac.itb.openie.relations;
+package id.ac.itb.openie.relation;
 
 import id.ac.itb.openie.utils.Utilities;
 import org.apache.commons.lang3.StringUtils;
@@ -54,5 +54,9 @@ public class Relations {
 
     public ArrayList<Relation> getRelations() {
         return relations;
+    }
+
+    public Relations intersect(Relations anotherRelations) {
+        return new Relations();
     }
 }

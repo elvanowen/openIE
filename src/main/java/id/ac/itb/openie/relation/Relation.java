@@ -1,4 +1,4 @@
-package id.ac.itb.openie.relations;
+package id.ac.itb.openie.relation;
 
 import org.apache.commons.lang3.tuple.Triple;
 

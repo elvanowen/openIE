@@ -16,13 +16,14 @@ import id.ac.itb.gui.viewer.ExtractionViewer;
 import id.ac.itb.nlp.SentenceTokenizer;
 import id.ac.itb.openie.config.Config;
 import id.ac.itb.openie.crawler.*;
+import id.ac.itb.openie.evaluation.ExtractionsEvaluation;
 import id.ac.itb.openie.extractor.*;
 import id.ac.itb.openie.pipeline.OpenIePipeline;
 import id.ac.itb.openie.plugins.PluginLoader;
 import id.ac.itb.openie.postprocess.*;
 import id.ac.itb.openie.preprocess.*;
-import id.ac.itb.openie.relations.Relation;
-import id.ac.itb.openie.relations.Relations;
+import id.ac.itb.openie.relation.Relation;
+import id.ac.itb.openie.relation.Relations;
 import id.ac.itb.openie.utils.Utilities;
 import id.ac.itb.util.UnzipUtility;
 import org.apache.commons.lang3.SerializationUtils;
@@ -1022,8 +1023,12 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         int returnValue = fileChooser.showOpenDialog(null);
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File extractionsDirectory = fileChooser.getSelectedFile();
+            File labelsDirectory = new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("EVALUATION_LABEL_OUTPUT_RELATIVE_PATH"));
 
-            EvaluationViewer evaluationViewer = new EvaluationViewer();
+            ExtractionsEvaluation extractionsEvaluation = new ExtractionsEvaluation();
+            extractionsEvaluation.evaluate(extractionsDirectory, labelsDirectory);
+
+            EvaluationViewer evaluationViewer = new EvaluationViewer(extractionsEvaluation);
             evaluationViewer.setVisible(true);
         }
 

@@ -5,7 +5,16 @@
  */
 package id.ac.itb.gui.viewer;
 
+import id.ac.itb.nlp.SentenceTokenizer;
+import id.ac.itb.openie.evaluation.ExtractionsEvaluation;
+import id.ac.itb.openie.relation.Relations;
+import id.ac.itb.openie.utils.Utilities;
+
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import java.io.File;
+import java.util.ArrayList;
 
 /**
  *
@@ -13,11 +22,59 @@ import javax.swing.*;
  */
 public class EvaluationViewer extends javax.swing.JFrame {
 
+    private ExtractionsEvaluation extractionsEvaluation;
+
     /**
      * Creates new form EvaluationViewer
      */
     public EvaluationViewer() {
         initComponents();
+    }
+
+    public EvaluationViewer(ExtractionsEvaluation extractionsEvaluation) {
+        this.extractionsEvaluation = extractionsEvaluation;
+        initComponents();
+    }
+
+    private void refreshEvaluationSentencesList() {
+        File currentlySelectedEvaluationFile = extractionsEvaluation.getDocuments().get(evaluationResultFilesjList.getSelectedIndex());
+        SentenceTokenizer sentenceTokenizer = new SentenceTokenizer();
+        ArrayList<String> sentences = sentenceTokenizer.tokenizeSentence(Utilities.getFileContent(currentlySelectedEvaluationFile));
+
+        evaluationResultSentencesjList.setModel(new javax.swing.AbstractListModel<String>() {
+            public int getSize() { return sentences.size(); }
+            public String getElementAt(int i) { return (i+1) + ". " + sentences.get(i); }
+        });
+    }
+
+    private void refreshEvaluationRelationsList() {
+        if (evaluationResultFilesjList.getSelectedIndex() >= 0) {
+            File selectedEvaluationFile = extractionsEvaluation.getDocuments().get(evaluationResultFilesjList.getSelectedIndex());
+
+            evaluationResultExtractedRelationsjList.setModel(new javax.swing.AbstractListModel<String>() {
+                Relations evaluationRelations = extractionsEvaluation.getExtractedRelationsByFilename().get(selectedEvaluationFile.getName());
+
+                public int getSize() { return evaluationRelations.getRelations().size(); }
+                public String getElementAt(int i) {
+                    return String.format("%s. %s(%s, %s)\n", (i+1), evaluationRelations.getRelations().get(i).getRelationTriple().getMiddle(), evaluationRelations.getRelations().get(i).getRelationTriple().getLeft(), evaluationRelations.getRelations().get(i).getRelationTriple().getRight());
+                }
+            });
+
+            evaluationResultLabelledRelationsjList.setModel(new javax.swing.AbstractListModel<String>() {
+                Relations evaluationRelations = extractionsEvaluation.getLabelledRelationsByFilename().get(selectedEvaluationFile.getName());
+
+                public int getSize() {
+                    if (evaluationRelations == null) {
+                        return 0;
+                    } else {
+                        return evaluationRelations.getRelations().size();
+                    }
+                }
+                public String getElementAt(int i) {
+                    return String.format("%s. %s(%s, %s)\n", (i+1), evaluationRelations.getRelations().get(i).getRelationTriple().getMiddle(), evaluationRelations.getRelations().get(i).getRelationTriple().getLeft(), evaluationRelations.getRelations().get(i).getRelationTriple().getRight());
+                }
+            });
+        }
     }
 
     /**
@@ -69,41 +126,36 @@ public class EvaluationViewer extends javax.swing.JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
+        System.out.println(extractionsEvaluation.getDocuments());
+
         evaluationResultFilesjList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
+            ArrayList<File> files = extractionsEvaluation.getDocuments();
+            public int getSize() { return files.size(); }
+            public String getElementAt(int i) { return (i+1) + ". " + files.get(i).getName(); }
         });
         jScrollPane1.setViewportView(evaluationResultFilesjList);
 
         evaluationResultFilesLabel.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
         evaluationResultFilesLabel.setText("Files:");
 
-        evaluationResultSentencesjList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane2.setViewportView(evaluationResultSentencesjList);
+
+        evaluationResultFilesjList.addListSelectionListener(new ListSelectionListener() {
+            @Override
+            public void valueChanged(ListSelectionEvent e) {
+                refreshEvaluationSentencesList();
+                refreshEvaluationRelationsList();
+            }
+        });
 
         evaluationResultSentencesLabel.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
         evaluationResultSentencesLabel.setText("Sentences:");
 
-        evaluationResultExtractedRelationsjList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane3.setViewportView(evaluationResultExtractedRelationsjList);
 
         evaluationResultExtractedRelationsLabel.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
         evaluationResultExtractedRelationsLabel.setText("Extracted Relations:");
 
-        evaluationResultLabelledRelationsjList.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane4.setViewportView(evaluationResultLabelledRelationsjList);
 
         evaluationResultLabelledRelationsLabel.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
