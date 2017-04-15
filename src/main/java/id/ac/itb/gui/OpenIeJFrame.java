@@ -133,24 +133,25 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     }
 
     private void refreshEvaluationRelationsList() {
-        if (jList1.getSelectedIndex() > 0) {
-            jList3.setModel(new javax.swing.AbstractListModel<String>() {
-                Relations relations = extractionsEvaluationLabeller.getRelationsFromDocument(extractionsEvaluationLabeller.getDocuments().get(jList1.getSelectedIndex()));
+        if (evaluationSectionFilesjList.getSelectedIndex() >= 0) {
+            evaluationSectionRelationsjList.setModel(new javax.swing.AbstractListModel<String>() {
+                Relations relations = extractionsEvaluationLabeller.getRelationsFromDocument(extractionsEvaluationLabeller.getDocuments().get(evaluationSectionFilesjList.getSelectedIndex()));
 
                 public int getSize() {
                     return relations.getRelations().size();
                 }
 
                 public String getElementAt(int i) {
-                    return String.format("%s. %s(%s, %s)\n", (i+1), relations.getRelations().get(i).getRelationTriple().getMiddle(), relations.getRelations().get(i).getRelationTriple().getLeft(), relations.getRelations().get(i).getRelationTriple().getRight());
+                    Relation selectedRelation = relations.getRelations().get(i);
+                    return String.format("%s. #%s: %s(%s, %s)\n", (i+1), selectedRelation.getSentenceIndex() + 1, selectedRelation.getRelationTriple().getMiddle(), selectedRelation.getRelationTriple().getLeft(), selectedRelation.getRelationTriple().getRight());
                 }
             });
         }
     }
 
     private void refreshEvaluationSentencesList() {
-        jList2.setModel(new javax.swing.AbstractListModel<String>() {
-            File selectedDocument = extractionsEvaluationLabeller.getDocuments().get(jList1.getSelectedIndex());
+        evaluationSectionSentencesjList.setModel(new javax.swing.AbstractListModel<String>() {
+            File selectedDocument = extractionsEvaluationLabeller.getDocuments().get(evaluationSectionFilesjList.getSelectedIndex());
             ArrayList<String> sentences = extractionsEvaluationLabeller.getDocumentSentences(selectedDocument);
 
             public int getSize() { return sentences.size(); }
@@ -202,9 +203,9 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         jSeparator14 = new javax.swing.JSeparator();
         jPanel6 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        evaluationSectionFilesjList = new javax.swing.JList<>();
         jScrollPane7 = new javax.swing.JScrollPane();
-        jList2 = new javax.swing.JList<>();
+        evaluationSectionSentencesjList = new javax.swing.JList<>();
         sentencesLabel = new javax.swing.JLabel();
         addNewRelationsLabel = new javax.swing.JLabel();
         argument1EvaluationTextField = new javax.swing.JTextField();
@@ -213,7 +214,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         addEvaluationRelationButton = new javax.swing.JButton();
         addedRelationsLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jList3 = new javax.swing.JList<>();
+        evaluationSectionRelationsjList = new javax.swing.JList<>();
         removeEvaluationButton = new javax.swing.JButton();
         runEvaluationButton = new javax.swing.JButton();
         saveEvaluationButton = new javax.swing.JButton();
@@ -496,13 +497,13 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Open IE", jPanel5);
 
-        jScrollPane2.setViewportView(jList1);
+        jScrollPane2.setViewportView(evaluationSectionFilesjList);
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+        evaluationSectionFilesjList.setModel(new javax.swing.AbstractListModel<String>() {
             public int getSize() { return extractionsEvaluationLabeller.getDocuments().size(); }
             public String getElementAt(int i) { return (i+1) + ". " + extractionsEvaluationLabeller.getDocuments().get(i).getName(); }
         });
-        jScrollPane7.setViewportView(jList2);
+        jScrollPane7.setViewportView(evaluationSectionSentencesjList);
 
         sentencesLabel.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
         sentencesLabel.setText("Sentences:");
@@ -517,7 +518,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             }
         });
 
-        jList1.addListSelectionListener(new ListSelectionListener() {
+        evaluationSectionFilesjList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 refreshEvaluationSentencesList();
@@ -525,10 +526,10 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             }
         });
 
-        jList2.addListSelectionListener(new ListSelectionListener() {
+        evaluationSectionSentencesjList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                if (jList2.getSelectedIndex() >= 0) {
+                if (evaluationSectionSentencesjList.getSelectedIndex() >= 0) {
                     addEvaluationRelationButton.setEnabled(true);
                 } else {
                     addEvaluationRelationButton.setEnabled(false);
@@ -553,12 +554,12 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         addedRelationsLabel.setText("Added Relations:");
 
         refreshEvaluationRelationsList();
-        jScrollPane1.setViewportView(jList3);
+        jScrollPane1.setViewportView(evaluationSectionRelationsjList);
 
-        jList3.addListSelectionListener(new ListSelectionListener() {
+        evaluationSectionRelationsjList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                if (jList3.getSelectedIndex() >= 0) {
+                if (evaluationSectionRelationsjList.getSelectedIndex() >= 0) {
                     removeEvaluationButton.setEnabled(true);
                 } else {
                     removeEvaluationButton.setEnabled(false);
@@ -893,8 +894,8 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private void addEvaluationRelationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEvaluationRelationButtonActionPerformed
         // TODO add your handling code here:
 
-        File selectedDocument = extractionsEvaluationLabeller.getDocuments().get(jList1.getSelectedIndex());
-        String selectedSentence = extractionsEvaluationLabeller.getDocumentSentences(selectedDocument).get(jList2.getSelectedIndex());
+        File selectedDocument = extractionsEvaluationLabeller.getDocuments().get(evaluationSectionFilesjList.getSelectedIndex());
+        String selectedSentence = extractionsEvaluationLabeller.getDocumentSentences(selectedDocument).get(evaluationSectionSentencesjList.getSelectedIndex());
         Relations relations = extractionsEvaluationLabeller.getRelationsFromDocument(selectedDocument);
 
         relations.addRelation(
@@ -903,7 +904,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                         relationEvaluationTextField.getText(),
                         argument2EvaluationTextField.getText(),
                         selectedDocument.getName(),
-                        jList2.getSelectedIndex(),
+                        evaluationSectionSentencesjList.getSelectedIndex(),
                         selectedSentence
                 ));
 
@@ -918,9 +919,9 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private void removeEvaluationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeEvaluationButtonActionPerformed
         // TODO add your handling code here:
 
-        File selectedDocument = extractionsEvaluationLabeller.getDocuments().get(jList1.getSelectedIndex());
+        File selectedDocument = extractionsEvaluationLabeller.getDocuments().get(evaluationSectionFilesjList.getSelectedIndex());
         Relations relations = extractionsEvaluationLabeller.getRelationsFromDocument(selectedDocument);
-        relations.removeRelation(jList3.getSelectedIndex());
+        relations.removeRelation(evaluationSectionRelationsjList.getSelectedIndex());
 
         refreshEvaluationRelationsList();
 
@@ -929,7 +930,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private void saveEvaluationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveEvaluationButtonActionPerformed
         // TODO add your handling code here:
 
-        extractionsEvaluationLabeller.persist(extractionsEvaluationLabeller.getDocuments().get(jList1.getSelectedIndex()));
+        extractionsEvaluationLabeller.persist(extractionsEvaluationLabeller.getDocuments().get(evaluationSectionFilesjList.getSelectedIndex()));
 
     }//GEN-LAST:event_saveEvaluationButtonActionPerformed
 
@@ -974,9 +975,9 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private javax.swing.JTextField argument2EvaluationTextField;
     private javax.swing.JButton browseStartingDirectoryButton;
     private javax.swing.JLabel evaluationFilesLabel;
-    private javax.swing.JList<String> jList1;
-    private javax.swing.JList<String> jList2;
-    private javax.swing.JList<String> jList3;
+    private javax.swing.JList<String> evaluationSectionFilesjList;
+    private javax.swing.JList<String> evaluationSectionSentencesjList;
+    private javax.swing.JList<String> evaluationSectionRelationsjList;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;

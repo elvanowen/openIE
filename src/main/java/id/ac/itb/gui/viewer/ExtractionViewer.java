@@ -193,6 +193,7 @@ public class ExtractionViewer extends javax.swing.JFrame {
         fileContentjTextArea.setRows(5);
         fileContentjTextArea.setEditable(false);
         fileContentjTextArea.setLineWrap(true);
+        fileContentjTextArea.setWrapStyleWord(true);
         fileContentjTextArea.setMargin(new Insets(8,8,8,8));
         jScrollPane2.setViewportView(fileContentjTextArea);
 

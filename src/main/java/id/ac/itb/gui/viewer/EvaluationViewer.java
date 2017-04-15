@@ -7,6 +7,7 @@ package id.ac.itb.gui.viewer;
 
 import id.ac.itb.nlp.SentenceTokenizer;
 import id.ac.itb.openie.evaluation.ExtractionsEvaluationResult;
+import id.ac.itb.openie.relation.Relation;
 import id.ac.itb.openie.relation.Relations;
 import id.ac.itb.openie.utils.Utilities;
 
@@ -56,7 +57,8 @@ public class EvaluationViewer extends javax.swing.JFrame {
 
                 public int getSize() { return evaluationRelations.getRelations().size(); }
                 public String getElementAt(int i) {
-                    return String.format("%s. %s(%s, %s)\n", (i+1), evaluationRelations.getRelations().get(i).getRelationTriple().getMiddle(), evaluationRelations.getRelations().get(i).getRelationTriple().getLeft(), evaluationRelations.getRelations().get(i).getRelationTriple().getRight());
+                    Relation relation = evaluationRelations.getRelations().get(i);
+                    return String.format("%s. #%s: %s(%s, %s)\n", (i+1), relation.getSentenceIndex() + 1, relation.getRelationTriple().getMiddle(), relation.getRelationTriple().getLeft(), relation.getRelationTriple().getRight());
                 }
             });
 
@@ -71,7 +73,8 @@ public class EvaluationViewer extends javax.swing.JFrame {
                     }
                 }
                 public String getElementAt(int i) {
-                    return String.format("%s. %s(%s, %s)\n", (i+1), evaluationRelations.getRelations().get(i).getRelationTriple().getMiddle(), evaluationRelations.getRelations().get(i).getRelationTriple().getLeft(), evaluationRelations.getRelations().get(i).getRelationTriple().getRight());
+                    Relation relation = evaluationRelations.getRelations().get(i);
+                    return String.format("%s. #%s: %s(%s, %s)\n", (i+1), relation.getSentenceIndex() + 1, relation.getRelationTriple().getMiddle(), relation.getRelationTriple().getLeft(), relation.getRelationTriple().getRight());
                 }
             });
         }
@@ -126,8 +129,6 @@ public class EvaluationViewer extends javax.swing.JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        System.out.println(extractionsEvaluationResult.getExtractionsEvaluationModel().getDocuments());
-
         evaluationResultFilesjList.setModel(new javax.swing.AbstractListModel<String>() {
             ArrayList<File> files = extractionsEvaluationResult.getExtractionsEvaluationModel().getDocuments();
             public int getSize() { return files.size(); }
@@ -174,22 +175,22 @@ public class EvaluationViewer extends javax.swing.JFrame {
         EvaluationResultTotalLabelledRelationsjLabel.setText("Total Labelled Relations (#Relations)");
 
         EvaluationResultTotalExtractedSentencesValuejLabel.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        EvaluationResultTotalExtractedSentencesValuejLabel.setText(": 100/200");
+        EvaluationResultTotalExtractedSentencesValuejLabel.setText(": " + extractionsEvaluationResult.getnExtractedSentences() + "/" + extractionsEvaluationResult.getnSentences());
 
         EvaluationResultTotalExtractedRelationsValuejLabel.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        EvaluationResultTotalExtractedRelationsValuejLabel.setText(": 90");
+        EvaluationResultTotalExtractedRelationsValuejLabel.setText(": " + extractionsEvaluationResult.getnExtractions());
 
         EvaluationResultTotalLabelledRelationsValuejLabel.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        EvaluationResultTotalLabelledRelationsValuejLabel.setText(": 50");
+        EvaluationResultTotalLabelledRelationsValuejLabel.setText(": " + extractionsEvaluationResult.getnRelations());
 
         EvaluationResultTotalLabelledSentencesValuejLabel.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        EvaluationResultTotalLabelledSentencesValuejLabel.setText(": 100/200");
+        EvaluationResultTotalLabelledSentencesValuejLabel.setText(": " + extractionsEvaluationResult.getnLabelledSentences() + "/" + extractionsEvaluationResult.getnSentences());
 
         EvaluationResultTotalCorrectRelationsjLabel.setFont(new java.awt.Font("Lucida Grande", 3, 11)); // NOI18N
         EvaluationResultTotalCorrectRelationsjLabel.setText("Total Correct Relations (#Correct)");
 
         EvaluationResultTotalCorrectRelationsValuejLabel.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        EvaluationResultTotalCorrectRelationsValuejLabel.setText(": 25");
+        EvaluationResultTotalCorrectRelationsValuejLabel.setText(": " + extractionsEvaluationResult.getnCorrect());
 
         EvaluationResultRecalljLabel.setFont(new java.awt.Font("Lucida Grande", 3, 11)); // NOI18N
         EvaluationResultRecalljLabel.setText("Recall (R)");
@@ -201,31 +202,31 @@ public class EvaluationViewer extends javax.swing.JFrame {
         EvaluationResultFMeasurejLabel.setText("F-measure (F)");
 
         EvaluationResultTotalRecallFormulajLabel.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        EvaluationResultTotalRecallFormulajLabel.setText("= #Correct/#Extractions");
+        EvaluationResultTotalRecallFormulajLabel.setText("= " + extractionsEvaluationResult.getRecallFormula());
 
         EvaluationResultPrecisionFormulajLabel.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        EvaluationResultPrecisionFormulajLabel.setText("= #Correct/#Relations");
+        EvaluationResultPrecisionFormulajLabel.setText("= " + extractionsEvaluationResult.getPrecisionFormula());
 
         EvaluationResultFMeasureFormulajLabel.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        EvaluationResultFMeasureFormulajLabel.setText("= 2PR/(P + R)");
+        EvaluationResultFMeasureFormulajLabel.setText("= " + extractionsEvaluationResult.getfMeasureFormula());
 
         EvaluationResultRecallFormulaValuejLabel.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        EvaluationResultRecallFormulaValuejLabel.setText("= 25 / 90");
+        EvaluationResultRecallFormulaValuejLabel.setText("= " + extractionsEvaluationResult.getRecallFormulaValue());
 
         EvaluationResultPrecisionFormulaValuejLabel.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        EvaluationResultPrecisionFormulaValuejLabel.setText("= 25 / 50");
+        EvaluationResultPrecisionFormulaValuejLabel.setText("= " + extractionsEvaluationResult.getPrecisionFormulaValue());
 
         EvaluationResultFMeasureFormulaValuejLabel.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        EvaluationResultFMeasureFormulaValuejLabel.setText("= 0.27/(0.27 + 0.50)");
+        EvaluationResultFMeasureFormulaValuejLabel.setText("= " + extractionsEvaluationResult.getfMeasureFormulaValue());
 
         EvaluationResultRecallValuejLabel.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        EvaluationResultRecallValuejLabel.setText("= 0.27");
+        EvaluationResultRecallValuejLabel.setText("= " + extractionsEvaluationResult.getRecall());
 
         EvaluationResultPrecisionValuejLabel.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        EvaluationResultPrecisionValuejLabel.setText("= 0.5");
+        EvaluationResultPrecisionValuejLabel.setText("= " + extractionsEvaluationResult.getPrecision());
 
         EvaluationResultFMeasureValuejLabel.setFont(new java.awt.Font("Lucida Grande", 0, 12)); // NOI18N
-        EvaluationResultFMeasureValuejLabel.setText("= 0.357");
+        EvaluationResultFMeasureValuejLabel.setText("= " + extractionsEvaluationResult.getfMeasure());
 
         jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
 

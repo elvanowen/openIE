@@ -26,6 +26,11 @@ public class ExtractionsEvaluation {
             Relations labelledRelations = extractionsEvaluationResult.getExtractionsEvaluationModel().getLabelledRelationsByFilename().get(file.getName());
             Relations _correctRelations = extractedRelations.intersect(labelledRelations);
 
+            if (_correctRelations.getRelations().size() > 0) {
+                System.out.println("_correctRelations");
+                System.out.println(_correctRelations);
+            }
+
             correctRelationsByFilename.put(file.getName(), _correctRelations);
             correctRelations.addRelations(_correctRelations);
         }
