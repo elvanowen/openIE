@@ -13,10 +13,9 @@ import id.ac.itb.gui.progressbar.PostprocessorProgress;
 import id.ac.itb.gui.progressbar.PreprocessorProgress;
 import id.ac.itb.gui.viewer.EvaluationViewer;
 import id.ac.itb.gui.viewer.ExtractionViewer;
-import id.ac.itb.nlp.SentenceTokenizer;
-import id.ac.itb.openie.config.Config;
 import id.ac.itb.openie.crawler.*;
 import id.ac.itb.openie.evaluation.ExtractionsEvaluation;
+import id.ac.itb.openie.evaluation.ExtractionsEvaluationLabeller;
 import id.ac.itb.openie.evaluation.ExtractionsEvaluationModel;
 import id.ac.itb.openie.evaluation.ExtractionsEvaluationResult;
 import id.ac.itb.openie.extractor.*;
@@ -26,7 +25,6 @@ import id.ac.itb.openie.postprocess.*;
 import id.ac.itb.openie.preprocess.*;
 import id.ac.itb.openie.relation.Relation;
 import id.ac.itb.openie.relation.Relations;
-import id.ac.itb.openie.utils.Utilities;
 import id.ac.itb.util.UnzipUtility;
 import org.apache.commons.lang3.SerializationUtils;
 
@@ -51,9 +49,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
     private DefaultListModel openIePipelineListModel = new DefaultListModel();
     private PluginLoader pluginLoader = new PluginLoader();
-    private ArrayList<File> evaluationFiles;
-    private ArrayList<String> evaluationSentences;
-    private HashMap<File, Relations> evaluationRelationsMap = new HashMap<>();
+    private ExtractionsEvaluationLabeller extractionsEvaluationLabeller = new ExtractionsEvaluationLabeller();
 
     /**
      * Creates new form CustomizeCrawlerJFrame
@@ -100,14 +96,12 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         Preprocessor fileReaderPreprocessor = new Preprocessor();
 
-        for (Object iPreprocessorHandler: pluginLoader.getImplementedExtensions(IPreprocessorHandler.class)) {
+        for (Object iPreprocessorHandler: pluginLoader.getAllExtensions(IPreprocessorHandler.class)) {
             IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) iPreprocessorHandler;
             String pluginName = preprocessorHandler.getPluginName();
 
             if (pluginName.equalsIgnoreCase("Preprocessor File Reader")) {
                 fileReaderPreprocessor = new Preprocessor().setPreprocessorHandler(SerializationUtils.clone(preprocessorHandler));
-                File defaultBrowseDirectory = new File(fileReaderPreprocessor.getPreprocessorHandler().getAvailableConfigurations().get("Input Directory"));
-                fileChooser.setCurrentDirectory(new File(defaultBrowseDirectory.getParent()));
             }
         }
 
@@ -115,49 +109,34 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             File selectedFile = fileChooser.getSelectedFile();
 
-            System.out.println(selectedFile);
-
             fileReaderPreprocessor.getPreprocessorHandler().setAvailableConfigurations("Input Directory", selectedFile.getAbsolutePath());
             openIePipelineListModel.addElement(fileReaderPreprocessor);
         }
     }
 
     private void refreshEvaluationRelationsList() {
-        Relations evaluationRelations = new Relations();
-
         if (jList1.getSelectedIndex() > 0) {
-            File selectedEvaluationFile = evaluationFiles.get(jList1.getSelectedIndex());
-            Relations _evaluationRelations = evaluationRelationsMap.get(selectedEvaluationFile);
+            jList3.setModel(new javax.swing.AbstractListModel<String>() {
+                Relations relations = extractionsEvaluationLabeller.getRelationsFromDocument(extractionsEvaluationLabeller.getDocuments().get(jList1.getSelectedIndex()));
 
-            if (_evaluationRelations != null) {
-                evaluationRelations = _evaluationRelations;
-            } else {
-                // Load from file if exist
-                String evaluationDir = System.getProperty("user.dir") + File.separator + new Config().getProperty("EVALUATION_LABEL_OUTPUT_RELATIVE_PATH");
-
-                File evaluationRelationsFile = new File(evaluationDir + File.separator + selectedEvaluationFile.getName());
-
-                if (evaluationRelationsFile.exists()) {
-                    evaluationRelationsMap.put(selectedEvaluationFile, new Relations(evaluationRelationsFile));
-                } else {
-                    evaluationRelationsMap.put(selectedEvaluationFile, new Relations());
+                public int getSize() {
+                    return relations.getRelations().size();
                 }
-            }
-        }
 
-        final Relations finalEvaluationRelations = evaluationRelations;
-        jList3.setModel(new javax.swing.AbstractListModel<String>() {
-            public int getSize() { return finalEvaluationRelations.getRelations().size(); }
-            public String getElementAt(int i) {
-                return String.format("%s. %s(%s, %s)\n", (i+1), finalEvaluationRelations.getRelations().get(i).getRelationTriple().getMiddle(), finalEvaluationRelations.getRelations().get(i).getRelationTriple().getLeft(), finalEvaluationRelations.getRelations().get(i).getRelationTriple().getRight());
-            }
-        });
+                public String getElementAt(int i) {
+                    return String.format("%s. %s(%s, %s)\n", (i+1), relations.getRelations().get(i).getRelationTriple().getMiddle(), relations.getRelations().get(i).getRelationTriple().getLeft(), relations.getRelations().get(i).getRelationTriple().getRight());
+                }
+            });
+        }
     }
 
     private void refreshEvaluationSentencesList() {
         jList2.setModel(new javax.swing.AbstractListModel<String>() {
-            public int getSize() { return evaluationSentences.size(); }
-            public String getElementAt(int i) { return (i+1) + ". " + evaluationSentences.get(i); }
+            File selectedDocument = extractionsEvaluationLabeller.getDocuments().get(jList1.getSelectedIndex());
+            ArrayList<String> sentences = extractionsEvaluationLabeller.getDocumentSentences(selectedDocument);
+
+            public int getSize() { return sentences.size(); }
+            public String getElementAt(int i) { return (i+1) + ". " + sentences.get(i); }
         });
     }
 
@@ -520,22 +499,11 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Open IE", jPanel5);
 
-        for (Object iPreprocessorHandler: pluginLoader.getAllExtensions(IPreprocessorHandler.class)) {
-            IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) iPreprocessorHandler;
-            String pluginName = preprocessorHandler.getPluginName();
-
-            if (pluginName.equalsIgnoreCase("Preprocessor File Writer")) {
-                File defaultBrowseDirectory = new File(new Preprocessor().setPreprocessorHandler(SerializationUtils.clone(preprocessorHandler)).getPreprocessorHandler().getAvailableConfigurations().get("Output Directory"));
-                evaluationFiles = Utilities.getDirectoryFiles(defaultBrowseDirectory);
-            }
-        }
-
         jScrollPane2.setViewportView(jList1);
 
-        final ArrayList<File> finalEvaluationFiles = evaluationFiles;
         jList1.setModel(new javax.swing.AbstractListModel<String>() {
-            public int getSize() { return finalEvaluationFiles.size(); }
-            public String getElementAt(int i) { return (i+1) + ". " + finalEvaluationFiles.get(i).getName(); }
+            public int getSize() { return extractionsEvaluationLabeller.getDocuments().size(); }
+            public String getElementAt(int i) { return (i+1) + ". " + extractionsEvaluationLabeller.getDocuments().get(i).getName(); }
         });
         jScrollPane7.setViewportView(jList2);
 
@@ -555,10 +523,6 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         jList1.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                File currentlySelectedEvaluationFile = evaluationFiles.get(jList1.getSelectedIndex());
-                SentenceTokenizer sentenceTokenizer = new SentenceTokenizer();
-                evaluationSentences = sentenceTokenizer.tokenizeSentence(Utilities.getFileContent(currentlySelectedEvaluationFile));
-
                 refreshEvaluationSentencesList();
                 refreshEvaluationRelationsList();
             }
@@ -958,18 +922,17 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private void addEvaluationRelationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addEvaluationRelationButtonActionPerformed
         // TODO add your handling code here:
 
-        File currentlySelectedEvaluationFile = evaluationFiles.get(jList1.getSelectedIndex());
-        String currentlySelectedEvaluationSentence = evaluationSentences.get(jList2.getSelectedIndex());
+        File selectedDocument = extractionsEvaluationLabeller.getDocuments().get(jList1.getSelectedIndex());
+        String selectedSentence = extractionsEvaluationLabeller.getDocumentSentences(selectedDocument).get(jList2.getSelectedIndex());
+        Relations relations = extractionsEvaluationLabeller.getRelationsFromDocument(selectedDocument);
 
-        Relations evaluationRelations = evaluationRelationsMap.get(currentlySelectedEvaluationFile);
-
-        evaluationRelations.addRelation(
+        relations.addRelation(
                 new Relation(
                         argument1EvaluationTextField.getText(),
                         relationEvaluationTextField.getText(),
                         argument2EvaluationTextField.getText(),
-                        currentlySelectedEvaluationFile.getName(),
-                        currentlySelectedEvaluationSentence
+                        selectedDocument.getName(),
+                        selectedSentence
                 ));
 
         argument1EvaluationTextField.setText("Argument 1");
@@ -983,7 +946,9 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private void removeEvaluationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_removeEvaluationButtonActionPerformed
         // TODO add your handling code here:
 
-        evaluationRelationsMap.get(evaluationFiles.get(jList1.getSelectedIndex())).removeRelation(jList3.getSelectedIndex());
+        File selectedDocument = extractionsEvaluationLabeller.getDocuments().get(jList1.getSelectedIndex());
+        Relations relations = extractionsEvaluationLabeller.getRelationsFromDocument(selectedDocument);
+        relations.removeRelation(jList3.getSelectedIndex());
 
         refreshEvaluationRelationsList();
 
@@ -992,15 +957,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private void saveEvaluationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveEvaluationButtonActionPerformed
         // TODO add your handling code here:
 
-        File selectedFile = evaluationFiles.get(jList1.getSelectedIndex());
-        Relations relationsToBeSaved = evaluationRelationsMap.get(selectedFile);
-        String evaluationDir = System.getProperty("user.dir") + File.separator + new Config().getProperty("EVALUATION_LABEL_OUTPUT_RELATIVE_PATH");
-
-        if (relationsToBeSaved.getRelations().size() == 0) {
-            Utilities.removeFile(new File(evaluationDir + File.separator + selectedFile.getName()));
-        } else {
-            Utilities.writeToFile(evaluationDir, selectedFile.getName(), relationsToBeSaved.toString());
-        }
+        extractionsEvaluationLabeller.persist(extractionsEvaluationLabeller.getDocuments().get(jList1.getSelectedIndex()));
 
     }//GEN-LAST:event_saveEvaluationButtonActionPerformed
 
