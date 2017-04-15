@@ -46,33 +46,29 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
         return n;
     }
 
-    private void addReaderAndWriterIfNotExist() {
+    private void addDefaultReaderAndWriter() {
         if (preprocessorPipelineElements.size() > 0) {
             PluginLoader pluginLoader = new PluginLoader();
             pluginLoader.registerAvailableExtensions(IPreprocessorHandler.class);
 
             // Prepend preprocessor file reader if not exist
-            if (!((Preprocessor) preprocessorPipelineElements.get(0)).getPreprocessorHandler().getPluginName().equalsIgnoreCase("Preprocessor File Reader")) {
-                for (Object iPreprocessorHandler: pluginLoader.getExtensions(IPreprocessorHandler.class)) {
-                    IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) iPreprocessorHandler;
-                    String pluginName = preprocessorHandler.getPluginName();
+            for (Object iPreprocessorHandler: pluginLoader.getExtensions(IPreprocessorHandler.class)) {
+                IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) iPreprocessorHandler;
+                String pluginName = preprocessorHandler.getPluginName();
 
-                    if (pluginName.equalsIgnoreCase("Preprocessor File Reader")) {
-                        Preprocessor preprocessor = new Preprocessor().setPreprocessorHandler(preprocessorHandler);
-                        preprocessorPipelineElements.add(0, preprocessor);
-                    }
+                if (pluginName.equalsIgnoreCase("Preprocessor File Reader")) {
+                    Preprocessor preprocessor = new Preprocessor().setPreprocessorHandler(preprocessorHandler);
+                    preprocessorPipelineElements.add(0, preprocessor);
                 }
             }
 
-            if (!((Preprocessor) preprocessorPipelineElements.get(preprocessorPipelineElements.size() - 1)).getPreprocessorHandler().getPluginName().equalsIgnoreCase("Preprocessor File Writer")) {
-                for (Object iPreprocessorHandler: pluginLoader.getExtensions(IPreprocessorHandler.class)) {
-                    IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) iPreprocessorHandler;
-                    String pluginName = preprocessorHandler.getPluginName();
+            for (Object iPreprocessorHandler: pluginLoader.getExtensions(IPreprocessorHandler.class)) {
+                IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) iPreprocessorHandler;
+                String pluginName = preprocessorHandler.getPluginName();
 
-                    if (pluginName.equalsIgnoreCase("Preprocessor File Writer")) {
-                        Preprocessor preprocessor = new Preprocessor().setPreprocessorHandler(preprocessorHandler);
-                        preprocessorPipelineElements.add(preprocessor);
-                    }
+                if (pluginName.equalsIgnoreCase("Preprocessor File Writer")) {
+                    Preprocessor preprocessor = new Preprocessor().setPreprocessorHandler(preprocessorHandler);
+                    preprocessorPipelineElements.add(preprocessor);
                 }
             }
         }
@@ -91,7 +87,7 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
         HashMap<File, String> pipeQueue = new HashMap<>();
         HashMap<File, String> nextPipeQueue = new HashMap<>();
 
-        addReaderAndWriterIfNotExist();
+        addDefaultReaderAndWriter();
 
         for (IPreprocessorPipelineElement preprocessorPipelineElement: preprocessorPipelineElements) {
             this.currentlyRunningPreprocessor = preprocessorPipelineElement;

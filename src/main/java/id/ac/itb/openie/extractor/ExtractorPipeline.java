@@ -48,33 +48,29 @@ public class ExtractorPipeline implements IOpenIePipelineElement {
         return n;
     }
 
-    private void addReaderAndWriterIfNotExist() {
+    private void addDefaultReaderAndWriter() {
         if (extractorPipelineElements.size() > 0) {
             PluginLoader pluginLoader = new PluginLoader();
             pluginLoader.registerAvailableExtensions(IExtractorHandler.class);
 
             // Prepend preprocessor file reader if not exist
-            if (!((Extractor) extractorPipelineElements.get(0)).getExtractorHandler().getPluginName().equalsIgnoreCase("Extractor File Reader")) {
-                for (Object iExtractorHandler: pluginLoader.getExtensions(IExtractorHandler.class)) {
-                    IExtractorHandler extractorHandler = (IExtractorHandler) iExtractorHandler;
-                    String pluginName = extractorHandler.getPluginName();
+            for (Object iExtractorHandler: pluginLoader.getExtensions(IExtractorHandler.class)) {
+                IExtractorHandler extractorHandler = (IExtractorHandler) iExtractorHandler;
+                String pluginName = extractorHandler.getPluginName();
 
-                    if (pluginName.equalsIgnoreCase("Extractor File Reader")) {
-                        Extractor extractor = new Extractor().setExtractorHandler(extractorHandler);
-                        extractorPipelineElements.add(0, extractor);
-                    }
+                if (pluginName.equalsIgnoreCase("Extractor File Reader")) {
+                    Extractor extractor = new Extractor().setExtractorHandler(extractorHandler);
+                    extractorPipelineElements.add(0, extractor);
                 }
             }
 
-            if (!((Extractor) extractorPipelineElements.get(extractorPipelineElements.size() - 1)).getExtractorHandler().getPluginName().equalsIgnoreCase("Extractor File Writer")) {
-                for (Object iExtractorHandler: pluginLoader.getExtensions(IExtractorHandler.class)) {
-                    IExtractorHandler extractorHandler = (IExtractorHandler) iExtractorHandler;
-                    String pluginName = extractorHandler.getPluginName();
+            for (Object iExtractorHandler: pluginLoader.getExtensions(IExtractorHandler.class)) {
+                IExtractorHandler extractorHandler = (IExtractorHandler) iExtractorHandler;
+                String pluginName = extractorHandler.getPluginName();
 
-                    if (pluginName.equalsIgnoreCase("Extractor File Writer")) {
-                        Extractor extractor = new Extractor().setExtractorHandler(extractorHandler);
-                        extractorPipelineElements.add(extractor);
-                    }
+                if (pluginName.equalsIgnoreCase("Extractor File Writer")) {
+                    Extractor extractor = new Extractor().setExtractorHandler(extractorHandler);
+                    extractorPipelineElements.add(extractor);
                 }
             }
         }
@@ -90,7 +86,7 @@ public class ExtractorPipeline implements IOpenIePipelineElement {
     public void execute() throws Exception {
         System.out.println("Running extractor pipeline...");
 
-        addReaderAndWriterIfNotExist();
+        addDefaultReaderAndWriter();
 
         HashMap<File, Pair<String, Relations>> pipeQueue = new HashMap<>();
         HashMap<File, Pair<String, Relations>> nextPipeQueue = new HashMap<>();

@@ -58,59 +58,6 @@ public class ExtractionViewer extends javax.swing.JFrame {
         }
     }
 
-    private void highlightRelations(Highlighter highlighter, String fileContent, Relations relations) {
-        Highlighter.HighlightPainter relationPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.orange);
-        Highlighter.HighlightPainter argumentPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.gray);
-
-        for (Relation relation: relations.getRelations()) {
-
-            String sentence = relation.getOriginSentence();
-            sentence = StringUtils.strip(sentence, ".").trim();
-
-            String rel = relation.getRelationTriple().getMiddle();
-            String arg1 = relation.getRelationTriple().getLeft();
-            String arg2 = relation.getRelationTriple().getRight();
-
-//            System.out.println("Check");
-//            System.out.println(fileContent);
-//            System.out.println(rel);
-//            System.out.println(fileContent.indexOf(rel));
-
-            int pointerRelStart = fileContent.indexOf(sentence) + sentence.indexOf(rel);
-            int pointerRelEnd = pointerRelStart + rel.length();
-
-            try {
-                if (pointerRelStart > 0) {
-                    highlighter.addHighlight(pointerRelStart, pointerRelEnd, relationPainter);
-                }
-            } catch (BadLocationException e1) {
-                e1.printStackTrace();
-            }
-
-            int pointerArg1Start = fileContent.indexOf(sentence) + sentence.indexOf(arg1);
-            int pointerArg1End = pointerArg1Start + arg1.length();
-
-            try {
-                if (pointerArg1Start > 0) {
-                    highlighter.addHighlight(pointerArg1Start, pointerArg1End, argumentPainter);
-                }
-            } catch (BadLocationException e1) {
-                e1.printStackTrace();
-            }
-
-            int pointerArg2Start = fileContent.indexOf(sentence) + sentence.indexOf(arg2);
-            int pointerArg2End = pointerArg2Start + arg2.length();
-
-            try {
-                if (pointerArg2Start > 0) {
-                    highlighter.addHighlight(pointerArg2Start, pointerArg2End, argumentPainter);
-                }
-            } catch (BadLocationException e1) {
-                e1.printStackTrace();
-            }
-        }
-    }
-
     private void highlightCurrentRelation() {
         Highlighter.HighlightPainter relationPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.orange);
         Highlighter.HighlightPainter argumentPainter = new DefaultHighlighter.DefaultHighlightPainter(Color.green);
@@ -224,9 +171,9 @@ public class ExtractionViewer extends javax.swing.JFrame {
         closeButton = new javax.swing.JButton();
         additionalInformationLabel = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        fileContentjTextArea = new javax.swing.JTextArea();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList<>();
+        filesjList = new javax.swing.JList<>();
         nextButton = new javax.swing.JButton();
         previousButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
@@ -242,12 +189,12 @@ public class ExtractionViewer extends javax.swing.JFrame {
 
         additionalInformationLabel.setText(files.size() + " extraction files existed");
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setEditable(false);
-        jTextArea1.setLineWrap(true);
-        jTextArea1.setMargin(new Insets(8,8,8,8));
-        jScrollPane2.setViewportView(jTextArea1);
+        fileContentjTextArea.setColumns(20);
+        fileContentjTextArea.setRows(5);
+        fileContentjTextArea.setEditable(false);
+        fileContentjTextArea.setLineWrap(true);
+        fileContentjTextArea.setMargin(new Insets(8,8,8,8));
+        jScrollPane2.setViewportView(fileContentjTextArea);
 
         HashSet<File> _files = new HashSet<>();
 
@@ -261,33 +208,28 @@ public class ExtractionViewer extends javax.swing.JFrame {
 
         ArrayList<File> files = new ArrayList<>(_files);
 
-        jList1.setModel(new javax.swing.AbstractListModel<String>() {
+        filesjList.setModel(new javax.swing.AbstractListModel<String>() {
             public int getSize() { return files.size(); }
             public String getElementAt(int i) { return (i+1) + ". " + files.get(i).getName() ; }
         });
-        jScrollPane3.setViewportView(jList1);
+        jScrollPane3.setViewportView(filesjList);
 
-        highlighter = jTextArea1.getHighlighter();
+        highlighter = fileContentjTextArea.getHighlighter();
 
-        jList1.addListSelectionListener(new ListSelectionListener() {
+        filesjList.addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-
                 // Reset pointer
                 currentRelationPointerIndex = 0;
 
                 // Set selected file
-                currentlySelectedFile = files.get(jList1.getSelectedIndex());
+                currentlySelectedFile = files.get(filesjList.getSelectedIndex());
 
                 String fileContent = StringUtils.join(Utilities.getFileContent(currentlySelectedFile), "");
-                jTextArea1.setText(fileContent);
+                fileContentjTextArea.setText(fileContent);
                 setTitle(currentlySelectedFile.getName());
 
                 showCurrentPointerProgress();
-
-//                System.out.println(relationsByFilename.get(currentlySelectedFile.getName()));
-
-//                highlightRelations(highlighter, fileContent, relationsByFilename.get(selectedFile.getName()));
                 highlightCurrentRelation();
             }
         });
@@ -424,11 +366,11 @@ public class ExtractionViewer extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel additionalInformationLabel;
     private javax.swing.JButton closeButton;
-    private javax.swing.JList<String> jList1;
+    private javax.swing.JList<String> filesjList;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTextArea fileContentjTextArea;
     private javax.swing.JButton nextButton;
     private javax.swing.JButton previousButton;
     // End of variables declaration//GEN-END:variables

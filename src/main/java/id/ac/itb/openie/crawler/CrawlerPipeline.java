@@ -38,20 +38,18 @@ public class CrawlerPipeline implements IOpenIePipelineElement {
         return n;
     }
 
-    private void addWriterIfNotExist() {
+    private void addDefaultWriter() {
         if (crawlerPipelineElements.size() > 0) {
             PluginLoader pluginLoader = new PluginLoader();
             pluginLoader.registerAvailableExtensions(ICrawlerHandler.class);
 
-            if (!((Crawler)crawlerPipelineElements.get(crawlerPipelineElements.size() - 1)).getCrawlerhandler().getPluginName().equalsIgnoreCase("Crawler File Writer")) {
-                for (Object iCrawlerHandler: pluginLoader.getExtensions(ICrawlerHandler.class)) {
-                    ICrawlerHandler crawlerHandler = (ICrawlerHandler) iCrawlerHandler;
-                    String pluginName = crawlerHandler.getPluginName();
+            for (Object iCrawlerHandler: pluginLoader.getExtensions(ICrawlerHandler.class)) {
+                ICrawlerHandler crawlerHandler = (ICrawlerHandler) iCrawlerHandler;
+                String pluginName = crawlerHandler.getPluginName();
 
-                    if (pluginName.equalsIgnoreCase("Crawler File Writer")) {
-                        Crawler crawler = new Crawler().setCrawlerhandler(crawlerHandler);
-                        crawlerPipelineElements.add(crawler);
-                    }
+                if (pluginName.equalsIgnoreCase("Crawler File Writer")) {
+                    Crawler crawler = new Crawler().setCrawlerhandler(crawlerHandler);
+                    crawlerPipelineElements.add(crawler);
                 }
             }
         }
@@ -79,8 +77,6 @@ public class CrawlerPipeline implements IOpenIePipelineElement {
         outputDirs.forEach(Crawler::addOutputDirectory);
     }
 
-
-
     @Override
     public void willExecute() {
         if (this.getNumberOfCrawlers() > 0) {
@@ -94,7 +90,7 @@ public class CrawlerPipeline implements IOpenIePipelineElement {
         // Make sure previous output directories are cleared
         Crawler.clearOutputDirectory();
 
-        addWriterIfNotExist();
+        addDefaultWriter();
         setOutputDirectoriesToAllCrawlers();
 
         for (ICrawlerPipelineElement crawlerPipelineElement: crawlerPipelineElements) {

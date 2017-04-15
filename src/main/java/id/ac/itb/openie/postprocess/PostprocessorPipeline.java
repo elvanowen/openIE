@@ -43,33 +43,29 @@ public class PostprocessorPipeline implements IOpenIePipelineElement {
         return n;
     }
 
-    private void addReaderAndWriterIfNotExist() {
+    private void addDefaultReaderAndWriter() {
         if (postprocessorPipelineElements.size() > 0) {
             PluginLoader pluginLoader = new PluginLoader();
             pluginLoader.registerAvailableExtensions(IPostprocessorHandler.class);
 
             // Prepend postprocessor file reader if not exist
-            if (!((Postprocessor) postprocessorPipelineElements.get(0)).getPostprocessorHandler().getPluginName().equalsIgnoreCase("Postprocessor File Reader")) {
-                for (Object iPostprocessorHandler: pluginLoader.getExtensions(IPostprocessorHandler.class)) {
-                    IPostprocessorHandler postprocessorHandler = (IPostprocessorHandler) iPostprocessorHandler;
-                    String pluginName = postprocessorHandler.getPluginName();
+            for (Object iPostprocessorHandler: pluginLoader.getExtensions(IPostprocessorHandler.class)) {
+                IPostprocessorHandler postprocessorHandler = (IPostprocessorHandler) iPostprocessorHandler;
+                String pluginName = postprocessorHandler.getPluginName();
 
-                    if (pluginName.equalsIgnoreCase("Postprocessor File Reader")) {
-                        Postprocessor postprocessor = new Postprocessor().setPostprocessorHandler(postprocessorHandler);
-                        postprocessorPipelineElements.add(0, postprocessor);
-                    }
+                if (pluginName.equalsIgnoreCase("Postprocessor File Reader")) {
+                    Postprocessor postprocessor = new Postprocessor().setPostprocessorHandler(postprocessorHandler);
+                    postprocessorPipelineElements.add(0, postprocessor);
                 }
             }
 
-            if (!((Postprocessor) postprocessorPipelineElements.get(postprocessorPipelineElements.size() - 1)).getPostprocessorHandler().getPluginName().equalsIgnoreCase("Postprocessor File Writer")) {
-                for (Object iPostprocessorHandler: pluginLoader.getExtensions(IPostprocessorHandler.class)) {
-                    IPostprocessorHandler postprocessorHandler = (IPostprocessorHandler) iPostprocessorHandler;
-                    String pluginName = postprocessorHandler.getPluginName();
+            for (Object iPostprocessorHandler: pluginLoader.getExtensions(IPostprocessorHandler.class)) {
+                IPostprocessorHandler postprocessorHandler = (IPostprocessorHandler) iPostprocessorHandler;
+                String pluginName = postprocessorHandler.getPluginName();
 
-                    if (pluginName.equalsIgnoreCase("Postprocessor File Writer")) {
-                        Postprocessor postprocessor = new Postprocessor().setPostprocessorHandler(postprocessorHandler);
-                        postprocessorPipelineElements.add(postprocessor);
-                    }
+                if (pluginName.equalsIgnoreCase("Postprocessor File Writer")) {
+                    Postprocessor postprocessor = new Postprocessor().setPostprocessorHandler(postprocessorHandler);
+                    postprocessorPipelineElements.add(postprocessor);
                 }
             }
         }
@@ -88,7 +84,7 @@ public class PostprocessorPipeline implements IOpenIePipelineElement {
         HashMap<File, Relations> pipeQueue = new HashMap<>();
         HashMap<File, Relations> nextPipeQueue = new HashMap<>();
 
-        addReaderAndWriterIfNotExist();
+        addDefaultReaderAndWriter();
 
         for (IPostprocessorPipelineElement postprocessorPipelineElement: postprocessorPipelineElements) {
             this.currentlyRunningPostprocessor = postprocessorPipelineElement;
