@@ -1,12 +1,16 @@
 package id.ac.itb.openie.evaluation;
 
+import id.ac.itb.openie.relation.Relations;
+
+import java.util.HashMap;
+
 /**
  * Created by elvanowen on 4/15/17.
  */
 public class ExtractionsEvaluationResult {
-    private int nCorrect;
-    private int nExtractions;
-    private int nRelations;
+    private HashMap<String, Relations> correctRelationsByFilename = new HashMap<>();
+    private Relations correctRelations = new Relations();
+    private ExtractionsEvaluationModel extractionsEvaluationModel;
     private String recallFormula = "#Correct / #Extractions";
     private String precisionFormula = "#Correct / #Relations";
     private String fMeasureFormula = "2PR / (P + R)";
@@ -24,27 +28,15 @@ public class ExtractionsEvaluationResult {
     }
 
     public int getnCorrect() {
-        return nCorrect;
-    }
-
-    public void setnCorrect(int nCorrect) {
-        this.nCorrect = nCorrect;
+        return correctRelations.getRelations().size();
     }
 
     public int getnExtractions() {
-        return nExtractions;
-    }
-
-    public void setnExtractions(int nExtractions) {
-        this.nExtractions = nExtractions;
+        return extractionsEvaluationModel.getExtractedRelations().getRelations().size();
     }
 
     public int getnRelations() {
-        return nRelations;
-    }
-
-    public void setnRelations(int nRelations) {
-        this.nRelations = nRelations;
+        return extractionsEvaluationModel.getLabelledRelations().getRelations().size();
     }
 
     public String getRecallFormula() {
@@ -69,5 +61,29 @@ public class ExtractionsEvaluationResult {
 
     public String getfMeasureFormulaValue() {
         return String.format("2 * %1$f * %2$f / (%1$f + %2$f)", getPrecision(), getRecall());
+    }
+
+    public HashMap<String, Relations> getCorrectRelationsByFilename() {
+        return correctRelationsByFilename;
+    }
+
+    public void setCorrectRelationsByFilename(HashMap<String, Relations> correctRelationsByFilename) {
+        this.correctRelationsByFilename = correctRelationsByFilename;
+    }
+
+    public Relations getCorrectRelations() {
+        return correctRelations;
+    }
+
+    public void setCorrectRelations(Relations correctRelations) {
+        this.correctRelations = correctRelations;
+    }
+
+    public ExtractionsEvaluationModel getExtractionsEvaluationModel() {
+        return extractionsEvaluationModel;
+    }
+
+    public void setExtractionsEvaluationModel(ExtractionsEvaluationModel extractionsEvaluationModel) {
+        this.extractionsEvaluationModel = extractionsEvaluationModel;
     }
 }

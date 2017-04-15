@@ -6,7 +6,7 @@
 package id.ac.itb.gui.viewer;
 
 import id.ac.itb.nlp.SentenceTokenizer;
-import id.ac.itb.openie.evaluation.ExtractionsEvaluation;
+import id.ac.itb.openie.evaluation.ExtractionsEvaluationResult;
 import id.ac.itb.openie.relation.Relations;
 import id.ac.itb.openie.utils.Utilities;
 
@@ -22,7 +22,7 @@ import java.util.ArrayList;
  */
 public class EvaluationViewer extends javax.swing.JFrame {
 
-    private ExtractionsEvaluation extractionsEvaluation;
+    private ExtractionsEvaluationResult extractionsEvaluationResult;
 
     /**
      * Creates new form EvaluationViewer
@@ -31,13 +31,13 @@ public class EvaluationViewer extends javax.swing.JFrame {
         initComponents();
     }
 
-    public EvaluationViewer(ExtractionsEvaluation extractionsEvaluation) {
-        this.extractionsEvaluation = extractionsEvaluation;
+    public EvaluationViewer(ExtractionsEvaluationResult extractionsEvaluationResult) {
+        this.extractionsEvaluationResult = extractionsEvaluationResult;
         initComponents();
     }
 
     private void refreshEvaluationSentencesList() {
-        File currentlySelectedEvaluationFile = extractionsEvaluation.getDocuments().get(evaluationResultFilesjList.getSelectedIndex());
+        File currentlySelectedEvaluationFile = extractionsEvaluationResult.getExtractionsEvaluationModel().getDocuments().get(evaluationResultFilesjList.getSelectedIndex());
         SentenceTokenizer sentenceTokenizer = new SentenceTokenizer();
         ArrayList<String> sentences = sentenceTokenizer.tokenizeSentence(Utilities.getFileContent(currentlySelectedEvaluationFile));
 
@@ -49,10 +49,10 @@ public class EvaluationViewer extends javax.swing.JFrame {
 
     private void refreshEvaluationRelationsList() {
         if (evaluationResultFilesjList.getSelectedIndex() >= 0) {
-            File selectedEvaluationFile = extractionsEvaluation.getDocuments().get(evaluationResultFilesjList.getSelectedIndex());
+            File selectedEvaluationFile = extractionsEvaluationResult.getExtractionsEvaluationModel().getDocuments().get(evaluationResultFilesjList.getSelectedIndex());
 
             evaluationResultExtractedRelationsjList.setModel(new javax.swing.AbstractListModel<String>() {
-                Relations evaluationRelations = extractionsEvaluation.getExtractedRelationsByFilename().get(selectedEvaluationFile.getName());
+                Relations evaluationRelations = extractionsEvaluationResult.getExtractionsEvaluationModel().getExtractedRelationsByFilename().get(selectedEvaluationFile.getName());
 
                 public int getSize() { return evaluationRelations.getRelations().size(); }
                 public String getElementAt(int i) {
@@ -61,7 +61,7 @@ public class EvaluationViewer extends javax.swing.JFrame {
             });
 
             evaluationResultLabelledRelationsjList.setModel(new javax.swing.AbstractListModel<String>() {
-                Relations evaluationRelations = extractionsEvaluation.getLabelledRelationsByFilename().get(selectedEvaluationFile.getName());
+                Relations evaluationRelations = extractionsEvaluationResult.getExtractionsEvaluationModel().getLabelledRelationsByFilename().get(selectedEvaluationFile.getName());
 
                 public int getSize() {
                     if (evaluationRelations == null) {
@@ -126,10 +126,10 @@ public class EvaluationViewer extends javax.swing.JFrame {
 
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 
-        System.out.println(extractionsEvaluation.getDocuments());
+        System.out.println(extractionsEvaluationResult.getExtractionsEvaluationModel().getDocuments());
 
         evaluationResultFilesjList.setModel(new javax.swing.AbstractListModel<String>() {
-            ArrayList<File> files = extractionsEvaluation.getDocuments();
+            ArrayList<File> files = extractionsEvaluationResult.getExtractionsEvaluationModel().getDocuments();
             public int getSize() { return files.size(); }
             public String getElementAt(int i) { return (i+1) + ". " + files.get(i).getName(); }
         });

@@ -49,7 +49,7 @@ public class PostprocessorPipeline implements IOpenIePipelineElement {
             pluginLoader.registerAvailableExtensions(IPostprocessorHandler.class);
 
             // Prepend postprocessor file reader if not exist
-            for (Object iPostprocessorHandler: pluginLoader.getExtensions(IPostprocessorHandler.class)) {
+            for (Object iPostprocessorHandler: pluginLoader.getImplementedExtensions(IPostprocessorHandler.class)) {
                 IPostprocessorHandler postprocessorHandler = (IPostprocessorHandler) iPostprocessorHandler;
                 String pluginName = postprocessorHandler.getPluginName();
 
@@ -59,7 +59,7 @@ public class PostprocessorPipeline implements IOpenIePipelineElement {
                 }
             }
 
-            for (Object iPostprocessorHandler: pluginLoader.getExtensions(IPostprocessorHandler.class)) {
+            for (Object iPostprocessorHandler: pluginLoader.getImplementedExtensions(IPostprocessorHandler.class)) {
                 IPostprocessorHandler postprocessorHandler = (IPostprocessorHandler) iPostprocessorHandler;
                 String pluginName = postprocessorHandler.getPluginName();
 

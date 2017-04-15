@@ -17,6 +17,8 @@ import id.ac.itb.nlp.SentenceTokenizer;
 import id.ac.itb.openie.config.Config;
 import id.ac.itb.openie.crawler.*;
 import id.ac.itb.openie.evaluation.ExtractionsEvaluation;
+import id.ac.itb.openie.evaluation.ExtractionsEvaluationModel;
+import id.ac.itb.openie.evaluation.ExtractionsEvaluationResult;
 import id.ac.itb.openie.extractor.*;
 import id.ac.itb.openie.pipeline.OpenIePipeline;
 import id.ac.itb.openie.plugins.PluginLoader;
@@ -98,7 +100,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         Preprocessor fileReaderPreprocessor = new Preprocessor();
 
-        for (Object iPreprocessorHandler: pluginLoader.getExtensions(IPreprocessorHandler.class)) {
+        for (Object iPreprocessorHandler: pluginLoader.getImplementedExtensions(IPreprocessorHandler.class)) {
             IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) iPreprocessorHandler;
             String pluginName = preprocessorHandler.getPluginName();
 
@@ -233,7 +235,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         openIESectionPreprocessLabel.setText("Preprocesses");
 
-        openIESectionPreprocessComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getExtensions(IPreprocessorHandler.class).toArray()));
+        openIESectionPreprocessComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getImplementedExtensions(IPreprocessorHandler.class).toArray()));
 
         openIESectionAddPreprocessesButton.setText("+");
         openIESectionAddPreprocessesButton.addActionListener(new java.awt.event.ActionListener() {
@@ -246,7 +248,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         openIESectionExtractionLabel.setText("Extraction");
 
-        openIESectionExtractionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getExtensions(IExtractorHandler.class).toArray()));
+        openIESectionExtractionComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getImplementedExtensions(IExtractorHandler.class).toArray()));
 
         openIESectionAddExtractionButton.setText("+");
         openIESectionAddExtractionButton.addActionListener(new java.awt.event.ActionListener() {
@@ -257,7 +259,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         openIESectionPostprocessLabel.setText("Postprocesses");
 
-        openIESectionPostprocessComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getExtensions(IPostprocessorHandler.class).toArray()));
+        openIESectionPostprocessComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getImplementedExtensions(IPostprocessorHandler.class).toArray()));
 
         openIESectionAddPostprocessesButton.setText("+");
         openIESectionAddPostprocessesButton.addActionListener(new java.awt.event.ActionListener() {
@@ -297,7 +299,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         });
 
         openIESectionCrawlerLabel.setText("Crawlers");
-        openIESectionCrawlerComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getExtensions(ICrawlerHandler.class).toArray()));
+        openIESectionCrawlerComboBox.setModel(new javax.swing.DefaultComboBoxModel<>(pluginLoader.getImplementedExtensions(ICrawlerHandler.class).toArray()));
 
         openIESectionAddCrawlersButton.setText("+");
         openIESectionAddCrawlersButton.addActionListener(new java.awt.event.ActionListener() {
@@ -316,7 +318,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
                 File defaultBrowseDirectory = null;
 
-                for (Object iExtractorHandler: pluginLoader.getExtensions(IExtractorHandler.class)) {
+                for (Object iExtractorHandler: pluginLoader.getImplementedExtensions(IExtractorHandler.class)) {
                     IExtractorHandler extractorHandler = (IExtractorHandler) iExtractorHandler;
                     String pluginName = extractorHandler.getPluginName();
 
@@ -518,7 +520,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Open IE", jPanel5);
 
-        for (Object iPreprocessorHandler: pluginLoader.getExtensions(IPreprocessorHandler.class)) {
+        for (Object iPreprocessorHandler: pluginLoader.getAllExtensions(IPreprocessorHandler.class)) {
             IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) iPreprocessorHandler;
             String pluginName = preprocessorHandler.getPluginName();
 
@@ -739,7 +741,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private void openIESectionAddCrawlersButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openIESectionAddCrawlersButtonActionPerformed
         // TODO add your handling code here:
 
-        ICrawlerHandler crawlerHandler = (ICrawlerHandler) pluginLoader.getExtensions(ICrawlerHandler.class).get(openIESectionCrawlerComboBox.getSelectedIndex());
+        ICrawlerHandler crawlerHandler = (ICrawlerHandler) pluginLoader.getImplementedExtensions(ICrawlerHandler.class).get(openIESectionCrawlerComboBox.getSelectedIndex());
         Crawler crawler = new Crawler().setCrawlerhandler(SerializationUtils.clone(crawlerHandler));
 
         openIePipelineListModel.addElement(crawler);
@@ -750,7 +752,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private void openIESectionAddPreprocessesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openIESectionAddPreprocessesButtonActionPerformed
         // TODO add your handling code here:
 
-        IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) pluginLoader.getExtensions(IPreprocessorHandler.class).get(openIESectionPreprocessComboBox.getSelectedIndex());
+        IPreprocessorHandler preprocessorHandler = (IPreprocessorHandler) pluginLoader.getImplementedExtensions(IPreprocessorHandler.class).get(openIESectionPreprocessComboBox.getSelectedIndex());
         Preprocessor preprocessor = new Preprocessor().setPreprocessorHandler(SerializationUtils.clone(preprocessorHandler));
 
         openIePipelineListModel.addElement(preprocessor);
@@ -761,7 +763,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private void openIESectionAddExtractionButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openIESectionAddExtractionButtonActionPerformed
         // TODO add your handling code here:
 
-        IExtractorHandler extractorHandler = (IExtractorHandler) pluginLoader.getExtensions(IExtractorHandler.class).get(openIESectionExtractionComboBox.getSelectedIndex());
+        IExtractorHandler extractorHandler = (IExtractorHandler) pluginLoader.getImplementedExtensions(IExtractorHandler.class).get(openIESectionExtractionComboBox.getSelectedIndex());
         Extractor extractor = new Extractor().setExtractorHandler(SerializationUtils.clone(extractorHandler));
 
         openIePipelineListModel.addElement(extractor);
@@ -772,7 +774,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private void openIESectionAddPostprocessesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openIESectionAddPostprocessesButtonActionPerformed
         // TODO add your handling code here:
 
-        IPostprocessorHandler postprocessorHandler = (IPostprocessorHandler) pluginLoader.getExtensions(IPostprocessorHandler.class).get(openIESectionPostprocessComboBox.getSelectedIndex());
+        IPostprocessorHandler postprocessorHandler = (IPostprocessorHandler) pluginLoader.getImplementedExtensions(IPostprocessorHandler.class).get(openIESectionPostprocessComboBox.getSelectedIndex());
         Postprocessor postprocessor = new Postprocessor().setPostprocessorHandler(SerializationUtils.clone(postprocessorHandler));
 
         openIePipelineListModel.addElement(postprocessor);
@@ -898,7 +900,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                 }
 
                 if (nFileWriter == 0) { // Open default folder
-                    for (Object iExtractorHandler: pluginLoader.getExtensions(IExtractorHandler.class)) {
+                    for (Object iExtractorHandler: pluginLoader.getImplementedExtensions(IExtractorHandler.class)) {
                         IExtractorHandler extractorHandler = (IExtractorHandler) iExtractorHandler;
                         String pluginName = extractorHandler.getPluginName();
 
@@ -1005,32 +1007,13 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private void runEvaluationButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runEvaluationButtonActionPerformed
         // TODO add your handling code here:
 
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Select extractions folder");
-        fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        ExtractionsEvaluation extractionsEvaluation = new ExtractionsEvaluation(new ExtractionsEvaluationModel());
+        extractionsEvaluation.evaluate();
 
-        for (Object iExtractorHandler: pluginLoader.getExtensions(IExtractorHandler.class)) {
-            IExtractorHandler extractorHandler = (IExtractorHandler) iExtractorHandler;
-            String pluginName = extractorHandler.getPluginName();
+        ExtractionsEvaluationResult extractionsEvaluationResult = extractionsEvaluation.getExtractionsEvaluationResult();
 
-            if (pluginName.equalsIgnoreCase("Extractor File Writer")) {
-                Extractor fileWriterExtractor = new Extractor().setExtractorHandler(SerializationUtils.clone(extractorHandler));
-                File defaultBrowseDirectory = new File(fileWriterExtractor.getExtractorHandler().getAvailableConfigurations().get("Output Directory"));
-                fileChooser.setCurrentDirectory(new File(defaultBrowseDirectory.getParent()));
-            }
-        }
-
-        int returnValue = fileChooser.showOpenDialog(null);
-        if (returnValue == JFileChooser.APPROVE_OPTION) {
-            File extractionsDirectory = fileChooser.getSelectedFile();
-            File labelsDirectory = new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("EVALUATION_LABEL_OUTPUT_RELATIVE_PATH"));
-
-            ExtractionsEvaluation extractionsEvaluation = new ExtractionsEvaluation();
-            extractionsEvaluation.evaluate(extractionsDirectory, labelsDirectory);
-
-            EvaluationViewer evaluationViewer = new EvaluationViewer(extractionsEvaluation);
-            evaluationViewer.setVisible(true);
-        }
+        EvaluationViewer evaluationViewer = new EvaluationViewer(extractionsEvaluationResult);
+        evaluationViewer.setVisible(true);
 
     }//GEN-LAST:event_runEvaluationButtonActionPerformed
 
