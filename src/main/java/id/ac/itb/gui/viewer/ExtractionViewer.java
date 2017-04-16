@@ -71,14 +71,11 @@ public class ExtractionViewer extends javax.swing.JFrame {
         String rel = relation.getRelationTriple().getMiddle();
         String arg1 = relation.getRelationTriple().getLeft();
         String arg2 = relation.getRelationTriple().getRight();
-
-        System.out.println("Check");
-        System.out.println(fileContent);
+        
         System.out.println(sentence);
         System.out.println(arg1);
         System.out.println(rel);
         System.out.println(arg2);
-        System.out.println(fileContent.indexOf(rel));
 
         // Remove old highlights
         for (Object highlight: currentHighlights) {
@@ -88,9 +85,12 @@ public class ExtractionViewer extends javax.swing.JFrame {
         // Highlight each word in relation separately
         String relSentence = sentence;
         int offsetRelSentence = 0;
+        int startIdxRel = -1, endIdxRel = -1;
         for (String word: rel.split("\\s")) {
-            int pointerRelStart = relSentence.indexOf(word);
+            int pointerRelStart = relSentence.indexOf(" " + word + " ") + 1;
             int pointerRelEnd = pointerRelStart + word.length();
+
+            if (startIdxRel == -1) startIdxRel = pointerRelStart;
 
             try {
                 if (pointerRelStart >= 0) {
@@ -100,6 +100,7 @@ public class ExtractionViewer extends javax.swing.JFrame {
                     currentHighlights.add(highlighter.addHighlight(fileContent.indexOf(sentence) + offsetRelSentence + pointerRelStart, fileContent.indexOf(sentence) + offsetRelSentence + pointerRelEnd, relationPainter));
 
                     offsetRelSentence += pointerRelEnd;
+                    endIdxRel = offsetRelSentence;
                 }
             } catch (BadLocationException e1) {
                 e1.printStackTrace();
@@ -107,10 +108,10 @@ public class ExtractionViewer extends javax.swing.JFrame {
         }
 
         // Highlight each word in 1st argument separately
-        String arg1Sentence = sentence;
+        String arg1Sentence = sentence.substring(0, startIdxRel);
         int offsetArg1Sentence = 0;
         for (String word: arg1.split("\\s")) {
-            int pointerArg1Start = arg1Sentence.indexOf(word);
+            int pointerArg1Start = arg1Sentence.indexOf(" " + word + " ") + 1;
             int pointerArg1End = pointerArg1Start + word.length();
 
             try {
@@ -127,11 +128,11 @@ public class ExtractionViewer extends javax.swing.JFrame {
             }
         }
 
-        // Highlight each word in 1st argument separately
-        String arg2Sentence = sentence;
+        // Highlight each word in 2nd argument separately
+        String arg2Sentence = sentence.substring(endIdxRel);
         int offsetArg2Sentence = 0;
         for (String word: arg2.split("\\s")) {
-            int pointerArg2Start = arg2Sentence.indexOf(word);
+            int pointerArg2Start = arg2Sentence.indexOf(" " + word + " ") + 1;
             int pointerArg2End = pointerArg2Start + word.length();
 
             try {
@@ -139,7 +140,7 @@ public class ExtractionViewer extends javax.swing.JFrame {
                     arg2Sentence = arg2Sentence.substring(pointerArg2End);
 
                     // Add offset
-                    currentHighlights.add(highlighter.addHighlight(fileContent.indexOf(sentence) + offsetArg2Sentence + pointerArg2Start, fileContent.indexOf(sentence) + offsetArg2Sentence + pointerArg2End, argumentPainter));
+                    currentHighlights.add(highlighter.addHighlight(fileContent.indexOf(sentence.substring(endIdxRel)) + offsetArg2Sentence + pointerArg2Start, fileContent.indexOf(sentence.substring(endIdxRel)) + offsetArg2Sentence + pointerArg2End, argumentPainter));
 
                     offsetArg2Sentence += pointerArg2End;
                 }

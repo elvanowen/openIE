@@ -13,17 +13,17 @@ import java.util.HashMap;
 /**
  * Created by elvanowen on 2/24/17.
  */
-public class ReverbExtractorHandler extends Plugin {
+public class ReverbExtractorV2Handler extends Plugin {
 
-    public ReverbExtractorHandler(PluginWrapper wrapper) {
+    public ReverbExtractorV2Handler(PluginWrapper wrapper) {
         super(wrapper);
     }
 
     @Extension
-    public static class ReverbExtractorHandlerPlugin implements IExtractorHandler {
+    public static class ReverbExtractorV2HandlerPlugin implements IExtractorHandler {
 
         public String getPluginName() {
-            return "Reverb Extractor";
+            return "Reverb Extractor V2";
         }
 
         @Override

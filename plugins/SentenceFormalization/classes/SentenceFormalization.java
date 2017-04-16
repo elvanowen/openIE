@@ -3,7 +3,6 @@ package classes;
 import IndonesianNLP.IndonesianSentenceFormalization;
 import id.ac.itb.nlp.SentenceTokenizer;
 import id.ac.itb.openie.preprocess.IPreprocessorHandler;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import ro.fortsoft.pf4j.Extension;
 import ro.fortsoft.pf4j.Plugin;
@@ -62,7 +61,7 @@ public class SentenceFormalization extends Plugin {
             }
 
             HashMap<File, String> pipelineItems = new HashMap<>();
-            pipelineItems.put(file, StringUtils.join(preprocessedSentences, "."));
+            pipelineItems.put(file, StringUtils.join(preprocessedSentences, ""));
 
             return pipelineItems;
         }

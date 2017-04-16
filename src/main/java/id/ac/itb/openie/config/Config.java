@@ -1,9 +1,8 @@
 package id.ac.itb.openie.config;
 
-import org.yaml.snakeyaml.Yaml;
-
-import java.io.*;
-import java.util.Map;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**

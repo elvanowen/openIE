@@ -15,8 +15,8 @@ import java.util.*;
 public class PluginLoader {
 
     private PluginManager pluginManager = null;
-    private HashMap<Class, List> implementedExtensions = new HashMap<>();
-    private HashMap<Class, List> allAvailableExtensions = new HashMap<>();
+    private HashMap<Class, List> implementedExtensions = new HashMap<>(); // Exclude system default plugins like reader and writer
+    private HashMap<Class, List> allAvailableExtensions = new HashMap<>(); // All plugins existed in plugins directory including reader and writer
 
     public PluginLoader() {
         this.pluginManager = new DefaultPluginManager();
