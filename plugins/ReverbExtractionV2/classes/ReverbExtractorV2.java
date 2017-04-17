@@ -35,7 +35,7 @@ class ReverbExtractorV2 {
         for(int i = 0; i < tags.size(); i++) tagsArr.add(i + "$" + tags.get(i)[0] + "/" + tags.get(i)[1]);
 
         String regexString = StringUtils.join(tagsArr, " ");
-        String regexExtractRelationPattern = "(?:[\\w$]+\\/VBI\\s?|[\\w$]+\\/VBT\\s?)+(?:[\\w$]+\\/CDP\\s?|[\\w$]+\\/NN\\s?|[\\w$]+\\/DT\\s?)*(?:[\\w$]+\\/IN\\s?)|(?:[\\w$]+\\/VBI\\s?|[\\w$]+\\/VBT\\s?)+([\\w$]+\\/IN\\s?)|(?:[\\w$]+\\/VBI\\s?|[\\w$]+\\/VBT\\s?)+";
+        String regexExtractRelationPattern = "(?:[\\w$]+\\/MD.?\\s?)*(?:[\\w$]+\\/VB.?\\s?)(?:[\\w$]+\\/CDP\\s?|[\\w$]+\\/WP\\s?|[\\w$]+\\/PR.?\\s?|[\\w$]+\\/RB\\s?|[\\w$]+\\/JJ\\s?|[\\w$]+\\/NN.?\\s?|[\\w$]+\\/DT\\s?)*(?:[\\w$]+\\/IN\\s?)|(?:[\\w$]+\\/MD.?\\s?)*(?:[\\w$]+\\/VB.?\\s?)(?:[\\w$]+\\/IN\\s?)?";
 
         Pattern p = Pattern.compile(regexExtractRelationPattern);
         Matcher m = p.matcher(regexString);
@@ -86,7 +86,7 @@ class ReverbExtractorV2 {
 
 //        System.out.println(regexString);
 
-        String regexExtractArgumentPattern = "(?:[\\w$()&]+\\/NNP\\s?|[\\w$()&]+\\/NN\\s?)+|(?:[\\w$()&]+\\/JJ\\s?)|(?:[\\w$()&]+\\/CD.?\\s?)|(?:[\\w$()&]+\\/FW\\s?)|(?:[\\w$()&]+\\/PRP\\s?)";
+        String regexExtractArgumentPattern = "(?:(?:[\\w$()&]|\\d+[,.-]\\d+)+\\/NN.?\\s?)+|(?:(?:[\\w$()&]|\\d+[,.-]\\d+)+\\/JJ\\s?)*(?:(?:[\\w$()&]|\\d+[,.-]\\d+)+\\/NN.?\\s?)|(?:(?:[\\w$()&]|\\d+[,.-]\\d+)+\\/FW\\s?)|(?:(?:[\\w$()&]|\\d+[,.-]\\d+)+\\/CD.?\\s?)";
 
         Pattern p = Pattern.compile(regexExtractArgumentPattern);
         Matcher m = p.matcher(regexString);
