@@ -52,19 +52,21 @@ class ReverbExtractorV2 {
         int previousVerbIdx = -1;
         String verbString = "";
         for (String verb: extractedVerbItems) {
-            int idx = Integer.valueOf(verb.split("\\$")[0]);
-            String currentVerb = verb.split("/")[0].split("\\$")[1];
+            if (verb.contains("$")) {
+                int idx = Integer.valueOf(verb.split("\\$")[0]);
+                String currentVerb = verb.split("/")[0].split("\\$")[1];
 
-            if (previousVerbIdx == -1) {
-                verbString += currentVerb + " ";
-            } else if (previousVerbIdx + 1 == idx) {
-                verbString += currentVerb + " ";
-            } else {
-                extractedVerbs.add(verbString.trim());
-                verbString = currentVerb + " ";
+                if (previousVerbIdx == -1) {
+                    verbString += currentVerb + " ";
+                } else if (previousVerbIdx + 1 == idx) {
+                    verbString += currentVerb + " ";
+                } else {
+                    extractedVerbs.add(verbString.trim());
+                    verbString = currentVerb + " ";
+                }
+
+                previousVerbIdx = idx;
             }
-
-            previousVerbIdx = idx;
         }
 
         extractedVerbs.add(verbString.trim());
@@ -100,20 +102,22 @@ class ReverbExtractorV2 {
 
         int previousArgumentIdx = -1;
         String argumentString = "";
-        for (String verb: extractedArgumentItems) {
-            int idx = Integer.valueOf(verb.split("\\$")[0]);
-            String currentArgument = verb.split("/")[0].split("\\$")[1];
+        for (String argument: extractedArgumentItems) {
+            if (argument.contains("$")) {
+                int idx = Integer.valueOf(argument.split("\\$")[0]);
+                String currentArgument = argument.split("/")[0].split("\\$")[1];
 
-            if (previousArgumentIdx == -1) {
-                argumentString += currentArgument + " ";
-            } else if (previousArgumentIdx + 1 == idx) {
-                argumentString += currentArgument + " ";
-            } else {
-                extractedArguments.add(argumentString.trim());
-                argumentString = currentArgument + " ";
+                if (previousArgumentIdx == -1) {
+                    argumentString += currentArgument + " ";
+                } else if (previousArgumentIdx + 1 == idx) {
+                    argumentString += currentArgument + " ";
+                } else {
+                    extractedArguments.add(argumentString.trim());
+                    argumentString = currentArgument + " ";
+                }
+
+                previousArgumentIdx = idx;
             }
-
-            previousArgumentIdx = idx;
         }
 
         extractedArguments.add(argumentString.trim());

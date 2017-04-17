@@ -72,10 +72,8 @@ public class ExtractionViewer extends javax.swing.JFrame {
         String arg1 = relation.getRelationTriple().getLeft();
         String arg2 = relation.getRelationTriple().getRight();
         
-        System.out.println(sentence);
-        System.out.println(arg1);
-        System.out.println(rel);
-        System.out.println(arg2);
+        System.out.println("Sentence: " + sentence);
+        System.out.println(String.format("Relation: %s(%s, %s)", rel, arg1, arg2));
 
         // Remove old highlights
         for (Object highlight: currentHighlights) {
@@ -84,7 +82,7 @@ public class ExtractionViewer extends javax.swing.JFrame {
 
         // Highlight each word in relation separately
         String relSentence = sentence;
-        int offsetRelSentence = 0;
+        int offsetRelSentence = fileContent.indexOf(sentence);
         int startIdxRel = -1, endIdxRel = -1;
         for (String word: rel.split("\\s")) {
             int pointerRelStart = relSentence.indexOf(" " + word + " ") + 1;
@@ -97,7 +95,7 @@ public class ExtractionViewer extends javax.swing.JFrame {
                     relSentence = relSentence.substring(pointerRelEnd);
 
                     // Add offset
-                    currentHighlights.add(highlighter.addHighlight(fileContent.indexOf(sentence) + offsetRelSentence + pointerRelStart, fileContent.indexOf(sentence) + offsetRelSentence + pointerRelEnd, relationPainter));
+                    currentHighlights.add(highlighter.addHighlight(offsetRelSentence + pointerRelStart, offsetRelSentence + pointerRelEnd, relationPainter));
 
                     offsetRelSentence += pointerRelEnd;
                     endIdxRel = offsetRelSentence;
@@ -109,7 +107,7 @@ public class ExtractionViewer extends javax.swing.JFrame {
 
         // Highlight each word in 1st argument separately
         String arg1Sentence = sentence.substring(0, startIdxRel);
-        int offsetArg1Sentence = 0;
+        int offsetArg1Sentence = fileContent.indexOf(sentence);
         for (String word: arg1.split("\\s")) {
             int pointerArg1Start = arg1Sentence.indexOf(" " + word + " ") + 1;
             int pointerArg1End = pointerArg1Start + word.length();
@@ -119,7 +117,7 @@ public class ExtractionViewer extends javax.swing.JFrame {
                     arg1Sentence = arg1Sentence.substring(pointerArg1End);
 
                     // Add offset
-                    currentHighlights.add(highlighter.addHighlight(fileContent.indexOf(sentence) + offsetArg1Sentence + pointerArg1Start, fileContent.indexOf(sentence) + offsetArg1Sentence + pointerArg1End, argumentPainter));
+                    currentHighlights.add(highlighter.addHighlight(offsetArg1Sentence + pointerArg1Start, offsetArg1Sentence + pointerArg1End, argumentPainter));
 
                     offsetArg1Sentence += pointerArg1End;
                 }
@@ -129,8 +127,8 @@ public class ExtractionViewer extends javax.swing.JFrame {
         }
 
         // Highlight each word in 2nd argument separately
-        String arg2Sentence = sentence.substring(endIdxRel);
-        int offsetArg2Sentence = 0;
+        String arg2Sentence = sentence.substring(startIdxRel + rel.length());
+        int offsetArg2Sentence = fileContent.indexOf(sentence) + startIdxRel + rel.length();
         for (String word: arg2.split("\\s")) {
             int pointerArg2Start = arg2Sentence.indexOf(" " + word + " ") + 1;
             int pointerArg2End = pointerArg2Start + word.length();
@@ -140,7 +138,7 @@ public class ExtractionViewer extends javax.swing.JFrame {
                     arg2Sentence = arg2Sentence.substring(pointerArg2End);
 
                     // Add offset
-                    currentHighlights.add(highlighter.addHighlight(fileContent.indexOf(sentence.substring(endIdxRel)) + offsetArg2Sentence + pointerArg2Start, fileContent.indexOf(sentence.substring(endIdxRel)) + offsetArg2Sentence + pointerArg2End, argumentPainter));
+                    currentHighlights.add(highlighter.addHighlight(offsetArg2Sentence + pointerArg2Start, offsetArg2Sentence + pointerArg2End, argumentPainter));
 
                     offsetArg2Sentence += pointerArg2End;
                 }
