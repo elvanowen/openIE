@@ -148,6 +148,8 @@ public class Crawler extends WebCrawler implements ICrawlerPipelineElement {
 
         config.setUserAgentString(userAgentString);
 
+        config.setPolitenessDelay(10);
+
         /*
          * Instantiate the controller for this crawl.
          */
@@ -173,7 +175,7 @@ public class Crawler extends WebCrawler implements ICrawlerPipelineElement {
              * will reach the line after this only when crawling is finished.
              */
             controller.start(this.getClass(), 1);
-            controller.waitUntilFinish();
+//            controller.waitUntilFinish();
         } catch (Exception e) {
             e.printStackTrace();
         }
