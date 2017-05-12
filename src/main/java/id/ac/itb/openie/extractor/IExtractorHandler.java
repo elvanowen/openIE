@@ -12,11 +12,35 @@ import java.util.HashMap;
  * Created by elvanowen on 2/24/17.
  */
 public interface IExtractorHandler extends ExtensionPoint, Serializable {
+    /**
+     *
+     * @return Plugin name
+     */
     public String getPluginName();
+
+    /**
+     *
+     * @return List of configuration name with its default value
+     */
     public HashMap<String, String> getAvailableConfigurations();
+
+    /**
+     *
+     * @param file File pointing to the original preprocessed document
+     * @param payload String containing the content of the file
+     * @param relations List of relation extracted from previous extractor
+     * @return List of file with its preprocessed payload and the extracted relations
+     * @throws Exception
+     */
     public HashMap<File, Pair<String, Relations>> extract(File file, String payload, Relations relations) throws Exception;
 
-    // Hooks
+    /**
+     * Hook to be called before extractor will run
+     */
     public void extractorWillRun();
+
+    /**
+     * Hook to be called before extractor have run
+     */
     public void extractorDidRun();
 }
