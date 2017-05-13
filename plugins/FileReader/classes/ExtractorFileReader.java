@@ -39,6 +39,11 @@ public class ExtractorFileReader extends Plugin {
         }
 
         @Override
+        public void setAvailableConfigurations(String key, String value) {
+            availableConfigurations.put(key, value);
+        }
+
+        @Override
         public HashMap<File, Pair<String, Relations>> read() throws Exception {
             if (getAvailableConfigurations().get("Input Directory") == null) {
                 throw new Exception("Read directory path must be specified");

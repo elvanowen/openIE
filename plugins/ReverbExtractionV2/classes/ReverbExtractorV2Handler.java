@@ -21,13 +21,20 @@ public class ReverbExtractorV2Handler extends Plugin {
     @Extension
     public static class ReverbExtractorV2HandlerPlugin extends IExtractorExtensionHandler {
 
+        HashMap<String, String> availableConfigurations = new HashMap<>();
+
         public String getPluginName() {
             return "Reverb Extractor V2";
         }
 
         @Override
         public HashMap<String, String> getAvailableConfigurations() {
-            return null;
+            return availableConfigurations;
+        }
+
+        @Override
+        public void setAvailableConfigurations(String key, String value) {
+            availableConfigurations.put(key, value);
         }
 
         @Override

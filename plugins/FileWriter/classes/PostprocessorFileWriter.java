@@ -37,6 +37,11 @@ public class PostprocessorFileWriter extends Plugin {
         }
 
         @Override
+        public void setAvailableConfigurations(String key, String value) {
+            availableConfigurations.put(key, value);
+        }
+
+        @Override
         public HashMap<File, Relations> read() throws Exception {
             return null;
         }

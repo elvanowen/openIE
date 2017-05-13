@@ -35,6 +35,11 @@ public class RelationValidationFilter extends Plugin {
         }
 
         @Override
+        public void setAvailableConfigurations(String key, String value) {
+            availableConfigurations.put(key, value);
+        }
+
+        @Override
         public Relations postprocess(Relations relations, Relations postprocessed) throws Exception {
             PhraseChunker phraseChunker = new PhraseChunker();
             NamedEntityTagger namedEntityTagger = new NamedEntityTagger();

@@ -24,6 +24,13 @@ public interface ICrawlerHandler extends ExtensionPoint, Serializable {
 
     /**
      *
+     * @param key Configuration name
+     * @param value Configuration value
+     */
+    public void setAvailableConfigurations(String key, String value);
+
+    /**
+     *
      * @return Set of main website urls to start crawling
      */
     public HashSet<String> getCrawlerStartingUrls();

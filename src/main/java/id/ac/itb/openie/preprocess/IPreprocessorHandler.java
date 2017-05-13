@@ -22,7 +22,12 @@ public interface IPreprocessorHandler extends ExtensionPoint, Serializable {
      */
     public HashMap<String, String> getAvailableConfigurations();
 
-    public HashMap<String, String> setAvailableConfigurations(String key, String value);
+    /**
+     *
+     * @param key Configuration name
+     * @param value Configuration value
+     */
+    public void setAvailableConfigurations(String key, String value);
 
     /**
      *

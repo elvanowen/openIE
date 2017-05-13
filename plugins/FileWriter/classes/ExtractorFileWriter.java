@@ -38,6 +38,11 @@ public class ExtractorFileWriter extends Plugin {
         }
 
         @Override
+        public void setAvailableConfigurations(String key, String value) {
+            availableConfigurations.put(key, value);
+        }
+
+        @Override
         public HashMap<File, Pair<String, Relations>> read() throws Exception {
             return null;
         }

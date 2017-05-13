@@ -26,6 +26,13 @@ public interface IExtractorHandler extends ExtensionPoint, Serializable {
 
     /**
      *
+     * @param key Configuration name
+     * @param value Configuration value
+     */
+    public void setAvailableConfigurations(String key, String value);
+
+    /**
+     *
      * @param document String containing original preprocessed file content
      * @param extracted List of relation extracted from previous extractor
      * @return extracted relations

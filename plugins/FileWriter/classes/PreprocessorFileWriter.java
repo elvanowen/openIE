@@ -36,9 +36,8 @@ public class PreprocessorFileWriter extends Plugin {
         }
 
         @Override
-        public HashMap<String, String> setAvailableConfigurations(String key, String value) {
+        public void setAvailableConfigurations(String key, String value) {
             availableConfigurations.put(key, value);
-            return null;
         }
 
         @Override

@@ -25,6 +25,13 @@ public interface IPostprocessorHandler extends ExtensionPoint, Serializable {
 
     /**
      *
+     * @param key Configuration name
+     * @param value Configuration value
+     */
+    public void setAvailableConfigurations(String key, String value);
+
+    /**
+     *
      * @param relations List of originally extracted relation from extractor
      * @param postprocessed List of relation postprocessed from previous postprocessor
      * @return postprocessed relations

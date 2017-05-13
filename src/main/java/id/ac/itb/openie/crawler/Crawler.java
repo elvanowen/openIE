@@ -102,13 +102,10 @@ public class Crawler extends WebCrawler implements ICrawlerPipelineElement {
     }
 
     private void writeToFile(String url, String content) {
-        System.out.println("writeToFile");
-        System.out.println(url);
-        System.out.println(content);
-        System.out.println(outputDirectories);
-        for (String outputDirectory: outputDirectories) {
-            System.out.println("outputDirectory" + outputDirectory);
-            Utilities.writeToFile(outputDirectory, url, content);
+        if (!url.equalsIgnoreCase("") && !content.equalsIgnoreCase("")) {
+            for (String outputDirectory: outputDirectories) {
+                Utilities.writeToFile(outputDirectory, url, content);
+            }
         }
     }
 

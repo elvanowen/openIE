@@ -38,6 +38,11 @@ public class PostprocessorFileReader extends Plugin {
         }
 
         @Override
+        public void setAvailableConfigurations(String key, String value) {
+            availableConfigurations.put(key, value);
+        }
+
+        @Override
         public HashMap<File, Relations> read() throws Exception {
             System.out.println("Inside post reader 0");
 

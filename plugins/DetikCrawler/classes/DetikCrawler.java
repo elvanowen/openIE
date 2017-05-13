@@ -1,13 +1,15 @@
 package classes;
 
 import id.ac.itb.openie.crawler.ICrawlerExtensionHandler;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
+import org.jsoup.nodes.Element;
 import ro.fortsoft.pf4j.Extension;
 import ro.fortsoft.pf4j.Plugin;
 import ro.fortsoft.pf4j.PluginWrapper;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
@@ -22,6 +24,7 @@ public class DetikCrawler extends Plugin {
 
     @Extension
     public static class DetikCrawlerHandler extends ICrawlerExtensionHandler {
+
         HashMap<String, String> availableConfigurations = new HashMap<>();
 
         public String getPluginName() {
@@ -39,13 +42,17 @@ public class DetikCrawler extends Plugin {
             return availableConfigurations;
         }
 
+        @Override
+        public void setAvailableConfigurations(String key, String value) {
+            availableConfigurations.put(key, value);
+        }
+
         public HashSet<String> getCrawlerStartingUrls() {
             HashSet<String> urls = new HashSet<String>();
 
             urls.add("https://www.detik.com");
             urls.add("https://finance.detik.com");
             urls.add("https://news.detik.com");
-            urls.add("https://wolipop.detik.com");
             urls.add("https://health.detik.com");
             urls.add("https://hot.detik.com");
             urls.add("http://travel.detik.com");
@@ -65,8 +72,17 @@ public class DetikCrawler extends Plugin {
         public String extract(String url, String response) {
             Document doc = Jsoup.parse(response);
 
-            Elements contents = doc.getElementsByClass("detail_text");
-            return contents.get(0).text();
+            ArrayList<String> contents = new ArrayList<>();
+
+            for (Element element: doc.getElementsByClass("detail_text")) {
+                contents.add(element.text());
+            }
+
+            for (Element element: doc.getElementsByClass("text_detail")) {
+                contents.add(element.text());
+            }
+
+            return StringUtils.join(contents, "");
         }
 
         public String toString() {

@@ -19,6 +19,8 @@ public class KompasNormalization extends Plugin {
     @Extension
     public static class KompasNormalizationHandler extends IPreprocessorExtensionHandler {
 
+        HashMap<String, String> availableConfigurations = new HashMap<>();
+
         @Override
         public String getPluginName() {
             return "Kompas Normalization";
@@ -26,12 +28,12 @@ public class KompasNormalization extends Plugin {
 
         @Override
         public HashMap<String, String> getAvailableConfigurations() {
-            return null;
+            return availableConfigurations;
         }
 
         @Override
-        public HashMap<String, String> setAvailableConfigurations(String key, String value) {
-            return null;
+        public void setAvailableConfigurations(String key, String value) {
+            availableConfigurations.put(key, value);
         }
 
         /* Function  : Remove document metadata */

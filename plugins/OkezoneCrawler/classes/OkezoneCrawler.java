@@ -43,6 +43,11 @@ public class OkezoneCrawler extends Plugin {
             return availableConfigurations;
         }
 
+        @Override
+        public void setAvailableConfigurations(String key, String value) {
+            availableConfigurations.put(key, value);
+        }
+
         public HashSet<String> getCrawlerStartingUrls() {
             HashSet<String> urls = new HashSet<String>();
 
