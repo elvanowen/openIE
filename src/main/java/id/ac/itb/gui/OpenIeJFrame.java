@@ -198,6 +198,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         openIESectionCrawlerComboBox = new javax.swing.JComboBox<>();
         openIESectionAddCrawlersButton = new javax.swing.JButton();
         openExtractionViewerLabel = new javax.swing.JLabel();
+        openExtractionPostprocessedViewerLabel = new javax.swing.JLabel();
         startingDirectoryLabel = new javax.swing.JLabel();
         browseStartingDirectoryButton = new javax.swing.JButton();
         jSeparator14 = new javax.swing.JSeparator();
@@ -330,7 +331,15 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
         jSeparator14.setOrientation(javax.swing.SwingConstants.VERTICAL);
 
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
+        openExtractionPostprocessedViewerLabel.setFont(new java.awt.Font("Lucida Grande", 2, 13)); // NOI18N
+        openExtractionPostprocessedViewerLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        openExtractionPostprocessedViewerLabel.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                JFrame extractionViewer = new ExtractionViewer(new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("POSTPROCESSES_OUTPUT_RELATIVE_PATH")));
+                extractionViewer.setVisible(true);
+            }
+        });
+
         openIePipelineDragDropList.addListSelectionListener(new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent ev) {
 
@@ -358,7 +367,10 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                 }
             }
         });
+        openExtractionPostprocessedViewerLabel.setForeground(new java.awt.Color(0, 102, 255));
+        openExtractionPostprocessedViewerLabel.setText("(open viewer)");
 
+        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -389,7 +401,10 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                         .addComponent(jSeparator13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(openIESectionPostprocessLabel)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addComponent(openIESectionPostprocessLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(openExtractionPostprocessedViewerLabel))
                             .addGroup(jPanel5Layout.createSequentialGroup()
                                 .addComponent(openIESectionPostprocessComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -454,27 +469,34 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                         .addComponent(openIESectionCrawlerLabel)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(7, 7, 7)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel5Layout.createSequentialGroup()
-                            .addComponent(openIESectionPreprocessLabel)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(openIESectionPreprocessComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(openIESectionAddPreprocessesButton)))
-                        .addGroup(jPanel5Layout.createSequentialGroup()
-                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(openIESectionExtractionLabel)
-                                .addComponent(openExtractionViewerLabel))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(openIESectionExtractionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(openIESectionAddExtractionButton)))
-                        .addComponent(jSeparator10, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
-                        .addComponent(jSeparator13))
                     .addGroup(jPanel5Layout.createSequentialGroup()
-                        .addComponent(openIESectionPostprocessLabel)
+                        .addGap(7, 7, 7)
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addComponent(openIESectionPreprocessLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(openIESectionPreprocessComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(openIESectionAddPreprocessesButton)))
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(openIESectionExtractionLabel)
+                                    .addComponent(openExtractionViewerLabel))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(openIESectionExtractionComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(openIESectionAddExtractionButton)))
+                            .addComponent(jSeparator10, javax.swing.GroupLayout.DEFAULT_SIZE, 60, Short.MAX_VALUE)
+                            .addComponent(jSeparator13)))
+                    .addGroup(jPanel5Layout.createSequentialGroup()
+                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addGap(7, 7, 7)
+                                .addComponent(openIESectionPostprocessLabel))
+                            .addGroup(jPanel5Layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(openExtractionPostprocessedViewerLabel)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(openIESectionPostprocessComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1003,6 +1025,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JButton loadPluginsButton;
     private javax.swing.JLabel loadPluginsLabel;
+    private javax.swing.JLabel openExtractionPostprocessedViewerLabel;
     private javax.swing.JLabel openExtractionViewerLabel;
     private javax.swing.JButton openIESectionAddCrawlersButton;
     private javax.swing.JButton openIESectionAddExtractionButton;
