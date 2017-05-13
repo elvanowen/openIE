@@ -85,6 +85,9 @@ public class ExtractorPipeline implements IOpenIePipelineElement {
 
     public void execute() throws Exception {
         System.out.println("Running extractor pipeline...");
+        totalProcessedExtractor = 0;
+        totalDocumentsToBeExtracted = 0;
+        currentlyExtractedDocuments = 0;
 
         addDefaultReaderAndWriter();
 
@@ -95,13 +98,12 @@ public class ExtractorPipeline implements IOpenIePipelineElement {
             this.currentlyRunningExtractor = extractorPipelineElement;
 
             if (((Extractor)extractorPipelineElement).getExtractorHandler().getPluginName().equalsIgnoreCase("Extractor File Reader")) {
-                HashMap<File, Pair<String, Relations>> extractedRelations = extractorPipelineElement.execute(null, null, null);
+                HashMap<File, Pair<String, Relations>> extractedRelations = extractorPipelineElement.read();
                 nextPipeQueue.putAll(extractedRelations);
                 totalDocumentsToBeExtracted += extractedRelations.size();
             } else if (((Extractor)extractorPipelineElement).getExtractorHandler().getPluginName().equalsIgnoreCase("Extractor File Writer")) {
                 for (Map.Entry<File, Pair<String, Relations>> pair : pipeQueue.entrySet()) {
-                    HashMap<File, Pair<String, Relations>> extractedRelations = extractorPipelineElement.execute(pair.getKey(), pair.getValue().getLeft(), pair.getValue().getRight());
-                    nextPipeQueue.putAll(extractedRelations);
+                    extractorPipelineElement.write(pair.getKey(), pair.getValue().getRight());
                 }
             } else {
                 this.totalProcessedExtractor++;
@@ -112,9 +114,10 @@ public class ExtractorPipeline implements IOpenIePipelineElement {
 
                 while (it.hasNext()) {
                     Map.Entry<File, Pair<String, Relations>> pair = it.next();
-                    HashMap<File, Pair<String, Relations>> preprocessed = extractorPipelineElement.execute(pair.getKey(), pair.getValue().getLeft(), pair.getValue().getRight());
 
-                    nextPipeQueue.putAll(preprocessed);
+                    HashMap<File, Pair<String, Relations>> extracted = extractorPipelineElement.execute(pair.getKey(), pair.getValue().getLeft(), pair.getValue().getRight());
+
+                    nextPipeQueue.putAll(extracted);
                     currentlyExtractedDocuments++;
                 }
             }

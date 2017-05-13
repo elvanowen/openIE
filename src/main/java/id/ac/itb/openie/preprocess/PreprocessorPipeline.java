@@ -83,6 +83,9 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
 
     public void execute() throws Exception {
         System.out.println("Running preprocessor pipeline...");
+        totalProcessedPreprocessor = 0;
+        totalDocumentsToBePreprocessed = 0;
+        currentlyPreprocessedDocuments = 0;
 
         HashMap<File, String> pipeQueue = new HashMap<>();
         HashMap<File, String> nextPipeQueue = new HashMap<>();
@@ -93,13 +96,12 @@ public class PreprocessorPipeline implements IOpenIePipelineElement {
             this.currentlyRunningPreprocessor = preprocessorPipelineElement;
 
             if (((Preprocessor)preprocessorPipelineElement).getPreprocessorHandler().getPluginName().equalsIgnoreCase("Preprocessor File Reader")) {
-                HashMap<File, String> preprocessed = preprocessorPipelineElement.execute(null, null);
+                HashMap<File, String> preprocessed = preprocessorPipelineElement.read();
                 nextPipeQueue.putAll(preprocessed);
                 totalDocumentsToBePreprocessed += preprocessed.size();
             } else if (((Preprocessor)preprocessorPipelineElement).getPreprocessorHandler().getPluginName().equalsIgnoreCase("Preprocessor File Writer")) {
                 for (Map.Entry<File, String> pair : pipeQueue.entrySet()) {
-                    HashMap<File, String> preprocessed = preprocessorPipelineElement.execute(pair.getKey(), pair.getValue());
-                    nextPipeQueue.putAll(preprocessed);
+                    preprocessorPipelineElement.write(pair.getKey(), pair.getValue());
                 }
             } else {
                 this.totalProcessedPreprocessor++;

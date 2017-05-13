@@ -1,8 +1,7 @@
 package classes;
 
-import id.ac.itb.openie.extractor.IExtractorHandler;
+import id.ac.itb.openie.extractor.IExtractorExtensionHandler;
 import id.ac.itb.openie.relation.Relations;
-import org.apache.commons.lang3.tuple.Pair;
 import ro.fortsoft.pf4j.Extension;
 import ro.fortsoft.pf4j.Plugin;
 import ro.fortsoft.pf4j.PluginWrapper;
@@ -20,7 +19,7 @@ public class ReverbExtractorV2Handler extends Plugin {
     }
 
     @Extension
-    public static class ReverbExtractorV2HandlerPlugin implements IExtractorHandler {
+    public static class ReverbExtractorV2HandlerPlugin extends IExtractorExtensionHandler {
 
         public String getPluginName() {
             return "Reverb Extractor V2";
@@ -32,8 +31,8 @@ public class ReverbExtractorV2Handler extends Plugin {
         }
 
         @Override
-        public HashMap<File, Pair<String, Relations>> extract(File file, String payload, Relations relations) throws Exception {
-            return new ReverbExtractorV2().extract(file, payload, relations);
+        public Relations extract(File file, String document, Relations extracted) throws Exception {
+            return new ReverbExtractorV2().extract(file, document, extracted);
         }
 
         public String toString() {

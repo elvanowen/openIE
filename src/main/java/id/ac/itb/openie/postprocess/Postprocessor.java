@@ -15,7 +15,20 @@ public class Postprocessor implements IPostprocessorPipelineElement {
 
     @Override
     public HashMap<File, Relations> execute(File file, Relations relations) throws Exception {
-        return this.getPostprocessorHandler().postprocess(file, relations);
+        HashMap<File, Relations> output = new HashMap<>();
+        output.put(file, this.getPostprocessorHandler().postprocess(new Relations(file), relations));
+
+        return output;
+    }
+
+    @Override
+    public HashMap<File, Relations> read() throws Exception {
+        return this.getPostprocessorHandler().read();
+    }
+
+    @Override
+    public void write(File file, Relations postprocessed) throws Exception {
+        this.getPostprocessorHandler().write(file, postprocessed);
     }
 
     public String toString() {

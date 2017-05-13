@@ -1,7 +1,7 @@
 package classes;
 
 import id.ac.itb.openie.config.Config;
-import id.ac.itb.openie.postprocess.IPostprocessorHandler;
+import id.ac.itb.openie.postprocess.IPostprocessorFileHandler;
 import id.ac.itb.openie.relation.Relations;
 import id.ac.itb.openie.utils.Utilities;
 import ro.fortsoft.pf4j.Extension;
@@ -21,7 +21,7 @@ public class PostprocessorFileWriter extends Plugin {
     }
 
     @Extension
-    public static class PostprocessorFileWriterHandler implements IPostprocessorHandler {
+    public static class PostprocessorFileWriterHandler extends IPostprocessorFileHandler {
 
         HashMap<String, String> availableConfigurations = new HashMap<>();
 
@@ -37,31 +37,31 @@ public class PostprocessorFileWriter extends Plugin {
         }
 
         @Override
-        public void postprocessorWillRun() {
+        public HashMap<File, Relations> read() throws Exception {
+            return null;
+        }
 
+        @Override
+        public void write(File file, Relations postprocessed) throws Exception {
+            if (getAvailableConfigurations().get("Output Directory") == null) {
+                throw new Exception("Write directory path must be specified");
+            } else {
+                if (postprocessed != null) {
+                    Utilities.writeToFile(availableConfigurations.get("Output Directory"), file.getName(), postprocessed.toString());
+                } else {
+                    Utilities.writeToFile(availableConfigurations.get("Output Directory"), file.getName(), "");
+                }
+            }
+        }
+
+        @Override
+        public void postprocessorWillRun() {
+            
         }
 
         @Override
         public void postprocessorDidRun() {
 
-        }
-
-        @Override
-        public HashMap<File, Relations> postprocess(File file, Relations relations) throws Exception {
-            if (getAvailableConfigurations().get("Output Directory") == null) {
-                throw new Exception("Write directory path must be specified");
-            } else {
-                if (relations != null) {
-                    Utilities.writeToFile(availableConfigurations.get("Output Directory"), file.getName(), relations.toString());
-                } else {
-                    Utilities.writeToFile(availableConfigurations.get("Output Directory"), file.getName(), "");
-                }
-
-                HashMap<File, Relations> pipelineItems = new HashMap<>();
-                pipelineItems.put(file, relations);
-
-                return pipelineItems;
-            }
         }
 
         public String toString() {

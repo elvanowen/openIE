@@ -846,8 +846,10 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                 ((ExtractorProgress) extractorProgress).stopTimer();
                 extractorProgress.dispose();
 
-                JFrame extractionViewer = new ExtractionViewer(new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("EXTRACTIONS_OUTPUT_RELATIVE_PATH")));
-                extractionViewer.setVisible(true);
+                if (postprocessorPipeline.getNumberOfPostprocessors() == 0) {
+                    JFrame extractionViewer = new ExtractionViewer(new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("EXTRACTIONS_OUTPUT_RELATIVE_PATH")));
+                    extractionViewer.setVisible(true);
+                }
             }
         });
 
@@ -864,6 +866,11 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             public void didExecute() {
                 ((PostprocessorProgress) postprocessorProgress).stopTimer();
                 postprocessorProgress.dispose();
+
+                if (postprocessorPipeline.getNumberOfPostprocessors() > 0) {
+                    JFrame extractionViewer = new ExtractionViewer(new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("POSTPROCESSES_OUTPUT_RELATIVE_PATH")));
+                    extractionViewer.setVisible(true);
+                }
             }
         });
 

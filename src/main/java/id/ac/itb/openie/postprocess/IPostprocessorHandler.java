@@ -25,12 +25,26 @@ public interface IPostprocessorHandler extends ExtensionPoint, Serializable {
 
     /**
      *
-     * @param file File pointing to the original extracted relations document
-     * @param relations List of relation postprocessed from previous postprocessor
-     * @return List of file with its postprocessed relations
+     * @param relations List of originally extracted relation from extractor
+     * @param postprocessed List of relation postprocessed from previous postprocessor
+     * @return postprocessed relations
      * @throws Exception
      */
-    public HashMap<File, Relations> postprocess(File file, Relations relations) throws Exception;
+    public Relations postprocess(Relations relations, Relations postprocessed) throws Exception;
+
+    /**
+     *
+     * @return List of file and its content
+     * @throws Exception
+     */
+    public HashMap<File, Relations> read() throws Exception;
+
+    /**
+     *
+     * @param postprocessed String containing original crawled content
+     * @throws Exception
+     */
+    public void write(File file, Relations postprocessed) throws Exception;
 
     /**
      * Hook to be called before postprocessor will run

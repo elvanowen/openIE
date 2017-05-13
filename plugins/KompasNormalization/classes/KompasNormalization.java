@@ -1,11 +1,10 @@
 package classes;
 
-import id.ac.itb.openie.preprocess.IPreprocessorHandler;
+import id.ac.itb.openie.preprocess.IPreprocessorExtensionHandler;
 import ro.fortsoft.pf4j.Extension;
 import ro.fortsoft.pf4j.Plugin;
 import ro.fortsoft.pf4j.PluginWrapper;
 
-import java.io.File;
 import java.util.HashMap;
 
 /**
@@ -18,7 +17,7 @@ public class KompasNormalization extends Plugin {
     }
 
     @Extension
-    public static class KompasNormalizationHandler implements IPreprocessorHandler {
+    public static class KompasNormalizationHandler extends IPreprocessorExtensionHandler {
 
         @Override
         public String getPluginName() {
@@ -50,14 +49,11 @@ public class KompasNormalization extends Plugin {
         }
 
         @Override
-        public HashMap<File, String> preprocess(File file, String payload) throws Exception {
-            String preprocessedPayload = removeMetadata(payload);
+        public String preprocess(String body, String preprocessed) throws Exception {
+            String preprocessedPayload = removeMetadata(preprocessed);
             preprocessedPayload = removeLinkToAnotherArticle(preprocessedPayload);
 
-            HashMap<File, String> pipelineItems = new HashMap<File, String>();
-            pipelineItems.put(file, preprocessedPayload);
-
-            return pipelineItems;
+            return preprocessedPayload;
         }
 
         public String toString() {

@@ -10,4 +10,6 @@ import java.util.HashMap;
  */
 public interface IPostprocessorPipelineElement {
     public HashMap<File, Relations> execute(File file, Relations relations) throws Exception;
+    public HashMap<File, Relations> read() throws Exception;
+    public void write(File file, Relations postprocessed) throws Exception;
 }

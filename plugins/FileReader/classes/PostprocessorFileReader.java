@@ -1,7 +1,7 @@
 package classes;
 
 import id.ac.itb.openie.config.Config;
-import id.ac.itb.openie.postprocess.IPostprocessorHandler;
+import id.ac.itb.openie.postprocess.IPostprocessorFileHandler;
 import id.ac.itb.openie.relation.Relations;
 import id.ac.itb.openie.utils.Utilities;
 import ro.fortsoft.pf4j.Extension;
@@ -22,7 +22,7 @@ public class PostprocessorFileReader extends Plugin {
     }
 
     @Extension
-    public static class PostprocessorFileReaderHandler implements IPostprocessorHandler {
+    public static class PostprocessorFileReaderHandler extends IPostprocessorFileHandler {
 
         HashMap<String, String> availableConfigurations = new HashMap<>();
 
@@ -38,13 +38,18 @@ public class PostprocessorFileReader extends Plugin {
         }
 
         @Override
-        public HashMap<File, Relations> postprocess(File file, Relations relations) throws Exception {
+        public HashMap<File, Relations> read() throws Exception {
+            System.out.println("Inside post reader 0");
+
             if (getAvailableConfigurations().get("Input Directory") == null) {
                 throw new Exception("Read directory path must be specified");
             } else {
                 HashMap<File, Relations> pipelineItems = new HashMap<>();
 
+                System.out.println("Inside post reader");
+
                 for (String inputDir: availableConfigurations.get("Input Directory").split(":")) {
+                    System.out.println(inputDir);
                     ArrayList<File> files = Utilities.getDirectoryFiles(new File(inputDir));
 
                     for (File _file: files) {
@@ -55,6 +60,9 @@ public class PostprocessorFileReader extends Plugin {
                 return pipelineItems;
             }
         }
+
+        @Override
+        public void write(File file, Relations postprocessed) throws Exception {}
 
         @Override
         public void postprocessorWillRun() {

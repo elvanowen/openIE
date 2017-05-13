@@ -1,6 +1,6 @@
 package classes;
 
-import id.ac.itb.openie.crawler.ICrawlerHandler;
+import id.ac.itb.openie.crawler.ICrawlerExtensionHandler;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,7 +24,7 @@ public class OkezoneCrawler extends Plugin {
     }
 
     @Extension
-    public static class OkezoneCrawlerHandler implements ICrawlerHandler {
+    public static class OkezoneCrawlerHandler extends ICrawlerExtensionHandler {
 
         HashMap<String, String> availableConfigurations = new HashMap<>();
 
@@ -55,10 +55,8 @@ public class OkezoneCrawler extends Plugin {
             return link.contains("okezone.com/read");
         }
 
-        public HashMap<String, String> extract(String url, String html) {
-            Document doc = Jsoup.parse(html);
-            HashMap<String, String> output = new HashMap<>();
-
+        public String extract(String url, String response) {
+            Document doc = Jsoup.parse(response);
             ArrayList<String> paragraphs = new ArrayList<String>();
 
             Elements contents = doc.select("#contentx p");
@@ -67,8 +65,7 @@ public class OkezoneCrawler extends Plugin {
             }
 
             if (paragraphs.size() > 0) {
-                output.put(url, StringUtils.join(paragraphs, " "));
-                return output;
+                return StringUtils.join(paragraphs, " ");
             } else {
                 return null;
             }

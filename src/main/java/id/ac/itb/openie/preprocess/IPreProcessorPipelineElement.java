@@ -1,10 +1,8 @@
 package id.ac.itb.openie.preprocess;
 
-import org.apache.commons.lang3.tuple.Pair;
 import ro.fortsoft.pf4j.ExtensionPoint;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -12,4 +10,6 @@ import java.util.HashMap;
  */
 public interface IPreprocessorPipelineElement extends ExtensionPoint {
     public HashMap<File, String> execute(File file, String payload) throws Exception;
+    public HashMap<File, String> read() throws Exception;
+    public void write(File file, String preprocessed) throws Exception;
 }

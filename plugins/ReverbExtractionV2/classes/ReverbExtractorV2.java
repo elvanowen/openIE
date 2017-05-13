@@ -5,12 +5,10 @@ import id.ac.itb.nlp.SentenceTokenizer;
 import id.ac.itb.openie.relation.Relation;
 import id.ac.itb.openie.relation.Relations;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -160,30 +158,25 @@ class ReverbExtractorV2 {
             }
         }
 
-//        System.out.println(relations);
-
         return relations;
     }
 
-    public HashMap<File, Pair<String, Relations>> extract(File file, String payload, Relations relations) throws Exception {
-
-        HashMap<File, Pair<String, Relations>> pipelineItems = new HashMap<>();
+    public Relations extract(File file, String payload, Relations previouslyExtracted) throws Exception {
 
         SentenceTokenizer sentenceTokenizer = new SentenceTokenizer();
+        Relations output = new Relations();
 
-        Relations extractedRelations = new Relations();
+        if (previouslyExtracted != null) output.addRelations(previouslyExtracted);
 
         ArrayList<String> sentences = sentenceTokenizer.tokenizeSentence(payload);
 
         for (int i=0;i<sentences.size();i++) {
             Relations _extractedRelations = extractRelationFromSentence(file, sentences.get(i), i);
-            extractedRelations.addRelations(_extractedRelations);
+            output.addRelations(_extractedRelations);
         }
 
-        System.out.println(Pair.of(payload, extractedRelations));
+        System.out.println(output);
 
-        pipelineItems.put(file, Pair.of(payload, extractedRelations));
-
-        return pipelineItems;
+        return output;
     }
 }

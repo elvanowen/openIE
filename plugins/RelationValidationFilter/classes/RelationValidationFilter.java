@@ -2,14 +2,13 @@ package classes;
 
 import id.ac.itb.nlp.NamedEntityTagger;
 import id.ac.itb.nlp.PhraseChunker;
-import id.ac.itb.openie.postprocess.IPostprocessorHandler;
+import id.ac.itb.openie.postprocess.IPostprocessorExtensionHandler;
 import id.ac.itb.openie.relation.Relation;
 import id.ac.itb.openie.relation.Relations;
 import ro.fortsoft.pf4j.Extension;
 import ro.fortsoft.pf4j.Plugin;
 import ro.fortsoft.pf4j.PluginWrapper;
 
-import java.io.File;
 import java.util.HashMap;
 
 /**
@@ -22,7 +21,7 @@ public class RelationValidationFilter extends Plugin {
     }
 
     @Extension
-    public static class RelationValidationFilterHandler implements IPostprocessorHandler {
+    public static class RelationValidationFilterHandler extends IPostprocessorExtensionHandler {
 
         HashMap<String, String> availableConfigurations = new HashMap<>();
 
@@ -36,6 +35,18 @@ public class RelationValidationFilter extends Plugin {
         }
 
         @Override
+        public Relations postprocess(Relations relations, Relations postprocessed) throws Exception {
+            PhraseChunker phraseChunker = new PhraseChunker();
+            NamedEntityTagger namedEntityTagger = new NamedEntityTagger();
+
+            for (Relation relation: relations.getRelations()) {
+                System.out.println(namedEntityTagger.tag(relation.getOriginSentence()));
+            }
+
+            return relations;
+        }
+
+        @Override
         public void postprocessorWillRun() {
 
         }
@@ -43,30 +54,6 @@ public class RelationValidationFilter extends Plugin {
         @Override
         public void postprocessorDidRun() {
 
-        }
-
-        @Override
-        public HashMap<File, Relations> postprocess(File file, Relations relations) throws Exception {
-//            System.out.println("my file");
-//            System.out.println(file);
-//            System.out.println("my relation");
-//            System.out.println(relations);
-
-            PhraseChunker phraseChunker = new PhraseChunker();
-            NamedEntityTagger namedEntityTagger = new NamedEntityTagger();
-
-            for (Relation relation: relations.getRelations()) {
-//                System.out.println(relation.getOriginSentence());
-//                System.out.println(phraseChunker.chunk(relation.getOriginSentence()).get(0)[0]);
-//                System.out.println(phraseChunker.chunk(relation.getOriginSentence()).get(0)[1]);
-
-                System.out.println(namedEntityTagger.tag(relation.getOriginSentence()));
-            }
-
-            HashMap<File, Relations> pipelineItems = new HashMap<>();
-            pipelineItems.put(file, relations);
-
-            return pipelineItems;
         }
 
         public String toString() {

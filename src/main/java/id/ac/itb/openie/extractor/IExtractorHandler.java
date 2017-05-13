@@ -26,13 +26,26 @@ public interface IExtractorHandler extends ExtensionPoint, Serializable {
 
     /**
      *
-     * @param file File pointing to the original preprocessed document
-     * @param payload String containing the content of the file
-     * @param relations List of relation extracted from previous extractor
-     * @return List of file with its preprocessed payload and the extracted relations
+     * @param document String containing original preprocessed file content
+     * @param extracted List of relation extracted from previous extractor
+     * @return extracted relations
      * @throws Exception
      */
-    public HashMap<File, Pair<String, Relations>> extract(File file, String payload, Relations relations) throws Exception;
+    public Relations extract(File file, String document, Relations extracted) throws Exception;
+
+    /**
+     *
+     * @return List of file and its content
+     * @throws Exception
+     */
+    public HashMap<File, Pair<String, Relations>> read() throws Exception;
+
+    /**
+     *
+     * @param extracted String containing original crawled content
+     * @throws Exception
+     */
+    public void write(File file, Relations extracted) throws Exception;
 
     /**
      * Hook to be called before extractor will run

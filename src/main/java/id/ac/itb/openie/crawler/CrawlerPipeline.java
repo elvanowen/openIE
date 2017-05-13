@@ -86,9 +86,7 @@ public class CrawlerPipeline implements IOpenIePipelineElement {
 
     public void execute() throws Exception {
         System.out.println("Running crawler pipeline...");
-
-        // Make sure previous output directories are cleared
-        Crawler.clearOutputDirectory();
+        totalProcessedCrawler = 0;
 
         addDefaultWriter();
         setOutputDirectoriesToAllCrawlers();

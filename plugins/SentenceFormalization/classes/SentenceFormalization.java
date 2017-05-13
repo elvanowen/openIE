@@ -2,13 +2,12 @@ package classes;
 
 import IndonesianNLP.IndonesianSentenceFormalization;
 import id.ac.itb.nlp.SentenceTokenizer;
-import id.ac.itb.openie.preprocess.IPreprocessorHandler;
+import id.ac.itb.openie.preprocess.IPreprocessorExtensionHandler;
 import org.apache.commons.lang3.StringUtils;
 import ro.fortsoft.pf4j.Extension;
 import ro.fortsoft.pf4j.Plugin;
 import ro.fortsoft.pf4j.PluginWrapper;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -22,7 +21,7 @@ public class SentenceFormalization extends Plugin {
     }
 
     @Extension
-    public static class SentenceFormalizationHandler implements IPreprocessorHandler {
+    public static class SentenceFormalizationHandler extends IPreprocessorExtensionHandler {
 
         @Override
         public String getPluginName() {
@@ -44,10 +43,10 @@ public class SentenceFormalization extends Plugin {
         Output: kata-katanya aku dong lucu banget begitu
         */
         @Override
-        public HashMap<File, String> preprocess(File file, String payload) throws Exception {
+        public String preprocess(String body, String preprocessed) throws Exception {
             SentenceTokenizer sentenceTokenizer = new SentenceTokenizer();
 
-            ArrayList<String> sentences = sentenceTokenizer.tokenizeSentence(payload);
+            ArrayList<String> sentences = sentenceTokenizer.tokenizeSentence(preprocessed);
             ArrayList<String> preprocessedSentences = new ArrayList<>();
             IndonesianSentenceFormalization formalizer = new IndonesianSentenceFormalization();
 
@@ -60,10 +59,7 @@ public class SentenceFormalization extends Plugin {
                 preprocessedSentences.add(preprocessedPayload);
             }
 
-            HashMap<File, String> pipelineItems = new HashMap<>();
-            pipelineItems.put(file, StringUtils.join(preprocessedSentences, ""));
-
-            return pipelineItems;
+            return StringUtils.join(preprocessedSentences, "");
         }
 
         public String toString() {

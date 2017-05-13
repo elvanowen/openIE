@@ -1,7 +1,7 @@
 package classes;
 
 import id.ac.itb.openie.config.Config;
-import id.ac.itb.openie.extractor.IExtractorHandler;
+import id.ac.itb.openie.extractor.IExtractorFileHandler;
 import id.ac.itb.openie.relation.Relations;
 import id.ac.itb.openie.utils.Utilities;
 import org.apache.commons.lang3.tuple.Pair;
@@ -22,7 +22,7 @@ public class ExtractorFileWriter extends Plugin {
     }
 
     @Extension
-    public static class ExtractorFileWriterHandler implements IExtractorHandler {
+    public static class ExtractorFileWriterHandler extends IExtractorFileHandler {
 
         HashMap<String, String> availableConfigurations = new HashMap<>();
 
@@ -38,20 +38,20 @@ public class ExtractorFileWriter extends Plugin {
         }
 
         @Override
-        public HashMap<File, Pair<String, Relations>> extract(File file, String payload, Relations relations) throws Exception {
+        public HashMap<File, Pair<String, Relations>> read() throws Exception {
+            return null;
+        }
+
+        @Override
+        public void write(File file, Relations extracted) throws Exception {
             if (getAvailableConfigurations().get("Output Directory") == null) {
                 throw new Exception("Write directory path must be specified");
             } else {
-                if (relations != null) {
-                    Utilities.writeToFile(availableConfigurations.get("Output Directory"), file.getName(), relations.toString());
+                if (extracted != null) {
+                    Utilities.writeToFile(availableConfigurations.get("Output Directory"), file.getName(), extracted.toString());
                 } else {
                     Utilities.writeToFile(availableConfigurations.get("Output Directory"), file.getName(), "");
                 }
-
-                HashMap<File, Pair<String, Relations>> pipelineItems = new HashMap<>();
-                pipelineItems.put(file, Pair.of(payload, relations));
-
-                return pipelineItems;
             }
         }
 

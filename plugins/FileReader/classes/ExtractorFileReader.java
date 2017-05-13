@@ -1,7 +1,7 @@
 package classes;
 
 import id.ac.itb.openie.config.Config;
-import id.ac.itb.openie.extractor.IExtractorHandler;
+import id.ac.itb.openie.extractor.IExtractorFileHandler;
 import id.ac.itb.openie.relation.Relations;
 import id.ac.itb.openie.utils.Utilities;
 import org.apache.commons.lang3.tuple.Pair;
@@ -23,7 +23,7 @@ public class ExtractorFileReader extends Plugin {
     }
 
     @Extension
-    public static class ExtractorFileReaderHandler implements IExtractorHandler {
+    public static class ExtractorFileReaderHandler extends IExtractorFileHandler {
 
         HashMap<String, String> availableConfigurations = new HashMap<>();
 
@@ -39,7 +39,7 @@ public class ExtractorFileReader extends Plugin {
         }
 
         @Override
-        public HashMap<File, Pair<String, Relations>> extract(File file, String payload, Relations relations) throws Exception {
+        public HashMap<File, Pair<String, Relations>> read() throws Exception {
             if (getAvailableConfigurations().get("Input Directory") == null) {
                 throw new Exception("Read directory path must be specified");
             } else {
@@ -56,6 +56,9 @@ public class ExtractorFileReader extends Plugin {
                 return pipelineItems;
             }
         }
+
+        @Override
+        public void write(File file, Relations extracted) throws Exception {}
 
         @Override
         public void extractorWillRun() {

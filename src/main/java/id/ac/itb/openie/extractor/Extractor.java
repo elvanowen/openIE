@@ -40,7 +40,20 @@ public class Extractor implements IExtractorPipelineElement {
 
     @Override
     public HashMap<File, Pair<String, Relations>> execute(File file, String payload, Relations relations) throws Exception {
-        return this.getExtractorHandler().extract(file, payload, relations);
+        HashMap<File, Pair<String, Relations>> output =  new HashMap<>();
+        output.put(file, Pair.of(payload, this.getExtractorHandler().extract(file, payload, relations)));
+
+        return output;
+    }
+
+    @Override
+    public HashMap<File, Pair<String, Relations>> read() throws Exception {
+        return this.getExtractorHandler().read();
+    }
+
+    @Override
+    public void write(File file, Relations extracted) throws Exception {
+        this.getExtractorHandler().write(file, extracted);
     }
 
     public int getTotalDocumentExtracted() {

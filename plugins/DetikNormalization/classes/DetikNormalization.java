@@ -1,11 +1,10 @@
 package classes;
 
-import id.ac.itb.openie.preprocess.IPreprocessorHandler;
+import id.ac.itb.openie.preprocess.IPreprocessorExtensionHandler;
 import ro.fortsoft.pf4j.Extension;
 import ro.fortsoft.pf4j.Plugin;
 import ro.fortsoft.pf4j.PluginWrapper;
 
-import java.io.File;
 import java.util.HashMap;
 
 /**
@@ -18,7 +17,7 @@ public class DetikNormalization extends Plugin {
     }
 
     @Extension
-    public static class DetikNormalizationHandler implements IPreprocessorHandler {
+    public static class DetikNormalizationHandler extends IPreprocessorExtensionHandler {
 
         @Override
         public String getPluginName() {
@@ -64,16 +63,13 @@ public class DetikNormalization extends Plugin {
         }
 
         @Override
-        public HashMap<File, String> preprocess(File file, String payload) throws Exception {
+        public String preprocess(String document, String payload) throws Exception {
             String preprocessedPayload = removeMetadata(payload);
             preprocessedPayload = removeLinkPhoto(preprocessedPayload);
             preprocessedPayload = removeLinkToAnotherArticle(preprocessedPayload);
             preprocessedPayload = removeEndingText(preprocessedPayload);
 
-            HashMap<File, String> pipelineItems = new HashMap<File, String>();
-            pipelineItems.put(file, preprocessedPayload);
-
-            return pipelineItems;
+            return preprocessedPayload;
         }
 
         public String toString() {

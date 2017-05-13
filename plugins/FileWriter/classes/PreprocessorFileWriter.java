@@ -1,7 +1,7 @@
 package classes;
 
 import id.ac.itb.openie.config.Config;
-import id.ac.itb.openie.preprocess.IPreprocessorHandler;
+import id.ac.itb.openie.preprocess.IPreprocessorFileHandler;
 import id.ac.itb.openie.utils.Utilities;
 import ro.fortsoft.pf4j.Extension;
 import ro.fortsoft.pf4j.Plugin;
@@ -20,7 +20,7 @@ public class PreprocessorFileWriter extends Plugin {
     }
 
     @Extension
-    public static class PreprocessorFileWriterHandler implements IPreprocessorHandler {
+    public static class PreprocessorFileWriterHandler extends IPreprocessorFileHandler {
 
         HashMap<String, String> availableConfigurations = new HashMap<>();
 
@@ -42,16 +42,16 @@ public class PreprocessorFileWriter extends Plugin {
         }
 
         @Override
-        public HashMap<File, String> preprocess(File file, String payload) throws Exception {
+        public HashMap<File, String> read() throws Exception {
+            return null;
+        }
+
+        @Override
+        public void write(File file, String preprocessed) throws Exception {
             if (getAvailableConfigurations().get("Output Directory") == null) {
                 throw new Exception("Write directory path must be specified");
             } else {
-                Utilities.writeToFile(availableConfigurations.get("Output Directory"), file.getName(), payload);
-
-                HashMap<File, String> pipelineItems = new HashMap<File, String>();
-                pipelineItems.put(file, payload);
-
-                return pipelineItems;
+                Utilities.writeToFile(availableConfigurations.get("Output Directory"), file.getName(), preprocessed);
             }
         }
 

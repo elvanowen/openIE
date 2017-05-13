@@ -14,9 +14,7 @@ import id.ac.itb.openie.utils.Utilities;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.Arrays;
 import java.util.regex.Pattern;
 
 /**
@@ -25,7 +23,7 @@ import java.util.regex.Pattern;
 public class Crawler extends WebCrawler implements ICrawlerPipelineElement {
 
     private static Crawler currentlyRunningCrawler = null;
-    private static ArrayList<String> outputDirectories = new ArrayList<>();
+    private static ArrayList<String> outputDirectories = new ArrayList<>(Arrays.asList(System.getProperty("user.dir") + File.separator + new Config().getProperty("CRAWLER_OUTPUT_RELATIVE_PATH")));
     private ICrawlerHandler crawlerHandler = null;
     private int totalDocumentCrawled = 0;
 
@@ -98,21 +96,18 @@ public class Crawler extends WebCrawler implements ICrawlerPipelineElement {
             HtmlParseData htmlParseData = (HtmlParseData) page.getParseData();
             String html = htmlParseData.getHtml();
 
-            HashMap<String, String> fileContentMappings = currentlyRunningCrawler.getCrawlerhandler().extract(url, html);
-            Iterator<Map.Entry<String, String>> it = fileContentMappings.entrySet().iterator();
-
-            while (it.hasNext()) {
-                Map.Entry<String, String> pair = it.next();
-
-                writeToFile(pair.getKey(), pair.getValue());
-
-                it.remove(); // avoids a ConcurrentModificationException
-            }
+            String extractedContent = currentlyRunningCrawler.getCrawlerhandler().extract(url, html);
+            writeToFile(url, extractedContent);
         }
     }
 
     private void writeToFile(String url, String content) {
+        System.out.println("writeToFile");
+        System.out.println(url);
+        System.out.println(content);
+        System.out.println(outputDirectories);
         for (String outputDirectory: outputDirectories) {
+            System.out.println("outputDirectory" + outputDirectory);
             Utilities.writeToFile(outputDirectory, url, content);
         }
     }
@@ -121,6 +116,7 @@ public class Crawler extends WebCrawler implements ICrawlerPipelineElement {
         if (crawlerHandler == null) throw new Exception("No Crawler Handler specified");
 
         currentlyRunningCrawler = this;
+        totalDocumentCrawled = 0;
 
         CrawlConfig config = new CrawlConfig();
 

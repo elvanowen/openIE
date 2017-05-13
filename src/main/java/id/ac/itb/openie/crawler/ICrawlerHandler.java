@@ -37,11 +37,11 @@ public interface ICrawlerHandler extends ExtensionPoint, Serializable {
 
     /**
      *
-     * @param url Page of a visited link
-     * @param html Content of the page
-     * @return List of filename with its extracted content
+     * @param url URL of a visited link
+     * @param response response from @url (could be text file or json depends on the crawler)
+     * @return extracted content
      */
-    public HashMap<String, String> extract(String url, String html);
+    public String extract(String url, String response);
 
     /**
      * Hook to be called before crawler will run

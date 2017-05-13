@@ -80,6 +80,9 @@ public class PostprocessorPipeline implements IOpenIePipelineElement {
 
     public void execute() throws Exception {
         System.out.println("Running postprocessor pipeline...");
+        totalProcessedPostprocessor = 0;
+        totalDocumentsToBePostprocessed = 0;
+        currentlyPostprocessedDocuments = 0;
 
         HashMap<File, Relations> pipeQueue = new HashMap<>();
         HashMap<File, Relations> nextPipeQueue = new HashMap<>();
@@ -90,13 +93,14 @@ public class PostprocessorPipeline implements IOpenIePipelineElement {
             this.currentlyRunningPostprocessor = postprocessorPipelineElement;
 
             if (((Postprocessor)postprocessorPipelineElement).getPostprocessorHandler().getPluginName().equalsIgnoreCase("Postprocessor File Reader")) {
-                HashMap<File, Relations> postprocessed = postprocessorPipelineElement.execute(null, null);
+                HashMap<File, Relations> postprocessed = postprocessorPipelineElement.read();
+                System.out.println("postprocessed");
+                System.out.println(postprocessed);
                 nextPipeQueue.putAll(postprocessed);
                 totalDocumentsToBePostprocessed += postprocessed.size();
             } else if (((Postprocessor)postprocessorPipelineElement).getPostprocessorHandler().getPluginName().equalsIgnoreCase("Postprocessor File Writer")) {
                 for (Map.Entry<File, Relations> pair : pipeQueue.entrySet()) {
-                    HashMap<File, Relations> postprocessed = postprocessorPipelineElement.execute(pair.getKey(), pair.getValue());
-                    nextPipeQueue.putAll(postprocessed);
+                    postprocessorPipelineElement.write(pair.getKey(), pair.getValue());
                 }
             } else {
                 this.totalProcessedPostprocessor++;

@@ -1,9 +1,8 @@
 package classes;
 
-import id.ac.itb.openie.crawler.ICrawlerHandler;
+import id.ac.itb.openie.crawler.ICrawlerExtensionHandler;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import ro.fortsoft.pf4j.Extension;
 import ro.fortsoft.pf4j.Plugin;
@@ -22,7 +21,7 @@ public class KompasCrawler extends Plugin {
     }
 
     @Extension
-    public static class KompasCrawlerHandler implements ICrawlerHandler {
+    public static class KompasCrawlerHandler extends ICrawlerExtensionHandler {
 
         HashMap<String, String> availableConfigurations = new HashMap<>();
 
@@ -53,18 +52,11 @@ public class KompasCrawler extends Plugin {
             return link.contains("kompas.com/read");
         }
 
-        public HashMap<String, String> extract(String url, String html) {
-            HashMap<String, String> output = new HashMap<>();
-            Document doc = Jsoup.parse(html);
+        public String extract(String url, String response) {
+            Document doc = Jsoup.parse(response);
 
             Elements contents = doc.getElementsByClass("read__content");
-            for (Element content : contents) {
-                String contentText = content.text();
-
-                output.put(url, contentText);
-            }
-
-            return output;
+            return contents.get(0).text();
         }
 
         public String toString() {

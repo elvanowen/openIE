@@ -11,4 +11,6 @@ import java.util.HashMap;
  */
 public interface IExtractorPipelineElement {
     public HashMap<File, Pair<String, Relations>> execute(File file, String payload, Relations relations) throws Exception;
+    public HashMap<File, Pair<String, Relations>> read() throws Exception;
+    public void write(File file, Relations extracted) throws Exception;
 }

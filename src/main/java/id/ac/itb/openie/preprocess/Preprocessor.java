@@ -1,5 +1,7 @@
 package id.ac.itb.openie.preprocess;
 
+import id.ac.itb.openie.utils.Utilities;
+
 import java.io.File;
 import java.util.HashMap;
 
@@ -13,7 +15,20 @@ public class Preprocessor implements IPreprocessorPipelineElement {
 
     @Override
     public HashMap<File, String> execute(File file, String payload) throws Exception {
-        return this.getPreprocessorHandler().preprocess(file, payload);
+        HashMap<File, String> output = new HashMap<>();
+        output.put(file, this.getPreprocessorHandler().preprocess(Utilities.getFileContent(file), payload));
+
+        return output;
+    }
+
+    @Override
+    public HashMap<File, String> read() throws Exception {
+        return this.getPreprocessorHandler().read();
+    }
+
+    @Override
+    public void write(File file, String preprocessed) throws Exception {
+        this.getPreprocessorHandler().write(file, preprocessed);
     }
 
     public IPreprocessorHandler getPreprocessorHandler() {

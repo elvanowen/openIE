@@ -1,7 +1,7 @@
 package classes;
 
 import id.ac.itb.openie.config.Config;
-import id.ac.itb.openie.preprocess.IPreprocessorHandler;
+import id.ac.itb.openie.preprocess.IPreprocessorFileHandler;
 import id.ac.itb.openie.utils.Utilities;
 import ro.fortsoft.pf4j.Extension;
 import ro.fortsoft.pf4j.Plugin;
@@ -21,7 +21,7 @@ public class PreprocessorFileReader extends Plugin {
     }
 
     @Extension
-    public static class PreprocessorFileReaderHandler implements IPreprocessorHandler {
+    public static class PreprocessorFileReaderHandler extends IPreprocessorFileHandler {
 
         HashMap<String, String> availableConfigurations = new HashMap<>();
 
@@ -43,7 +43,7 @@ public class PreprocessorFileReader extends Plugin {
         }
 
         @Override
-        public HashMap<File, String> preprocess(File file, String payload) throws Exception {
+        public HashMap<File, String> read() throws Exception {
             if (getAvailableConfigurations().get("Input Directory") == null) {
                 throw new Exception("Read directory path must be specified");
             } else {
@@ -60,6 +60,9 @@ public class PreprocessorFileReader extends Plugin {
                 return pipelineItems;
             }
         }
+
+        @Override
+        public void write(File file, String preprocessed) throws Exception {}
 
         public String toString() {
             return this.getPluginName();
