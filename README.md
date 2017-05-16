@@ -4,7 +4,7 @@ Prototype for Modular Open Information Extraction System
 # Prerequisites
 
 - Java 1.8
-- Ant
+- [Ant](http://ant.apache.org/)
 
 # Installation
 All source codes are placed in the /src directory. Application is developed using IntelliJ IDEA.
