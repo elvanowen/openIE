@@ -299,22 +299,385 @@
   <path id="library.maven:_xml-apis:xml-apis:1.3.03.classpath">
     <pathelement location="${path.variable.maven_repository}/xml-apis/xml-apis/1.3.03/xml-apis-1.3.03.jar"/>
   </path>
-  <!-- Register Custom Compiler Taskdefs -->
-  <property name="javac2.home" value="${idea.home}/lib"/>
-  <path id="javac2.classpath">
-    <pathelement location="${javac2.home}/javac2.jar"/>
-    <pathelement location="${javac2.home}/jdom.jar"/>
-    <pathelement location="${javac2.home}/asm-all.jar"/>
-    <pathelement location="${javac2.home}/jgoodies-forms.jar"/>
-  </path>
-  <target name="register.custom.compilers">
-    <taskdef name="javac2" classname="com.intellij.ant.Javac2" classpathref="javac2.classpath"/>
-    <taskdef name="instrumentIdeaExtensions" classname="com.intellij.ant.InstrumentIdeaExtensions" classpathref="javac2.classpath"/>
-  </target>
   
   <!-- Modules -->
   
-  <import file="${basedir}/module_openie.xml"/>
+  
+  <!-- Module OpenIE -->
+  
+  <dirname property="module.openie.basedir" file="${ant.file}"/>
+  
+  
+  <property name="module.jdk.home.openie" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.openie" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.openie" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.openie" value="-encoding UTF-8 -source 8 -target 1.8 ${compiler.args}"/>
+  
+  <property name="openie.output.dir" value="${module.openie.basedir}/target/classes"/>
+  <property name="openie.testoutput.dir" value="${module.openie.basedir}/target/test-classes"/>
+  
+  <path id="openie.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="openie.module.production.classpath">
+    <path refid="${module.jdk.classpath.openie}"/>
+    <path refid="library.maven:_edu.uci.ics:crawler4j:4.2.classpath"/>
+    <path refid="library.maven:_org.slf4j:slf4j-api:1.7.10.classpath"/>
+    <path refid="library.maven:_uk.org.lidalia:lidalia-slf4j-ext:1.0.0.classpath"/>
+    <path refid="library.maven:_com.google.guava:guava:14.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.4.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.4.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.2.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.9.classpath"/>
+    <path refid="library.maven:_com.sleepycat:je:5.0.73.classpath"/>
+    <path refid="library.maven:_org.apache.tika:tika-parsers:1.5.classpath"/>
+    <path refid="library.maven:_org.apache.tika:tika-core:1.5.classpath"/>
+    <path refid="library.maven:_org.gagravarr:vorbis-java-tika:0.1.classpath"/>
+    <path refid="library.maven:_org.gagravarr:vorbis-java-core:tests:0.1.classpath"/>
+    <path refid="library.maven:_edu.ucar:netcdf:4.2-min.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-dom:0.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.commons:commons-compress:1.5.classpath"/>
+    <path refid="library.maven:_org.tukaani:xz:1.2.classpath"/>
+    <path refid="library.maven:_org.apache.pdfbox:pdfbox:1.8.4.classpath"/>
+    <path refid="library.maven:_org.apache.pdfbox:fontbox:1.8.4.classpath"/>
+    <path refid="library.maven:_org.apache.pdfbox:jempbox:1.8.4.classpath"/>
+    <path refid="library.maven:_org.bouncycastle:bcmail-jdk15:1.45.classpath"/>
+    <path refid="library.maven:_org.bouncycastle:bcprov-jdk15:1.45.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi:3.10-beta2.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi-scratchpad:3.10-beta2.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi-ooxml:3.10-beta2.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi-ooxml-schemas:3.10-beta2.classpath"/>
+    <path refid="library.maven:_org.apache.xmlbeans:xmlbeans:2.3.0.classpath"/>
+    <path refid="library.maven:_dom4j:dom4j:1.6.1.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.ccil.cowan.tagsoup:tagsoup:1.2.1.classpath"/>
+    <path refid="library.maven:_org.ow2.asm:asm-debug-all:4.1.classpath"/>
+    <path refid="library.maven:_com.googlecode.mp4parser:isoparser:1.0-rc-1.classpath"/>
+    <path refid="library.maven:_org.aspectj:aspectjrt:1.6.11.classpath"/>
+    <path refid="library.maven:_com.drewnoakes:metadata-extractor:2.6.2.classpath"/>
+    <path refid="library.maven:_com.adobe.xmp:xmpcore:5.1.2.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.8.1.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.3.03.classpath"/>
+    <path refid="library.maven:_de.l3s.boilerpipe:boilerpipe:1.1.0.classpath"/>
+    <path refid="library.maven:_rome:rome:0.9.classpath"/>
+    <path refid="library.maven:_jdom:jdom:1.0.classpath"/>
+    <path refid="library.maven:_org.gagravarr:vorbis-java-core:0.1.classpath"/>
+    <path refid="library.maven:_com.googlecode.juniversalchardet:juniversalchardet:1.0.3.classpath"/>
+    <path refid="library.maven:_com.uwyn:jhighlight:1.0.classpath"/>
+    <path refid="library.maven:_org.jsoup:jsoup:1.10.2.classpath"/>
+    <path refid="library.maven:_com.github.slugify:slugify:2.1.7.classpath"/>
+    <path refid="library.maven:_org.apache.commons:commons-lang3:3.5.classpath"/>
+    <path refid="library.maven:_ro.fortsoft.pf4j:pf4j:1.1.1.classpath"/>
+    <path refid="library.maven:_com.github.zafarkhaja:java-semver:0.9.0.classpath"/>
+    <path refid="library.inanlp.classpath"/>
+  </path>
+  
+  <path id="openie.runtime.production.module.classpath">
+    <pathelement location="${openie.output.dir}"/>
+    <path refid="library.maven:_edu.uci.ics:crawler4j:4.2.classpath"/>
+    <path refid="library.maven:_org.slf4j:slf4j-api:1.7.10.classpath"/>
+    <path refid="library.maven:_uk.org.lidalia:lidalia-slf4j-ext:1.0.0.classpath"/>
+    <path refid="library.maven:_com.google.guava:guava:14.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.4.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.4.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.2.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.9.classpath"/>
+    <path refid="library.maven:_com.sleepycat:je:5.0.73.classpath"/>
+    <path refid="library.maven:_org.apache.tika:tika-parsers:1.5.classpath"/>
+    <path refid="library.maven:_org.apache.tika:tika-core:1.5.classpath"/>
+    <path refid="library.maven:_org.gagravarr:vorbis-java-tika:0.1.classpath"/>
+    <path refid="library.maven:_org.gagravarr:vorbis-java-core:tests:0.1.classpath"/>
+    <path refid="library.maven:_edu.ucar:netcdf:4.2-min.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-dom:0.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.commons:commons-compress:1.5.classpath"/>
+    <path refid="library.maven:_org.tukaani:xz:1.2.classpath"/>
+    <path refid="library.maven:_org.apache.pdfbox:pdfbox:1.8.4.classpath"/>
+    <path refid="library.maven:_org.apache.pdfbox:fontbox:1.8.4.classpath"/>
+    <path refid="library.maven:_org.apache.pdfbox:jempbox:1.8.4.classpath"/>
+    <path refid="library.maven:_org.bouncycastle:bcmail-jdk15:1.45.classpath"/>
+    <path refid="library.maven:_org.bouncycastle:bcprov-jdk15:1.45.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi:3.10-beta2.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi-scratchpad:3.10-beta2.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi-ooxml:3.10-beta2.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi-ooxml-schemas:3.10-beta2.classpath"/>
+    <path refid="library.maven:_org.apache.xmlbeans:xmlbeans:2.3.0.classpath"/>
+    <path refid="library.maven:_dom4j:dom4j:1.6.1.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.ccil.cowan.tagsoup:tagsoup:1.2.1.classpath"/>
+    <path refid="library.maven:_org.ow2.asm:asm-debug-all:4.1.classpath"/>
+    <path refid="library.maven:_com.googlecode.mp4parser:isoparser:1.0-rc-1.classpath"/>
+    <path refid="library.maven:_org.aspectj:aspectjrt:1.6.11.classpath"/>
+    <path refid="library.maven:_com.drewnoakes:metadata-extractor:2.6.2.classpath"/>
+    <path refid="library.maven:_com.adobe.xmp:xmpcore:5.1.2.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.8.1.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.3.03.classpath"/>
+    <path refid="library.maven:_de.l3s.boilerpipe:boilerpipe:1.1.0.classpath"/>
+    <path refid="library.maven:_rome:rome:0.9.classpath"/>
+    <path refid="library.maven:_jdom:jdom:1.0.classpath"/>
+    <path refid="library.maven:_org.gagravarr:vorbis-java-core:0.1.classpath"/>
+    <path refid="library.maven:_com.googlecode.juniversalchardet:juniversalchardet:1.0.3.classpath"/>
+    <path refid="library.maven:_com.uwyn:jhighlight:1.0.classpath"/>
+    <path refid="library.maven:_org.jsoup:jsoup:1.10.2.classpath"/>
+    <path refid="library.maven:_com.github.slugify:slugify:2.1.7.classpath"/>
+    <path refid="library.maven:_org.apache.commons:commons-lang3:3.5.classpath"/>
+    <path refid="library.maven:_ro.fortsoft.pf4j:pf4j:1.1.1.classpath"/>
+    <path refid="library.maven:_com.github.zafarkhaja:java-semver:0.9.0.classpath"/>
+    <path refid="library.inanlp.classpath"/>
+  </path>
+  
+  <path id="openie.module.classpath">
+    <path refid="${module.jdk.classpath.openie}"/>
+    <pathelement location="${openie.output.dir}"/>
+    <path refid="library.maven:_edu.uci.ics:crawler4j:4.2.classpath"/>
+    <path refid="library.maven:_org.slf4j:slf4j-api:1.7.10.classpath"/>
+    <path refid="library.maven:_uk.org.lidalia:lidalia-slf4j-ext:1.0.0.classpath"/>
+    <path refid="library.maven:_com.google.guava:guava:14.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.4.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.4.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.2.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.9.classpath"/>
+    <path refid="library.maven:_com.sleepycat:je:5.0.73.classpath"/>
+    <path refid="library.maven:_org.apache.tika:tika-parsers:1.5.classpath"/>
+    <path refid="library.maven:_org.apache.tika:tika-core:1.5.classpath"/>
+    <path refid="library.maven:_org.gagravarr:vorbis-java-tika:0.1.classpath"/>
+    <path refid="library.maven:_org.gagravarr:vorbis-java-core:tests:0.1.classpath"/>
+    <path refid="library.maven:_edu.ucar:netcdf:4.2-min.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-dom:0.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.commons:commons-compress:1.5.classpath"/>
+    <path refid="library.maven:_org.tukaani:xz:1.2.classpath"/>
+    <path refid="library.maven:_org.apache.pdfbox:pdfbox:1.8.4.classpath"/>
+    <path refid="library.maven:_org.apache.pdfbox:fontbox:1.8.4.classpath"/>
+    <path refid="library.maven:_org.apache.pdfbox:jempbox:1.8.4.classpath"/>
+    <path refid="library.maven:_org.bouncycastle:bcmail-jdk15:1.45.classpath"/>
+    <path refid="library.maven:_org.bouncycastle:bcprov-jdk15:1.45.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi:3.10-beta2.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi-scratchpad:3.10-beta2.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi-ooxml:3.10-beta2.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi-ooxml-schemas:3.10-beta2.classpath"/>
+    <path refid="library.maven:_org.apache.xmlbeans:xmlbeans:2.3.0.classpath"/>
+    <path refid="library.maven:_dom4j:dom4j:1.6.1.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.ccil.cowan.tagsoup:tagsoup:1.2.1.classpath"/>
+    <path refid="library.maven:_org.ow2.asm:asm-debug-all:4.1.classpath"/>
+    <path refid="library.maven:_com.googlecode.mp4parser:isoparser:1.0-rc-1.classpath"/>
+    <path refid="library.maven:_org.aspectj:aspectjrt:1.6.11.classpath"/>
+    <path refid="library.maven:_com.drewnoakes:metadata-extractor:2.6.2.classpath"/>
+    <path refid="library.maven:_com.adobe.xmp:xmpcore:5.1.2.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.8.1.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.3.03.classpath"/>
+    <path refid="library.maven:_de.l3s.boilerpipe:boilerpipe:1.1.0.classpath"/>
+    <path refid="library.maven:_rome:rome:0.9.classpath"/>
+    <path refid="library.maven:_jdom:jdom:1.0.classpath"/>
+    <path refid="library.maven:_org.gagravarr:vorbis-java-core:0.1.classpath"/>
+    <path refid="library.maven:_com.googlecode.juniversalchardet:juniversalchardet:1.0.3.classpath"/>
+    <path refid="library.maven:_com.uwyn:jhighlight:1.0.classpath"/>
+    <path refid="library.maven:_org.jsoup:jsoup:1.10.2.classpath"/>
+    <path refid="library.maven:_com.github.slugify:slugify:2.1.7.classpath"/>
+    <path refid="library.maven:_org.apache.commons:commons-lang3:3.5.classpath"/>
+    <path refid="library.maven:_ro.fortsoft.pf4j:pf4j:1.1.1.classpath"/>
+    <path refid="library.maven:_com.github.zafarkhaja:java-semver:0.9.0.classpath"/>
+    <path refid="library.inanlp.classpath"/>
+  </path>
+  
+  <path id="openie.runtime.module.classpath">
+    <pathelement location="${openie.testoutput.dir}"/>
+    <pathelement location="${openie.output.dir}"/>
+    <path refid="library.maven:_edu.uci.ics:crawler4j:4.2.classpath"/>
+    <path refid="library.maven:_org.slf4j:slf4j-api:1.7.10.classpath"/>
+    <path refid="library.maven:_uk.org.lidalia:lidalia-slf4j-ext:1.0.0.classpath"/>
+    <path refid="library.maven:_com.google.guava:guava:14.0.1.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpclient:4.4.classpath"/>
+    <path refid="library.maven:_org.apache.httpcomponents:httpcore:4.4.classpath"/>
+    <path refid="library.maven:_commons-logging:commons-logging:1.2.classpath"/>
+    <path refid="library.maven:_commons-codec:commons-codec:1.9.classpath"/>
+    <path refid="library.maven:_com.sleepycat:je:5.0.73.classpath"/>
+    <path refid="library.maven:_org.apache.tika:tika-parsers:1.5.classpath"/>
+    <path refid="library.maven:_org.apache.tika:tika-core:1.5.classpath"/>
+    <path refid="library.maven:_org.gagravarr:vorbis-java-tika:0.1.classpath"/>
+    <path refid="library.maven:_org.gagravarr:vorbis-java-core:tests:0.1.classpath"/>
+    <path refid="library.maven:_edu.ucar:netcdf:4.2-min.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-core:0.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.james:apache-mime4j-dom:0.7.2.classpath"/>
+    <path refid="library.maven:_org.apache.commons:commons-compress:1.5.classpath"/>
+    <path refid="library.maven:_org.tukaani:xz:1.2.classpath"/>
+    <path refid="library.maven:_org.apache.pdfbox:pdfbox:1.8.4.classpath"/>
+    <path refid="library.maven:_org.apache.pdfbox:fontbox:1.8.4.classpath"/>
+    <path refid="library.maven:_org.apache.pdfbox:jempbox:1.8.4.classpath"/>
+    <path refid="library.maven:_org.bouncycastle:bcmail-jdk15:1.45.classpath"/>
+    <path refid="library.maven:_org.bouncycastle:bcprov-jdk15:1.45.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi:3.10-beta2.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi-scratchpad:3.10-beta2.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi-ooxml:3.10-beta2.classpath"/>
+    <path refid="library.maven:_org.apache.poi:poi-ooxml-schemas:3.10-beta2.classpath"/>
+    <path refid="library.maven:_org.apache.xmlbeans:xmlbeans:2.3.0.classpath"/>
+    <path refid="library.maven:_dom4j:dom4j:1.6.1.classpath"/>
+    <path refid="library.maven:_org.apache.geronimo.specs:geronimo-stax-api_1.0_spec:1.0.1.classpath"/>
+    <path refid="library.maven:_org.ccil.cowan.tagsoup:tagsoup:1.2.1.classpath"/>
+    <path refid="library.maven:_org.ow2.asm:asm-debug-all:4.1.classpath"/>
+    <path refid="library.maven:_com.googlecode.mp4parser:isoparser:1.0-rc-1.classpath"/>
+    <path refid="library.maven:_org.aspectj:aspectjrt:1.6.11.classpath"/>
+    <path refid="library.maven:_com.drewnoakes:metadata-extractor:2.6.2.classpath"/>
+    <path refid="library.maven:_com.adobe.xmp:xmpcore:5.1.2.classpath"/>
+    <path refid="library.maven:_xerces:xercesimpl:2.8.1.classpath"/>
+    <path refid="library.maven:_xml-apis:xml-apis:1.3.03.classpath"/>
+    <path refid="library.maven:_de.l3s.boilerpipe:boilerpipe:1.1.0.classpath"/>
+    <path refid="library.maven:_rome:rome:0.9.classpath"/>
+    <path refid="library.maven:_jdom:jdom:1.0.classpath"/>
+    <path refid="library.maven:_org.gagravarr:vorbis-java-core:0.1.classpath"/>
+    <path refid="library.maven:_com.googlecode.juniversalchardet:juniversalchardet:1.0.3.classpath"/>
+    <path refid="library.maven:_com.uwyn:jhighlight:1.0.classpath"/>
+    <path refid="library.maven:_org.jsoup:jsoup:1.10.2.classpath"/>
+    <path refid="library.maven:_com.github.slugify:slugify:2.1.7.classpath"/>
+    <path refid="library.maven:_org.apache.commons:commons-lang3:3.5.classpath"/>
+    <path refid="library.maven:_ro.fortsoft.pf4j:pf4j:1.1.1.classpath"/>
+    <path refid="library.maven:_com.github.zafarkhaja:java-semver:0.9.0.classpath"/>
+    <path refid="library.inanlp.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.openie">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.openie">
+    <patternset refid="excluded.from.module.openie"/>
+  </patternset>
+  
+  <path id="openie.module.sourcepath">
+    <dirset dir="${module.openie.basedir}">
+      <include name="src/main/java"/>
+      <include name="src/main/resources"/>
+      <include name="plugins/OkezoneCrawler"/>
+      <include name="plugins/KompasCrawler"/>
+      <include name="plugins/DetikCrawler"/>
+      <include name="plugins/DetikNormalization"/>
+      <include name="plugins/KompasNormalization"/>
+      <include name="plugins/FileReader"/>
+      <include name="plugins/FileWriter"/>
+      <include name="plugins/SentenceFormalization"/>
+      <include name="plugins/RelationValidationFilter"/>
+      <include name="plugins/ReverbExtractionV2"/>
+      <include name="examples/templates/Crawler"/>
+      <include name="examples/templates/Extractor"/>
+      <include name="examples/templates/Postprocessor"/>
+      <include name="examples/templates/Preprocessor"/>
+    </dirset>
+  </path>
+  
+  <path id="openie.module.test.sourcepath">
+    <dirset dir="${module.openie.basedir}">
+      <include name="src/test/java"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.openie" depends="compile.module.openie.production,compile.module.openie.tests" description="Compile module OpenIE"/>
+  
+  <target name="compile.module.openie.production" description="Compile module OpenIE; production classes">
+    <mkdir dir="${openie.output.dir}"/>
+    <javac destdir="${openie.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.openie}/javac">
+      <compilerarg line="${compiler.args.openie}"/>
+      <bootclasspath refid="openie.module.bootclasspath"/>
+      <classpath refid="openie.module.production.classpath"/>
+      <src refid="openie.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.openie"/>
+    </javac>
+    
+    <copy todir="${openie.output.dir}">
+      <fileset dir="${module.openie.basedir}/src/main/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.openie.basedir}/src/main/resources">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.openie.basedir}/plugins/OkezoneCrawler">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.openie.basedir}/plugins/KompasCrawler">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.openie.basedir}/plugins/DetikCrawler">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.openie.basedir}/plugins/DetikNormalization">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.openie.basedir}/plugins/KompasNormalization">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.openie.basedir}/plugins/FileReader">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.openie.basedir}/plugins/FileWriter">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.openie.basedir}/plugins/SentenceFormalization">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.openie.basedir}/plugins/RelationValidationFilter">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.openie.basedir}/plugins/ReverbExtractionV2">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.openie.basedir}/examples/templates/Crawler">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.openie.basedir}/examples/templates/Extractor">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.openie.basedir}/examples/templates/Postprocessor">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+      <fileset dir="${module.openie.basedir}/examples/templates/Preprocessor">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.openie.tests" depends="compile.module.openie.production" description="compile module OpenIE; test classes" unless="skip.tests">
+    <mkdir dir="${openie.testoutput.dir}"/>
+    <javac destdir="${openie.testoutput.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.openie}/javac">
+      <compilerarg line="${compiler.args.openie}"/>
+      <bootclasspath refid="openie.module.bootclasspath"/>
+      <classpath refid="openie.module.classpath"/>
+      <src refid="openie.module.test.sourcepath"/>
+      <patternset refid="excluded.from.compilation.openie"/>
+    </javac>
+    
+    <copy todir="${openie.testoutput.dir}">
+      <fileset dir="${module.openie.basedir}/src/test/java">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="clean.module.openie" description="cleanup module">
+    <delete dir="${openie.output.dir}"/>
+    <delete dir="${openie.testoutput.dir}"/>
+  </target>
   
   <target name="init" description="Build initialization">
     <!-- Perform any build initialization in this target -->
