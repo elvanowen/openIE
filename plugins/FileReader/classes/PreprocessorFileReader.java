@@ -31,6 +31,8 @@ public class PreprocessorFileReader extends Plugin {
 
         @Override
         public HashMap<String, String> getAvailableConfigurations() {
+            System.out.println("PreprocessorFileReader Input Directory");
+            System.out.println(System.getProperty("user.dir") + File.separator + new Config().getProperty("CRAWLER_OUTPUT_RELATIVE_PATH"));
             availableConfigurations.putIfAbsent("Input Directory", System.getProperty("user.dir") + File.separator + new Config().getProperty("CRAWLER_OUTPUT_RELATIVE_PATH"));
 
             return availableConfigurations;
