@@ -5,8 +5,14 @@ Prototype for Modular Open Information Extraction System
 All source codes are placed in the /src directory. Application is developed using IntelliJ IDEA.
 
 - Clone this repo.
-- Include (from `/examples/jars` directory) and/or install all dependencies (using maven)
-- Run class `OpenIeJFrame` located in `/src/main/java/id/ac/itb/gui`
+- Install dependencies: run `$ mvn install`
+- Modify `path.variable.maven_repository` to local maven repository path
+- Compile classes: run `$ ant`
+
+# Run program
+```
+$ java -cp .:out/artifacts/OpenIE_jar/*:target/classes id.ac.itb.gui.OpenIeJFrame
+```
 
 # Creating a plugin
 To create your own plugin, please see `/examples` for more information.
