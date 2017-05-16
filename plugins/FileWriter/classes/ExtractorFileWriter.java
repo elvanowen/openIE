@@ -32,7 +32,7 @@ public class ExtractorFileWriter extends Plugin {
 
         @Override
         public HashMap<String, String> getAvailableConfigurations() {
-            availableConfigurations.putIfAbsent("Output Directory", System.getProperty("user.dir") + File.separator + new Config().getProperty("EXTRACTIONS_OUTPUT_RELATIVE_PATH"));
+            availableConfigurations.putIfAbsent("Output Directory", System.getProperty("user.dir") + File.separator + new Config().getProperty("EXTRACTIONS_OUTPUT_RELATIVE_PATH").replaceAll("\\.", File.separator));
 
             return availableConfigurations;
         }

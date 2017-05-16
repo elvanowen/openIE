@@ -23,7 +23,7 @@ import java.util.regex.Pattern;
 public class Crawler extends WebCrawler implements ICrawlerPipelineElement {
 
     private static Crawler currentlyRunningCrawler = null;
-    private static ArrayList<String> outputDirectories = new ArrayList<>(Arrays.asList(System.getProperty("user.dir") + File.separator + new Config().getProperty("CRAWLER_OUTPUT_RELATIVE_PATH")));
+    private static ArrayList<String> outputDirectories = new ArrayList<>(Arrays.asList(System.getProperty("user.dir") + File.separator + new Config().getProperty("CRAWLER_OUTPUT_RELATIVE_PATH").replaceAll("\\.", File.separator)));
     private ICrawlerHandler crawlerHandler = null;
     private int totalDocumentCrawled = 0;
 
@@ -116,9 +116,6 @@ public class Crawler extends WebCrawler implements ICrawlerPipelineElement {
         totalDocumentCrawled = 0;
 
         CrawlConfig config = new CrawlConfig();
-
-        // Set Internal Output Directory Config
-        config.setCrawlStorageFolder(System.getProperty("user.dir") + File.separator + new Config().getProperty("INTERNAL_CRAWLER_STORAGE_DIRECTORY"));
 
         // Set Max Depth of Crawling Config
         String userMaxDepthOfCrawling = currentlyRunningCrawler.getCrawlerhandler().getAvailableConfigurations().get("Max Depth of Crawling");

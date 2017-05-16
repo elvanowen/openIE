@@ -62,11 +62,11 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     }
 
     private void setupFolders() {
-        File crawlerDirectory = new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("CRAWLER_OUTPUT_RELATIVE_PATH"));
-        File preprocessDirectory = new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("PREPROCESSES_OUTPUT_RELATIVE_PATH"));
-        File extractionDirectory = new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("EXTRACTIONS_OUTPUT_RELATIVE_PATH"));
-        File postprocessDirectory = new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("POSTPROCESSES_OUTPUT_RELATIVE_PATH"));
-        File labelDirectory = new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("EVALUATION_LABEL_OUTPUT_RELATIVE_PATH"));
+        File crawlerDirectory = new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("CRAWLER_OUTPUT_RELATIVE_PATH").replaceAll("\\.", File.separator));
+        File preprocessDirectory = new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("PREPROCESSES_OUTPUT_RELATIVE_PATH").replaceAll("\\.", File.separator));
+        File extractionDirectory = new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("EXTRACTIONS_OUTPUT_RELATIVE_PATH").replaceAll("\\.", File.separator));
+        File postprocessDirectory = new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("POSTPROCESSES_OUTPUT_RELATIVE_PATH").replaceAll("\\.", File.separator));
+        File labelDirectory = new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("EVALUATION_LABEL_OUTPUT_RELATIVE_PATH").replaceAll("\\.", File.separator));
 
         if (!crawlerDirectory.exists()) crawlerDirectory.mkdir();
         if (!preprocessDirectory.exists()) preprocessDirectory.mkdir();
@@ -315,7 +315,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         openExtractionViewerLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         openExtractionViewerLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                JFrame extractionViewer = new ExtractionViewer(new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("EXTRACTIONS_OUTPUT_RELATIVE_PATH")));
+                JFrame extractionViewer = new ExtractionViewer(new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("EXTRACTIONS_OUTPUT_RELATIVE_PATH").replaceAll("\\.", File.separator)));
                 extractionViewer.setVisible(true);
             }
         });
@@ -335,7 +335,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         openExtractionPostprocessedViewerLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
         openExtractionPostprocessedViewerLabel.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-                JFrame extractionViewer = new ExtractionViewer(new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("POSTPROCESSES_OUTPUT_RELATIVE_PATH")));
+                JFrame extractionViewer = new ExtractionViewer(new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("POSTPROCESSES_OUTPUT_RELATIVE_PATH").replaceAll("\\.", File.separator)));
                 extractionViewer.setVisible(true);
             }
         });
@@ -869,7 +869,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                 extractorProgress.dispose();
 
                 if (postprocessorPipeline.getNumberOfPostprocessors() == 0) {
-                    JFrame extractionViewer = new ExtractionViewer(new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("EXTRACTIONS_OUTPUT_RELATIVE_PATH")));
+                    JFrame extractionViewer = new ExtractionViewer(new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("EXTRACTIONS_OUTPUT_RELATIVE_PATH").replaceAll("\\.", File.separator)));
                     extractionViewer.setVisible(true);
                 }
             }
@@ -890,7 +890,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                 postprocessorProgress.dispose();
 
                 if (postprocessorPipeline.getNumberOfPostprocessors() > 0) {
-                    JFrame extractionViewer = new ExtractionViewer(new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("POSTPROCESSES_OUTPUT_RELATIVE_PATH")));
+                    JFrame extractionViewer = new ExtractionViewer(new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("POSTPROCESSES_OUTPUT_RELATIVE_PATH").replaceAll("\\.", File.separator)));
                     extractionViewer.setVisible(true);
                 }
             }

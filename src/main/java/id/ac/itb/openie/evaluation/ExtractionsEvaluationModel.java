@@ -23,7 +23,7 @@ public class ExtractionsEvaluationModel {
     private Relations labelledRelations;
 
     public ExtractionsEvaluationModel() {
-        this(new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("EXTRACTIONS_OUTPUT_RELATIVE_PATH")), new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("EVALUATION_LABEL_OUTPUT_RELATIVE_PATH")));
+        this(new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("EXTRACTIONS_OUTPUT_RELATIVE_PATH").replaceAll("\\.", File.separator)), new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("EVALUATION_LABEL_OUTPUT_RELATIVE_PATH").replaceAll("\\.", File.separator)));
     }
 
     public ExtractionsEvaluationModel(File extractionsDirectory, File labelsDirectory) {

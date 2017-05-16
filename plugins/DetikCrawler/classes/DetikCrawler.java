@@ -33,7 +33,6 @@ public class DetikCrawler extends Plugin {
 
         @Override
         public HashMap<String, String> getAvailableConfigurations() {
-//            availableConfigurations.putIfAbsent("Output Directory", System.getProperty("user.dir") + File.separator + new Config().getProperty("CRAWLER_OUTPUT_RELATIVE_PATH"));
             availableConfigurations.putIfAbsent("Max Pages to Fetch", "50");
             availableConfigurations.putIfAbsent("Max Depth of Crawling", "100");
             availableConfigurations.putIfAbsent("Regex Filter Pattern", ".*(\\.(css|js|gif|jpeg|jpg|png|mp3|mp3|zip|gz))$");
