@@ -12,13 +12,12 @@ Prototype for Modular Open Information Extraction System
 All source codes are placed in the /src directory. Application is developed using IntelliJ IDEA.
 
 - Clone this repo.
-- Install dependencies: run `$ mvn install`
 - Open file `build.properties` and modify `jdk.home.1.8` to JAVA_HOME path
 - Compile classes: run `$ ant`
 
 # Run program
 ```
-$ java -cp .:out/artifacts/OpenIE_jar/*:target/classes id.ac.itb.gui.OpenIeJFrame
+$ java -cp .:out/artifacts/OpenIE_jar/*:jars/*:target/classes id.ac.itb.gui.OpenIeJFrame
 ```
 
 # Creating a plugin
