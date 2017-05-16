@@ -1,6 +1,13 @@
 # openIE
 Prototype for Modular Open Information Extraction System
 
+# Prerequisites
+
+- Java 1.8
+- Maven
+- Ant
+
+
 # Installation
 All source codes are placed in the /src directory. Application is developed using IntelliJ IDEA.
 
