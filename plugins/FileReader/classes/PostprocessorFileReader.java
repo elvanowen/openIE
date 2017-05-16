@@ -54,13 +54,10 @@ public class PostprocessorFileReader extends Plugin {
 
                 System.out.println("Inside post reader");
 
-                for (String inputDir: availableConfigurations.get("Input Directory").split(":")) {
-                    System.out.println(inputDir);
-                    ArrayList<File> files = Utilities.getDirectoryFiles(new File(inputDir));
+                ArrayList<File> files = Utilities.getDirectoryFiles(new File(availableConfigurations.get("Input Directory")));
 
-                    for (File _file: files) {
-                        pipelineItems.put(_file, new Relations(_file));
-                    }
+                for (File _file: files) {
+                    pipelineItems.put(_file, new Relations(_file));
                 }
 
                 return pipelineItems;

@@ -51,12 +51,10 @@ public class ExtractorFileReader extends Plugin {
             } else {
                 HashMap<File, Pair<String, Relations>> pipelineItems = new HashMap<>();
 
-                for (String inputDir: availableConfigurations.get("Input Directory").split(":")) {
-                    ArrayList<File> files = Utilities.getDirectoryFiles(new File(inputDir));
+                ArrayList<File> files = Utilities.getDirectoryFiles(new File(availableConfigurations.get("Input Directory")));
 
-                    for (File _file: files) {
-                        pipelineItems.put(_file, Pair.of(Utilities.getFileContent(_file), null));
-                    }
+                for (File _file: files) {
+                    pipelineItems.put(_file, Pair.of(Utilities.getFileContent(_file), null));
                 }
 
                 return pipelineItems;

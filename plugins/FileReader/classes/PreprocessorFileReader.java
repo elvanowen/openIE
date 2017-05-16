@@ -51,12 +51,10 @@ public class PreprocessorFileReader extends Plugin {
             } else {
                 HashMap<File, String> pipelineItems = new HashMap<File, String>();
 
-                for (String inputDir: availableConfigurations.get("Input Directory").split(":")) {
-                    ArrayList<File> files = Utilities.getDirectoryFiles(new File(inputDir));
+                ArrayList<File> files = Utilities.getDirectoryFiles(new File(availableConfigurations.get("Input Directory")));
 
-                    for (File _file: files) {
-                        pipelineItems.put(_file, Utilities.getFileContent(_file));
-                    }
+                for (File _file: files) {
+                    pipelineItems.put(_file, Utilities.getFileContent(_file));
                 }
 
                 return pipelineItems;
