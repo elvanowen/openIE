@@ -12,7 +12,7 @@ Prototype for Modular Open Information Extraction System
 All source codes are placed in the /src directory. Application is developed using IntelliJ IDEA.
 
 - Clone this repo.
-- Open file `build.properties` and modify `jdk.home.1.8` to JAVA_HOME path
+- Open file `build.properties` and modify `jdk.home.1.8` to `JAVA_HOME` path
 - Compile classes: run `$ ant`
 
 # Run program
