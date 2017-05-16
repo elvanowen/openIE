@@ -13,7 +13,7 @@ All source codes are placed in the /src directory. Application is developed usin
 
 - Clone this repo.
 - Install dependencies: run `$ mvn install`
-- Open file `build.properties` and modify `path.variable.maven_repository` to local maven repository path
+- Open file `build.properties` and modify `jdk.home.1.8` to JAVA_HOME path
 - Compile classes: run `$ ant`
 
 # Run program
