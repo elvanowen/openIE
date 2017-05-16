@@ -14,8 +14,14 @@ All source codes are placed in the /src directory. Application is developed usin
 - Compile classes: run `$ ant`
 
 # Run program
+## UNIX
 ```
 $ java -cp .:out/artifacts/OpenIE_jar/*:jars/*:target/classes id.ac.itb.gui.OpenIeJFrame
+```
+
+## Windows
+```
+$ java -cp .;out/artifacts/OpenIE_jar/*;jars/*;target/classes id.ac.itb.gui.OpenIeJFrame
 ```
 
 # Creating a plugin
