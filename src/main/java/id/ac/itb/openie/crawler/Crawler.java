@@ -119,7 +119,7 @@ public class Crawler extends WebCrawler implements ICrawlerPipelineElement {
         CrawlConfig config = new CrawlConfig();
 
         // Set Internal Output Directory Config
-        config.setCrawlStorageFolder("data;.crawl".replaceAll(";", File.separator));
+        config.setCrawlStorageFolder("data;.crawl".replaceAll(";", Matcher.quoteReplacement(System.getProperty("file.separator"))));
 
         // Set Max Depth of Crawling Config
         String userMaxDepthOfCrawling = currentlyRunningCrawler.getCrawlerhandler().getAvailableConfigurations().get("Max Depth of Crawling");
