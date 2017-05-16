@@ -15,6 +15,7 @@ import id.ac.itb.openie.utils.Utilities;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -23,7 +24,7 @@ import java.util.regex.Pattern;
 public class Crawler extends WebCrawler implements ICrawlerPipelineElement {
 
     private static Crawler currentlyRunningCrawler = null;
-    private static ArrayList<String> outputDirectories = new ArrayList<>(Arrays.asList(System.getProperty("user.dir") + File.separator + new Config().getProperty("CRAWLER_OUTPUT_RELATIVE_PATH").replaceAll("\\.", File.separator)));
+    private static ArrayList<String> outputDirectories = new ArrayList<>(Arrays.asList(System.getProperty("user.dir") + File.separator + new Config().getProperty("CRAWLER_OUTPUT_RELATIVE_PATH").replaceAll("\\.", Matcher.quoteReplacement(System.getProperty("file.separator")))));
     private ICrawlerHandler crawlerHandler = null;
     private int totalDocumentCrawled = 0;
 

@@ -11,6 +11,7 @@ import ro.fortsoft.pf4j.PluginWrapper;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
 
 /**
  * Created by elvanowen on 2/24/17.
@@ -32,7 +33,7 @@ public class PostprocessorFileReader extends Plugin {
 
         @Override
         public HashMap<String, String> getAvailableConfigurations() {
-            availableConfigurations.putIfAbsent("Input Directory", System.getProperty("user.dir") + File.separator + new Config().getProperty("EXTRACTIONS_OUTPUT_RELATIVE_PATH").replaceAll("\\.", File.separator));
+            availableConfigurations.putIfAbsent("Input Directory", System.getProperty("user.dir") + File.separator + new Config().getProperty("EXTRACTIONS_OUTPUT_RELATIVE_PATH").replaceAll("\\.", Matcher.quoteReplacement(System.getProperty("file.separator"))));
 
             return availableConfigurations;
         }

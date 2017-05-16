@@ -8,6 +8,7 @@ import id.ac.itb.openie.utils.Utilities;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
 
 /**
  * Created by elvanowen on 4/15/17.
@@ -18,9 +19,9 @@ public class ExtractionsEvaluationLabeller {
     private HashMap<File, Relations> relationsByFile = new HashMap<>();
 
     public ExtractionsEvaluationLabeller() {
-        documents = Utilities.getDirectoryFiles(new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("PREPROCESSES_OUTPUT_RELATIVE_PATH").replaceAll("\\.", File.separator)));
+        documents = Utilities.getDirectoryFiles(new File(System.getProperty("user.dir") + File.separator + new Config().getProperty("PREPROCESSES_OUTPUT_RELATIVE_PATH").replaceAll("\\.", Matcher.quoteReplacement(System.getProperty("file.separator")))));
 
-        String labelsDirectory = System.getProperty("user.dir") + File.separator + new Config().getProperty("EVALUATION_LABEL_OUTPUT_RELATIVE_PATH").replaceAll("\\.", File.separator);
+        String labelsDirectory = System.getProperty("user.dir") + File.separator + new Config().getProperty("EVALUATION_LABEL_OUTPUT_RELATIVE_PATH").replaceAll("\\.", Matcher.quoteReplacement(System.getProperty("file.separator")));
 
         for (File document: documents) {
             File evaluationRelationsFile = new File(labelsDirectory + File.separator + document.getName());
@@ -35,7 +36,7 @@ public class ExtractionsEvaluationLabeller {
 
     public void persist(File document) {
         Relations relationsToBeSaved = relationsByFile.get(document);
-        String evaluationDir = System.getProperty("user.dir") + File.separator + new Config().getProperty("EVALUATION_LABEL_OUTPUT_RELATIVE_PATH").replaceAll("\\.", File.separator);
+        String evaluationDir = System.getProperty("user.dir") + File.separator + new Config().getProperty("EVALUATION_LABEL_OUTPUT_RELATIVE_PATH").replaceAll("\\.", Matcher.quoteReplacement(System.getProperty("file.separator")));
 
         if (relationsToBeSaved.getRelations().size() == 0) {
             Utilities.removeFile(new File(evaluationDir + File.separator + document.getName()));
