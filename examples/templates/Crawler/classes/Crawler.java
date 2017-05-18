@@ -68,10 +68,6 @@ public class Crawler extends Plugin {
             return "";
         }
 
-        public String toString() {
-            return this.getPluginName();
-        }
-
         public void crawlerWillRun() {
             /* TODO: before crawler start crawling */
         }

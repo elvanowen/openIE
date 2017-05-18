@@ -50,9 +50,5 @@ public class Postprocessor extends Plugin {
             /* TODO: after postprocessor finish crawling */
         }
 
-        public String toString() {
-            return this.getPluginName();
-        }
-
     }
 }

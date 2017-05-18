@@ -41,10 +41,6 @@ public class Extractor extends Plugin {
             return extracted;
         }
 
-        public String toString() {
-            return this.getPluginName();
-        }
-
         public void extractorWillRun() {
             /* TODO: before extractor start crawling */
         }

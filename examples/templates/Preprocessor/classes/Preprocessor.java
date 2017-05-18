@@ -40,10 +40,6 @@ public class Preprocessor extends Plugin {
             return preprocessed;
         }
 
-        public String toString() {
-            return this.getPluginName();
-        }
-
         @Override
         public void preprocessorWillRun() {
             /* TODO: before preprocessor start crawling */
