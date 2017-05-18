@@ -6,6 +6,10 @@ Prototype for Modular Open Information Extraction System
 - Java 1.8
 - [Ant](http://ant.apache.org/)
 - Git (optional)
+- [Maven](https://maven.apache.org/) (optional)
+
+# Dependencies
+All dependencies are given in `jars` directory. All dependencies can also be installed through `maven` (`$ mvn install`) except for `inaNLP.jar` and `ipostagger.jar` which has to be included manually.
 
 # Installation
 All source codes are placed in the /src directory. Application is developed using IntelliJ IDEA.
