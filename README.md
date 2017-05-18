@@ -10,7 +10,7 @@ Prototype for Modular Open Information Extraction System
 # Installation
 All source codes are placed in the /src directory. Application is developed using IntelliJ IDEA.
 
-- Clone this repo or [download here](github.com/elvanowen/openIE/archive/master.zip). <br />
+- Clone this repo or [download here](https://github.com/elvanowen/openIE/archive/master.zip). <br />
   `$ git clone https://github.com/elvanowen/openIE.git`
 - Open file `build.properties` and modify property `jdk.home.1.8` to your `JAVA_HOME` path. [More about JAVA_HOME](http://sbndev.astro.umd.edu/wiki/Finding_and_Setting_JAVA_HOME) <br />
   e.g. Windows: <br />
