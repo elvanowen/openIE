@@ -5,13 +5,18 @@ Prototype for Modular Open Information Extraction System
 
 - Java 1.8
 - [Ant](http://ant.apache.org/)
+- Git (optional)
 
 # Installation
 All source codes are placed in the /src directory. Application is developed using IntelliJ IDEA.
 
-- Clone this repo.
-- Open file `build.properties` and modify `jdk.home.1.8` to `JAVA_HOME` path. E.g. `jdk.home.1.8=C:/Program Files/Java/jdk1.8.0_92` (Windows) and `jdk.home.1.8=/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home` (Mac OS X)
-- Compile classes: run `$ ant` (This will generate `out` and `target` directories)
+- Clone this repo or [download here](github.com/elvanowen/openIE/archive/master.zip). <br />
+  `$ git clone https://github.com/elvanowen/openIE.git`
+- Open file `build.properties` and modify `jdk.home.1.8` to `JAVA_HOME` path. <br />
+  e.g. Windows: `jdk.home.1.8=C:/Program Files/Java/jdk1.8.0_92` <br />
+  e.g. Mac OS X: `jdk.home.1.8=/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home`
+- Compile classes (This will generate `out` and `target` directories needed to run the app) <br />
+  `$ ant`
 
 # Run program
 This will open the main application window.
