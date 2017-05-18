@@ -64,10 +64,6 @@ public class PreprocessorFileReader extends Plugin {
         @Override
         public void write(File file, String preprocessed) throws Exception {}
 
-        public String toString() {
-            return this.getPluginName();
-        }
-
         @Override
         public void preprocessorWillRun() {
 

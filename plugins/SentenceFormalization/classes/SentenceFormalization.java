@@ -64,10 +64,6 @@ public class SentenceFormalization extends Plugin {
             return StringUtils.join(preprocessedSentences, "");
         }
 
-        public String toString() {
-            return this.getPluginName();
-        }
-
         @Override
         public void preprocessorWillRun() {
 

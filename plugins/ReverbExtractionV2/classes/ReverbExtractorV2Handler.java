@@ -42,10 +42,6 @@ public class ReverbExtractorV2Handler extends Plugin {
             return new ReverbExtractorV2().extract(file, document, extracted);
         }
 
-        public String toString() {
-            return this.getPluginName();
-        }
-
         public void extractorWillRun() {
             System.out.println(this.getPluginName() + " will run..");
         }

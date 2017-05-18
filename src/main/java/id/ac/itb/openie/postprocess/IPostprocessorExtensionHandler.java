@@ -16,4 +16,8 @@ public abstract class IPostprocessorExtensionHandler implements IPostprocessorHa
 
     public void write(File file, Relations postprocessed) throws Exception { }
 
+    public String toString() {
+        return this.getPluginName();
+    }
+
 }

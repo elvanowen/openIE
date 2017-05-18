@@ -70,11 +70,5 @@ public class ExtractorFileWriter extends Plugin {
         public void extractorDidRun() {
 
         }
-
-
-        public String toString() {
-            return this.getPluginName();
-        }
-
     }
 }

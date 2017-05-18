@@ -13,4 +13,8 @@ public abstract class IPreprocessorExtensionHandler implements IPreprocessorHand
     }
 
     public void write(File file, String preprocessed) throws Exception {}
+
+    public String toString() {
+        return this.getPluginName();
+    }
 }

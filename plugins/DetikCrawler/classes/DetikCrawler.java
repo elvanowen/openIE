@@ -84,10 +84,6 @@ public class DetikCrawler extends Plugin {
             return StringUtils.join(contents, "");
         }
 
-        public String toString() {
-            return this.getPluginName();
-        }
-
         public void crawlerWillRun() {
             System.out.println(this.getPluginName() + " will run..");
         }

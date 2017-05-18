@@ -76,9 +76,5 @@ public class PostprocessorFileReader extends Plugin {
         public void postprocessorDidRun() {
 
         }
-
-        public String toString() {
-            return this.getPluginName();
-        }
     }
 }

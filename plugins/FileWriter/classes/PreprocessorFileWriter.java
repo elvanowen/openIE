@@ -55,10 +55,6 @@ public class PreprocessorFileWriter extends Plugin {
             }
         }
 
-        public String toString() {
-            return this.getPluginName();
-        }
-
         @Override
         public void preprocessorWillRun() {
 

@@ -63,10 +63,6 @@ public class KompasCrawler extends Plugin {
             return contents.get(0).text();
         }
 
-        public String toString() {
-            return this.getPluginName();
-        }
-
         public void crawlerWillRun() {
             System.out.println(this.getPluginName() + " will run..");
         }

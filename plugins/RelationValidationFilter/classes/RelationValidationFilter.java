@@ -60,10 +60,5 @@ public class RelationValidationFilter extends Plugin {
         public void postprocessorDidRun() {
 
         }
-
-        public String toString() {
-            return this.getPluginName();
-        }
-
     }
 }

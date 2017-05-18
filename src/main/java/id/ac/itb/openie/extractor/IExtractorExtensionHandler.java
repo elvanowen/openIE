@@ -17,4 +17,8 @@ public abstract class IExtractorExtensionHandler implements IExtractorHandler {
 
     public void write(File file, Relations extracted) throws Exception {}
 
+    public String toString() {
+        return this.getPluginName();
+    }
+
 }

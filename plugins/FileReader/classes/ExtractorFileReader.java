@@ -73,9 +73,5 @@ public class ExtractorFileReader extends Plugin {
         public void extractorDidRun() {
 
         }
-
-        public String toString() {
-            return this.getPluginName();
-        }
     }
 }

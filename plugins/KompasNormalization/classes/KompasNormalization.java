@@ -58,10 +58,6 @@ public class KompasNormalization extends Plugin {
             return preprocessedPayload;
         }
 
-        public String toString() {
-            return this.getPluginName();
-        }
-
         @Override
         public void preprocessorWillRun() {
 
