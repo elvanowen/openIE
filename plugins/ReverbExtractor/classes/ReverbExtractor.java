@@ -12,19 +12,19 @@ import java.util.HashMap;
 /**
  * Created by elvanowen on 2/24/17.
  */
-public class ReverbExtractorV2Handler extends Plugin {
+public class ReverbExtractor extends Plugin {
 
-    public ReverbExtractorV2Handler(PluginWrapper wrapper) {
+    public ReverbExtractor(PluginWrapper wrapper) {
         super(wrapper);
     }
 
     @Extension
-    public static class ReverbExtractorV2HandlerPlugin extends IExtractorExtensionHandler {
+    public static class ReverbExtractorHandler extends IExtractorExtensionHandler {
 
         HashMap<String, String> availableConfigurations = new HashMap<>();
 
         public String getPluginName() {
-            return "Reverb Extractor V2";
+            return "Reverb Extractor";
         }
 
         @Override
@@ -39,7 +39,7 @@ public class ReverbExtractorV2Handler extends Plugin {
 
         @Override
         public Relations extract(File file, String document, Relations extracted) throws Exception {
-            return new ReverbExtractorV2().extract(file, document, extracted);
+            return new ReverbExtraction().extract(file, document, extracted);
         }
 
         public void extractorWillRun() {

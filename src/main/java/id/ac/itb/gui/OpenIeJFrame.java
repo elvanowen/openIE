@@ -41,6 +41,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Properties;
 import java.util.regex.Matcher;
 
 /**
@@ -77,6 +78,10 @@ public class OpenIeJFrame extends javax.swing.JFrame {
     }
 
     private void initPlugins() {
+        Properties props = System.getProperties();
+        props.setProperty("pf4j.mode", "development");
+        props.setProperty("pf4j.pluginsDir", "plugins");
+
         pluginLoader = new PluginLoader();
 
         pluginLoader
@@ -99,7 +104,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                 Files.copy(selectedFile.toPath(), targetZip.toPath(), StandardCopyOption.REPLACE_EXISTING);
 
                 UnzipUtility unzipUtility = new UnzipUtility();
-                unzipUtility.unzip(target, UnzipTarget);
+                unzipUtility.unzip(target, System.getProperty("pf4j.pluginsDir", "plugins"));
                 targetZip.delete();
 
                 new Alert("Required restarting application to load new plugins.").setVisible(true);

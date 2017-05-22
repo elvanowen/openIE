@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
  * Created by elvanowen on 2/9/17.
  */
 
-class ReverbExtractorV2 {
+class ReverbExtraction {
 
     /* Reverb extraction rule */
     /* Extract verb then find two nearest noun phrase */
