@@ -16,11 +16,13 @@ All source codes are placed in the /src directory. Application is developed usin
 
 - Clone this repo or [download here](https://github.com/elvanowen/openIE/archive/master.zip). <br />
   `$ git clone https://github.com/elvanowen/openIE.git`
+  <br />
 - Open file `build.properties` and modify property `jdk.home.1.8` to your `JAVA_HOME` path. [More about JAVA_HOME](http://sbndev.astro.umd.edu/wiki/Finding_and_Setting_JAVA_HOME) <br />
   e.g. Windows: <br />
   `jdk.home.1.8=C:/Program Files/Java/jdk1.8.0_92` <br />
   e.g. Mac OS X: <br />
   `jdk.home.1.8=/Library/Java/JavaVirtualMachines/jdk1.8.0_92.jdk/Contents/Home`
+  <br />
 - Compile app (This will generate `out` and `target` directories needed to run the app) <br />
   `$ ant`
 
