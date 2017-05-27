@@ -4,7 +4,7 @@ Prototype for Modular Open Information Extraction System
 # Prerequisites
 
 - Java 1.8
-- [Ant](http://ant.apache.org/)
+- [Ant](http://ant.apache.org/) (How to install Ant on [Windows](https://www.mkyong.com/ant/how-to-install-apache-ant-on-windows/) / [OS X](https://www.mkyong.com/ant/how-to-apache-ant-on-mac-os-x/))
 - Git (optional)
 - [Maven](https://maven.apache.org/) (optional)
 
