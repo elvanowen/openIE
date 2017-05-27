@@ -33,8 +33,7 @@ import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -107,7 +106,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                 unzipUtility.unzip(target, System.getProperty("pf4j.pluginsDir", "plugins"));
                 targetZip.delete();
 
-                new Alert("Required restarting application to load new plugins.").setVisible(true);
+                new Alert("Plugins loaded successfully. Restart required to use new integrated plugin.").setVisible(true);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -138,6 +137,15 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         }
     }
 
+    private void refreshEvaluationFilesList() {
+        extractionsEvaluationLabeller = new ExtractionsEvaluationLabeller();
+
+        evaluationSectionFilesjList.setModel(new javax.swing.AbstractListModel<String>() {
+            public int getSize() { return extractionsEvaluationLabeller.getDocuments().size(); }
+            public String getElementAt(int i) { return (i+1) + ". " + extractionsEvaluationLabeller.getDocuments().get(i).getName(); }
+        });
+    }
+
     private void refreshEvaluationRelationsList() {
         if (evaluationSectionFilesjList.getSelectedIndex() >= 0) {
             evaluationSectionRelationsjList.setModel(new javax.swing.AbstractListModel<String>() {
@@ -157,11 +165,31 @@ public class OpenIeJFrame extends javax.swing.JFrame {
 
     private void refreshEvaluationSentencesList() {
         evaluationSectionSentencesjList.setModel(new javax.swing.AbstractListModel<String>() {
-            File selectedDocument = extractionsEvaluationLabeller.getDocuments().get(evaluationSectionFilesjList.getSelectedIndex());
-            ArrayList<String> sentences = extractionsEvaluationLabeller.getDocumentSentences(selectedDocument);
+            public int getSize() {
+                ArrayList<String> sentences = new ArrayList<>();
 
-            public int getSize() { return sentences.size(); }
-            public String getElementAt(int i) { return (i+1) + ". " + sentences.get(i); }
+                if (evaluationSectionFilesjList.getSelectedIndex() > 0) {
+                    File selectedDocument = extractionsEvaluationLabeller.getDocuments().get(evaluationSectionFilesjList.getSelectedIndex());
+                    sentences = extractionsEvaluationLabeller.getDocumentSentences(selectedDocument);
+                }
+
+                return sentences.size();
+            }
+
+            public String getElementAt(int i) {
+                ArrayList<String> sentences = new ArrayList<>();
+
+                if (evaluationSectionFilesjList.getSelectedIndex() > 0) {
+                    File selectedDocument = extractionsEvaluationLabeller.getDocuments().get(evaluationSectionFilesjList.getSelectedIndex());
+                    sentences = extractionsEvaluationLabeller.getDocumentSentences(selectedDocument);
+                }
+
+                if (sentences.size() > 0) {
+                    return (i+1) + ". " + sentences.get(i);
+                } else {
+                    return null;
+                }
+            }
         });
     }
 
@@ -363,7 +391,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                         availableConfigurations = ((Postprocessor)selectedPipelineElement).getPostprocessorHandler().getAvailableConfigurations();
                     }
 
-                    if (availableConfigurations != null) {
+                    if (availableConfigurations != null && availableConfigurations.size() > 0) {
                         openIESectionConfigurePipelineElementButton1.setEnabled(true);
                     } else {
                         openIESectionConfigurePipelineElementButton1.setEnabled(false);
@@ -539,10 +567,27 @@ public class OpenIeJFrame extends javax.swing.JFrame {
         addNewRelationsLabel.setFont(new java.awt.Font("Lucida Grande", 0, 11)); // NOI18N
         addNewRelationsLabel.setText("Add New Relations:");
 
-        argument1EvaluationTextField.setText("Argument 1");
+        argument1EvaluationTextField.setText("1st Argument");
+        argument1EvaluationTextField.setEnabled(false);
         argument1EvaluationTextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 argument1EvaluationTextFieldActionPerformed(evt);
+            }
+        });
+
+        argument1EvaluationTextField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (argument1EvaluationTextField.getText().equalsIgnoreCase("1st Argument")) {
+                    argument1EvaluationTextField.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (argument1EvaluationTextField.getText().equalsIgnoreCase("")) {
+                    argument1EvaluationTextField.setText("1st Argument");
+                }
             }
         });
 
@@ -559,16 +604,54 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             public void valueChanged(ListSelectionEvent e) {
                 if (evaluationSectionSentencesjList.getSelectedIndex() >= 0) {
                     addEvaluationRelationButton.setEnabled(true);
+                    argument1EvaluationTextField.setEnabled(true);
+                    relationEvaluationTextField.setEnabled(true);
+                    argument2EvaluationTextField.setEnabled(true);
                 } else {
                     addEvaluationRelationButton.setEnabled(false);
+                    argument1EvaluationTextField.setEnabled(false);
+                    relationEvaluationTextField.setEnabled(false);
+                    argument2EvaluationTextField.setEnabled(false);
                 }
 
             }
         });
 
         relationEvaluationTextField.setText("Relation");
+        relationEvaluationTextField.setEnabled(false);
+        relationEvaluationTextField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (relationEvaluationTextField.getText().equalsIgnoreCase("Relation")) {
+                    relationEvaluationTextField.setText("");
+                }
+            }
 
-        argument2EvaluationTextField.setText("Argument 2");
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (relationEvaluationTextField.getText().equalsIgnoreCase("")) {
+                    relationEvaluationTextField.setText("Relation");
+                }
+            }
+        });
+
+        argument2EvaluationTextField.setText("2nd Argument");
+        argument2EvaluationTextField.setEnabled(false);
+        argument2EvaluationTextField.addFocusListener(new FocusListener() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (argument2EvaluationTextField.getText().equalsIgnoreCase("2nd Argument")) {
+                    argument2EvaluationTextField.setText("");
+                }
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (argument2EvaluationTextField.getText().equalsIgnoreCase("")) {
+                    argument2EvaluationTextField.setText("2nd Argument");
+                }
+            }
+        });
 
         addEvaluationRelationButton.setText("+");
         addEvaluationRelationButton.setEnabled(false);
@@ -699,6 +782,13 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(runEvaluationButton))
         );
+
+        jPanel6.addComponentListener ( new ComponentAdapter() {
+            public void componentShown ( ComponentEvent e ) {
+                // reload files list in case user just do some crawling
+                refreshEvaluationFilesList();
+            }
+        } );
 
         jTabbedPane1.addTab("Evaluation", jPanel6);
 
@@ -943,9 +1033,9 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                         selectedSentence
                 ));
 
-        argument1EvaluationTextField.setText("Argument 1");
+        argument1EvaluationTextField.setText("1st Argument");
         relationEvaluationTextField.setText("Relation");
-        argument2EvaluationTextField.setText("Argument 2");
+        argument2EvaluationTextField.setText("2nd Argument");
 
         refreshEvaluationRelationsList();
 
