@@ -106,7 +106,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                 unzipUtility.unzip(target, System.getProperty("pf4j.pluginsDir", "plugins"));
                 targetZip.delete();
 
-                new Alert("Plugins loaded successfully. Restart required to use new integrated plugin.").setVisible(true);
+                new Alert("Plugins loaded successfully. Recompilation required to use new integrated plugin.").setVisible(true);
             } catch (IOException e) {
                 e.printStackTrace();
             }
