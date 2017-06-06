@@ -131,6 +131,7 @@ public class ExtractionViewer extends javax.swing.JFrame {
         int offsetArg2Sentence = fileContent.indexOf(sentence) + startIdxRel + rel.length();
         for (String word: arg2.split("\\s")) {
             int pointerArg2Start = arg2Sentence.indexOf(" " + word + " ") + 1;
+            int pointerArg2Start = arg2Sentence.indexOf(" " + word) + 1;
             int pointerArg2End = pointerArg2Start + word.length();
 
             try {
