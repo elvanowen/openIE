@@ -168,7 +168,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             public int getSize() {
                 ArrayList<String> sentences = new ArrayList<>();
 
-                if (evaluationSectionFilesjList.getSelectedIndex() > 0) {
+                if (evaluationSectionFilesjList.getSelectedIndex() >= 0) {
                     File selectedDocument = extractionsEvaluationLabeller.getDocuments().get(evaluationSectionFilesjList.getSelectedIndex());
                     sentences = extractionsEvaluationLabeller.getDocumentSentences(selectedDocument);
                 }
@@ -179,7 +179,7 @@ public class OpenIeJFrame extends javax.swing.JFrame {
             public String getElementAt(int i) {
                 ArrayList<String> sentences = new ArrayList<>();
 
-                if (evaluationSectionFilesjList.getSelectedIndex() > 0) {
+                if (evaluationSectionFilesjList.getSelectedIndex() >= 0) {
                     File selectedDocument = extractionsEvaluationLabeller.getDocuments().get(evaluationSectionFilesjList.getSelectedIndex());
                     sentences = extractionsEvaluationLabeller.getDocumentSentences(selectedDocument);
                 }
