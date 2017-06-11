@@ -34,8 +34,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
@@ -106,7 +108,31 @@ public class OpenIeJFrame extends javax.swing.JFrame {
                 unzipUtility.unzip(target, System.getProperty("pf4j.pluginsDir", "plugins"));
                 targetZip.delete();
 
-                new Alert("Plugins loaded successfully. Recompilation required to use new integrated plugin.").setVisible(true);
+                try {
+                    Runtime rt = Runtime.getRuntime();
+                    Process pr = rt.exec("ant");
+
+                    BufferedReader input = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+
+                    String line=null;
+
+                    System.out.println("Rebuilding app using ant.");
+
+                    while((line=input.readLine()) != null) {
+                        System.out.println(line);
+                    }
+
+                    int exitVal = pr.waitFor();
+
+                    if (exitVal == 0) {
+                        new Alert("Plugins loaded successfully. Restart required to take effect.").setVisible(true);
+                    } else {
+                        throw new Error("Error loading plugin.");
+                    }
+                } catch(Exception e) {
+                    new Alert(e.getMessage()).setVisible(true);
+                }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
